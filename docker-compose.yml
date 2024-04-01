@@ -7,7 +7,7 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./target/wacar.war:/usr/local/tomcat/webapps/wacar.war
+      - ./wacar/target/wacar.war:/usr/local/tomcat/webapps/wacar.war
   
   db:
     image: postgres
