@@ -41,7 +41,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 request.getRequestDispatcher("/html/signup.html").forward(request, response);
                 break;
             case "logout/":
-                // the requested operation is logout. return to homepage
+                // logout and return to homepage
                 logoutOperations(request, response);
                 break;
             case "reservations/":
@@ -115,7 +115,7 @@ public class UserServlet extends AbstractDatabaseServlet {
         else{
             LOGGER.info("User NULL");
         }
-        request.getRequestDispatcher("/html/home.html").forward(request, response);
+        response.sendRedirect(request.getContextPath() + "/");
     }
 
 
@@ -262,6 +262,7 @@ public class UserServlet extends AbstractDatabaseServlet {
             String password = req.getParameter("password");
             String name = req.getParameter("name");
             String surname = req.getParameter("surname");
+            String address = req.getParameter("address");
 
             LOGGER.info("user {} is trying to register", email);
             // regex to validate email and password
@@ -272,6 +273,7 @@ public class UserServlet extends AbstractDatabaseServlet {
             if (email == null || email.equals("") ||
                     password == null || password.equals("") ||
                     name == null || name.equals("") ||
+                    address == null || address.equals("") ||
                     surname == null || surname.equals("")) {
 
                 m = new Message("Some fields are empty", "E200", "Missing fields");
@@ -304,7 +306,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 email = email.toLowerCase();
 
                 //else, create a new user resource
-                User user_to_reg = new User(email, password, name, surname);
+                User user_to_reg = new User(email, password, name, surname, address);
                 //pass it to the dao to register it
                 if (true) {
                     new UserRegisterDAO(getConnection(), user_to_reg).access().getOutputParam();
@@ -373,6 +375,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 out.printf("<li>surname: %s</li>%n", s.getSurname());
                 out.printf("<li>name: %s</li>%n", s.getName());
                 out.printf("<li>email: %s</li>%n", s.getEmail());
+                out.printf("<li>address: %s</li>%n", s.getAddress());
                 out.printf("</ul>%n");
             }
 

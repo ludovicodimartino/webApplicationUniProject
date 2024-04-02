@@ -43,7 +43,6 @@ public class LoginFilter extends AbstractFilter {
 
         } else {
             LOGGER.info("Not logged in, show login page.");
-
             res.sendRedirect(loginURI); // Not logged in, show login page.
         }
 

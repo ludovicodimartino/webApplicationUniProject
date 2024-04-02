@@ -9,14 +9,18 @@ public class User {
     private String password;
     private String name;
     private String surname;
+    private String address;
 
 
-    public User(int id, String email, String password, String name, String surname){
+
+    public User(int id, String email, String password, String name, String surname, String address){
         this.id = id;
         this.email = email;
         this.password = password;
         this.name = name;
         this.surname = surname;
+        this.address = address;
+
     }
 
 
@@ -32,11 +36,12 @@ public class User {
 
 
     // this is used in registration
-    public User(String email, String password, String name, String surname){
+    public User(String email, String password, String name, String surname, String address){
         this.email = email;
         this.password = password;
         this.surname = surname;
         this.name = name;
+        this.address =address;
     }
 
     // this is used in login
@@ -74,6 +79,7 @@ public class User {
     public final String getSurname() {
         return surname;
     }
+    public final String getAddress() {return address;}
 
 
     public JSONObject toJSON(){
@@ -85,4 +91,6 @@ public class User {
 
         return uJson;
     }
+
+
 }

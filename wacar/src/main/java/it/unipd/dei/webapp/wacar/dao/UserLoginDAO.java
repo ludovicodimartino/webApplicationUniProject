@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 public class UserLoginDAO extends AbstractDAO<User>  {
 
     //TODO: aggiungere crittografia md5 sia in INSERT che in SELECT. es: AND password=md5(?)
-    private static final String USER_LOGIN = "SELECT id,email,password,name,surname FROM account WHERE email=? AND password=?;";
+    private static final String USER_LOGIN = "SELECT id,email,password,name,surname,address FROM assessment.account WHERE email=? AND password=?;";
 
     private final User user;
 
@@ -37,7 +37,9 @@ public class UserLoginDAO extends AbstractDAO<User>  {
                 String password = rs.getString("password");
                 String name = rs.getString("name");
                 String surname = rs.getString("surname");
-                user_new = new User(email, password, name, surname);
+                String address = rs.getString("address");
+
+                user_new = new User(email, password, name, surname, address);
                 LOGGER.info("User logged in {}.", user_new.getEmail());
 
             }else{

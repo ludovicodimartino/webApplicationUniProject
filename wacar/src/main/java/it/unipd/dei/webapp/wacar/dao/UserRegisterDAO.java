@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 
 public class UserRegisterDAO extends AbstractDAO{
 
-    private static final String STATEMENT_REGISTRATION = "INSERT INTO account(email, password, name, surname) VALUES (?, ?, ?, ?)";
+    private static final String STATEMENT_REGISTRATION = "INSERT INTO assessment.account(email, password, name, surname, address, type) VALUES (?, ?, ?, ?, ?, 'USER')";
     private final User user;
 
     public UserRegisterDAO(final Connection con, final User user) {
@@ -28,6 +28,8 @@ public class UserRegisterDAO extends AbstractDAO{
             stmnt.setString(2, user.getPassword());
             stmnt.setString(3, user.getName());
             stmnt.setString(4, user.getSurname());
+            stmnt.setString(5, user.getAddress());
+
 
             stmnt.execute();
             LOGGER.info("User registered {}.", user.getEmail());
