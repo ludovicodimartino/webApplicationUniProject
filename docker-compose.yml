@@ -7,17 +7,17 @@ services:
       db:
         condition: service_healthy
     volumes:
-      - ./wacar/target/wacar.war:/usr/local/tomcat/webapps/wacar.war
+      - ./target/wacar.war:/usr/local/tomcat/webapps/wacar.war
   
   db:
     image: postgres
     ports:
       - 5432:5432
     volumes:
-      - ./wacar/src/main/database/wacar.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./src/main/database/wacar.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/db:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      test: [ "CMD-SHELL", "pg_isready -U wacaruser" ]
       interval: 5s
       timeout: 10s
       retries: 50
