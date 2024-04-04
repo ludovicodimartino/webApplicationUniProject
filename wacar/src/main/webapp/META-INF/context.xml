@@ -8,8 +8,8 @@
               factory="org.apache.tomcat.jdbc.pool.DataSourceFactory"
               driverClassName="org.postgresql.Driver"
               url="jdbc:postgresql://db:5432/wacar_db"
-              username="postgres"
-              password="12345"
+              username="wacaruser"
+              password="wacaruser"
 
               testOnBorrow="true"
               validationQuery="SELECT 1"

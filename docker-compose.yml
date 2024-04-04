@@ -22,6 +22,6 @@ services:
       timeout: 10s
       retries: 50
     environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=12345
+      - POSTGRES_USER=wacaruser
+      - POSTGRES_PASSWORD=wacaruser
       - POSTGRES_DB=wacar_db
