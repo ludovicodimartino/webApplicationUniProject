@@ -17,7 +17,7 @@ services:
       - ./src/main/database/wacar.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/db:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U wacaruser" ]
+      test: [ "CMD-SHELL", "pg_isready -d wacar_db -U wacaruser" ]
       interval: 5s
       timeout: 10s
       retries: 50
