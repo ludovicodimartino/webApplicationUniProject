@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--    <Configuration status="INFO">-->
+<!--        <Appenders>-->
+<!--            <RollingFile name="MyFile" fileName="C:\Program Files\Apache Software Foundation\Tomcat 10.0_Tomcat10_27\logs\logFile2.log" filePattern="C:\Program Files\Apache Software Foundation\Tomcat 10.0_Tomcat10_27\logs\logFile-%d{MM-dd-yyyy}.log">-->
+<!--                <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>-->
+<!--                <TimeBasedTriggeringPolicy />-->
+<!--            </RollingFile>-->
+<!--        </Appenders>-->
+<!--        <Loggers>-->
+<!--            <Root level="all">-->
+<!--                <AppenderRef ref="MyFile"/>-->
+<!--            </Root>-->
+
+<!--        </Loggers>-->
+<!--    </Configuration>-->
+<!--<Configuration status="INFO" monitorInterval="0" name="crane">-->
+<!--    <Appenders>-->
+<!--        <RollingRandomAccessFile name="RFILE" fileName="C:\Program Files\Apache Software Foundation\Tomcat 10.0_Tomcat10_27\webapps\loginProject\logs\logFile.log" filePattern="C:\Program Files\Apache Software Foundation\Tomcat 10.0_Tomcat10_27\webapps\loginProject\logs\${date:yyyy-MM}\crane-%d{yyyyMMdd}-%i.log.gz">-->
+<!--            <PatternLayout>-->
+<!--                <Pattern>%date{DEFAULT} %level [%thread] %class{1}.%method(%file:%line)%n\tIP = %MDC{IP}; USER = %MDC{USER}; ACTION = %MDC{ACTION}; RESOURCE = %MDC{RESOURCE}%n\t%message%n\t%throwable%n</Pattern>-->
+<!--            </PatternLayout>-->
+<!--            <Policies>-->
+<!--                <TimeBasedTriggeringPolicy />-->
+<!--                <SizeBasedTriggeringPolicy size="250 MB"/>-->
+<!--            </Policies>-->
+<!--        </RollingRandomAccessFile>-->
+<!--        <Console name="STDOUT" target="SYSTEM_OUT">-->
+<!--            <PatternLayout>-->
+<!--                <Pattern>%date{DEFAULT} %level [%thread] %class{1}.%method(%file:%line)%n\tIP = %MDC{IP}; USER = %MDC{USER}; ACTION = %MDC{ACTION}; RESOURCE = %MDC{RESOURCE}%n\t%message%n\t%throwable%n</Pattern>-->
+<!--            </PatternLayout>-->
+<!--        </Console>-->
+<!--    </Appenders>-->
+<!--    <Loggers>-->
+<!--        <Root level="TRACE">-->
+<!--            <AppenderRef ref="RFILE" level="INFO"/>-->
+<!--            &lt;!&ndash; <AppenderRef ref="STDOUT" level="INFO"/>&ndash;&gt;-->
+<!--        </Root>-->
+<!--    </Loggers>-->
+<!--</Configuration>-->
+
+<Configuration status="INFO" monitorInterval="0" name="log4j2-config">
+    <Appenders>
+            <RollingRandomAccessFile name="RFILE" fileName="C:\Program Files\Apache Software Foundation\Tomcat 10.0_Tomcat10_27\my-logs\logFile2.log" filePattern="C:\Program Files\Apache Software Foundation\Tomcat 10.0_Tomcat10_27\my-logs\${date:yyyy-MM}\loginwa-%d{yyyyMMdd}-%i.log.gz">
+            <PatternLayout>
+                <Pattern>%date{DEFAULT} %level [%thread] %class{1}.%method(%file:%line)%n\tIP = %MDC{IP}; USER = %MDC{USER}; ACTION = %MDC{ACTION}; RESOURCE = %MDC{RESOURCE}%n\t%message%n\t%throwable%n</Pattern>
+            </PatternLayout>
+            <Policies>
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="250 MB"/>
+            </Policies>
+        </RollingRandomAccessFile>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout>
+                <Pattern>%date{DEFAULT} %level [%thread] %class{1}.%method(%file:%line)%n\tIP = %MDC{IP}; USER = %MDC{USER}; ACTION = %MDC{ACTION}; RESOURCE = %MDC{RESOURCE}%n\t%message%n\t%throwable%n</Pattern>
+            </PatternLayout>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="TRACE">
+            <AppenderRef ref="RFILE" level="INFO"/>
+            <AppenderRef ref="STDOUT" level="INFO"/>
+        </Root>
+    </Loggers>
+</Configuration>
