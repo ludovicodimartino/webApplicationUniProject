@@ -22,7 +22,7 @@ public class UserServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
         LogContext.setResource(request.getRequestURI());
-        LogContext.setAction("LOGIN");
+
 
         String op = request.getRequestURI();
         op = op.substring(op.lastIndexOf("user") + 5);
@@ -34,10 +34,12 @@ public class UserServlet extends AbstractDatabaseServlet {
 
             case "login/":
                 request.getSession().invalidate();
+                LogContext.setAction("LOGIN");
                 request.getRequestDispatcher("/html/login.html").forward(request, response);
                 break;
             case "signup/":
                 request.getSession().invalidate();
+                LogContext.setAction("SIGNUP");
                 request.getRequestDispatcher("/html/signup.html").forward(request, response);
                 break;
             case "logout/":
@@ -49,6 +51,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 break;
             case "":
                 HttpSession session = request.getSession();
+                LogContext.setAction("USER INFO");
                 User user = (User) session.getAttribute("account");
                 if (user!=null) {
                     Message m = new Message("Login success");
@@ -156,10 +159,12 @@ public class UserServlet extends AbstractDatabaseServlet {
                 else{
                     m = new Message("Login success");
                     LOGGER.info("the user {} LOGGED IN", user.getEmail());
+                    LOGGER.info("User account type: {}", user.getType());
+
                     // activate a session to keep the user data
                     HttpSession session = req.getSession();
                     session.setAttribute("account", user);
-                    session.setAttribute("role", "user");
+                    session.setAttribute("role", user.getType());
 
                     // login credentials were correct: we redirect the user to the homepage
                     // now the session is active and its data can be used to change the homepage
@@ -246,6 +251,9 @@ public class UserServlet extends AbstractDatabaseServlet {
 
         finally{
             writePage(user,m,res);
+            LogContext.removeIPAddress();
+            LogContext.removeAction();
+            LogContext.removeResource();
         }
     }
 
@@ -254,8 +262,8 @@ public class UserServlet extends AbstractDatabaseServlet {
 
         User user = null;
         Message m = null;
+        boolean fieldEmpty = false;
         try {
-
 
             //get the registration patameters
             String email = req.getParameter("email");
@@ -276,6 +284,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                     address == null || address.equals("") ||
                     surname == null || surname.equals("")) {
 
+                fieldEmpty = true;
                 m = new Message("Some fields are empty", "E200", "Missing fields");
                 LOGGER.error("problems with fields: {}", m.getMessage());
 
@@ -302,7 +311,8 @@ public class UserServlet extends AbstractDatabaseServlet {
                 m = new Message("This user already exists", "E200", "User already existing");
                 LOGGER.error("problems with fields: {}", m.getMessage());
 
-            } else {
+            }
+            else if (!fieldEmpty){
                 email = email.toLowerCase();
 
                 //else, create a new user resource
@@ -319,7 +329,8 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                     loginOperations(req, res, true);
 
-                } else {
+                }
+                else {
 
                     m = new Message("The deadline is expired", "E200", "Deadline expired");
                     LOGGER.error("problems with fields: {}", m.getMessage());
@@ -328,6 +339,10 @@ public class UserServlet extends AbstractDatabaseServlet {
                 }
 
 
+            }
+            else{
+                m = new Message("At least one field  is empty", "E200", "Deadline expired");
+                LOGGER.error("problems with fields: {}", m.getMessage());
             }
 
         } catch (SQLException | ServletException e) {

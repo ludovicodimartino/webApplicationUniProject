@@ -10,6 +10,7 @@ public class User {
     private String name;
     private String surname;
     private String address;
+    private  String accountType;
 
 
 
@@ -55,6 +56,16 @@ public class User {
         this.email = email;
     }
 
+    // this is returned after login
+    public User(String email, String password, String name, String surname, String address, String accountType){
+        this.email = email;
+        this.password = password;
+        this.surname = surname;
+        this.name = name;
+        this.address =address;
+        this.accountType = accountType;
+    }
+
 
 
 
@@ -80,6 +91,7 @@ public class User {
         return surname;
     }
     public final String getAddress() {return address;}
+    public final String getType() {return accountType;}
 
 
     public JSONObject toJSON(){
