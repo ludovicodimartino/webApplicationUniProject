@@ -1,5 +1,6 @@
 <%@ page import="it.unipd.dei.webapp.wacar.resource.User" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page import="java.util.Objects" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -13,6 +14,7 @@
             padding: 0;
             background-color: #f2f2f2;
         }
+
         .container {
             max-width: 800px;
             margin: 50px auto;
@@ -21,6 +23,7 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .card {
             display: flex;
             justify-content: space-between;
@@ -31,11 +34,13 @@
             border-radius: 8px;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
         }
+
         .card a {
             text-decoration: none;
             color: #333;
             font-weight: bold;
         }
+
         .btn {
             display: inline-block;
             padding: 10px 20px;
@@ -46,6 +51,7 @@
             cursor: pointer;
             text-decoration: none;
         }
+
         .btn:hover {
             background-color: #0056b3;
         }
@@ -70,6 +76,7 @@
 
     <% User user = (User) session.getAttribute("account"); %>
     <% if (user != null) { %>
+    <% if (Objects.equals(user.getType(), "USER")) { %>
     <!-- Reservations -->
     <div class="card">
         <a href="/wacar/user/reservations/">Reservations</a>
@@ -79,6 +86,22 @@
         <a href="/wacar/user/">User page</a>
         <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
     </div>
+    <% } %>
+    <% if (Objects.equals(user.getType(), "ADMIN")) { %>
+    <div class="card">
+        <a href="/wacar/admin/insertCar/">Insert new Car</a>
+    </div>
+    <div class="card">
+        <a href="/wacar/admin/insertCircuit/">Insert new Circuit</a>
+    </div>
+    <div class="card">
+        <a href="/wacar/admin/insertMapping/">Map a car to a Circuit</a>
+    </div>
+    <div class="card">
+        <a href="/wacar/admin/">Admin page</a>
+        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
+    </div>
+    <% } %>
     <!-- Logout -->
     <form method="GET" action="/wacar/user/logout/">
         <button type="submit">Logout</button>
