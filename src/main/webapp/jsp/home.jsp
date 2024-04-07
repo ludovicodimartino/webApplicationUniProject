@@ -1,5 +1,6 @@
 <%@ page import="it.unipd.dei.webapp.wacar.resource.User" %>
 <%@ page import="java.util.Objects" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html lang="it">
@@ -74,48 +75,52 @@
         <a href="/wacar/html/car_list.html"><img src="car_icon.png" alt="car_icon" width="50"></a>
     </div>
 
-    <% User user = (User) session.getAttribute("account"); %>
-    <% if (user != null) { %>
-    <% if (Objects.equals(user.getType(), "USER")) { %>
-    <!-- Reservations -->
-    <div class="card">
-        <a href="/wacar/user/reservations/">Reservations</a>
-        <a href="/wacar/user/reservations/"><img src="icon.png" alt="res_icon" width="50"></a>
-    </div>
-    <div class="card">
-        <a href="/wacar/user/">User page</a>
-        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
-    </div>
-    <% } %>
-    <% if (Objects.equals(user.getType(), "ADMIN")) { %>
-    <div class="card">
-        <a href="/wacar/admin/insertCar/">Insert new Car</a>
-    </div>
-    <div class="card">
-        <a href="/wacar/admin/insertCircuit/">Insert new Circuit</a>
-    </div>
-    <div class="card">
-        <a href="/wacar/admin/insertMapping/">Map a car to a Circuit</a>
-    </div>
-    <div class="card">
-        <a href="/wacar/admin/">Admin page</a>
-        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
-    </div>
-    <% } %>
-    <!-- Logout -->
-    <form method="GET" action="/wacar/user/logout/">
-        <button type="submit">Logout</button>
-    </form>
-    <% } else { %>
-    <!-- Signup -->
-    <form method="GET" action="/wacar/user/signup/">
-        <button type="submit">Signup</button>
-    </form>
-    <!-- Login -->
-    <form method="GET" action="/wacar/user/login/">
-        <button type="submit">Login</button>
-    </form>
-    <% } %>
+    <c:choose>
+        <c:when test="${not empty sessionScope.account}">
+            <c:choose>
+                <c:when test="${sessionScope.account.type eq 'USER'}">
+                    <!-- Reservations -->
+                    <div class="card">
+                        <a href="/wacar/user/reservations/">Reservations</a>
+                        <a href="/wacar/user/reservations/"><img src="icon.png" alt="res_icon" width="50"></a>
+                    </div>
+                    <div class="card">
+                        <a href="/wacar/user/">User page</a>
+                        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
+                    </div>
+                </c:when>
+                <c:when test="${sessionScope.account.type eq 'ADMIN'}">
+                    <div class="card">
+                        <a href="/wacar/admin/insertCar/">Insert new Car</a>
+                    </div>
+                    <div class="card">
+                        <a href="/wacar/admin/insertCircuit/">Insert new Circuit</a>
+                    </div>
+                    <div class="card">
+                        <a href="/wacar/admin/insertMapping/">Map a car to a Circuit</a>
+                    </div>
+                    <div class="card">
+                        <a href="/wacar/admin/">Admin page</a>
+                        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
+                    </div>
+                </c:when>
+            </c:choose>
+            <!-- Logout -->
+            <form method="GET" action="/wacar/user/logout/">
+                <button type="submit">Logout</button>
+            </form>
+        </c:when>
+        <c:otherwise>
+            <!-- Signup -->
+            <form method="GET" action="/wacar/user/signup/">
+                <button type="submit">Signup</button>
+            </form>
+            <!-- Login -->
+            <form method="GET" action="/wacar/user/login/">
+                <button type="submit">Login</button>
+            </form>
+        </c:otherwise>
+    </c:choose>
 
 </div>
 
