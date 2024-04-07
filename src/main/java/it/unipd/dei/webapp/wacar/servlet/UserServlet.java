@@ -233,7 +233,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                         // login credentials were correct: we redirect the user to the homepage
                         // now the session is active and its data can be used to change the homepage
-                        res.sendRedirect(req.getContextPath()+"/");
+                        res.sendRedirect(req.getContextPath()+"/home");
 
 
                     }

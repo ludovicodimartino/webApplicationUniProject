@@ -18,16 +18,10 @@ public class HomeFilter extends AbstractFilter{
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
 
-        // Check if the request is for the home page
-        if (req.getRequestURI().equals(req.getContextPath() + "/")) {
-            LOGGER.info("Redirecting to the home");
-            // Redirect to the home
-            res.sendRedirect(req.getContextPath() + "/home");
-            return;
-        }
+        LOGGER.info("Trying to access html resources. Redirecting to the home");
+        // Redirect to the home
+        res.sendRedirect(req.getContextPath() + "/home");
 
-        // Otherwise continue
-        chain.doFilter(req, res);
 
     }
 }

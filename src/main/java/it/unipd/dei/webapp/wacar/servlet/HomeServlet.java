@@ -26,7 +26,7 @@ public class HomeServlet extends AbstractDatabaseServlet{
         LOGGER.info("op GET {}",op);
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute("account");
-        request.getRequestDispatcher("/html/home.jsp").forward(request, response);
+        request.getRequestDispatcher("/jsp/home.jsp").forward(request, response);
 
         if (user!=null){
 
