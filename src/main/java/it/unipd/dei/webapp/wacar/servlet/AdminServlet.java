@@ -3,6 +3,8 @@ package it.unipd.dei.webapp.wacar.servlet;
 import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,20 +20,21 @@ public class AdminServlet extends AbstractDatabaseServlet {
         LOGGER.info("op GET {}", op);
 
         try{
-            op = op.substring(op.lastIndexOf("admin") + 6);
+            if(op.lastIndexOf("admin") == op.length() - 5){ // Math url wacar/admin
+                op = "";
+            } else { // Math url wacar/**/admin**
+                op = op.substring(op.lastIndexOf("admin") + 6);
+            }
+
             switch (op){
                 case "insertCar/":
-                    request.getRequestDispatcher("/html/insertCar.html").forward(request, response);
+                    ArrayList<String> carTypeList = new ArrayList<>(Arrays.asList("Micro", "SUV", "Supercar"));
+                    request.setAttribute("carList", carTypeList);
+                    request.getRequestDispatcher("/jsp/insertCar.jsp").forward(request, response);
                     break;
-                case "":
-//                    HttpSession session = request.getSession();
-//                    User user = (User) session.getAttribute("account");
-//                    if (user!=null) {
-//                        Message m = new Message("Login success");
-//                        writePage(user,m,response);
-//                    }
+                case "": // URL /wacar/admin
+                    //redirect to admin page
                     break;
-
                 default:
                     Message m = new Message("An error occurred default","E200","Operation Unknown");
                     LOGGER.info("stacktrace {}:", m.getMessage());
@@ -85,7 +88,13 @@ public class AdminServlet extends AbstractDatabaseServlet {
         int maxSpeed = Integer.parseInt(req.getParameter("maxSpeed"));
         int horsepower = Integer.parseInt(req.getParameter("horsepower"));
         int acceleration = Integer.parseInt(req.getParameter("acceleration"));
+        boolean availability = Boolean.parseBoolean(req.getParameter("availability"));
+        String type = req.getParameter("type");
 
+        LOGGER.info("Insert Car POST request: model: {}, " +
+                "brand: {}, description: {}, maxSpeed: {}, " +
+                "horsepower: {}, acceleration: {}, availability: {}, " +
+                "type: {}", model, brand, description, maxSpeed, horsepower, acceleration, availability, type);
         //TODO: Add controls on maxSpeed, horsepower and acceleration (e.g. the maxSPeed can be a value between 10 and 500)
 
 

@@ -13,14 +13,14 @@ import java.io.IOException;
 
 public class AdminFilter extends AbstractFilter {
 
-    final static Logger logger = LogManager.getLogger(AdminFilter.class);
+    final static Logger LOGGER = LogManager.getLogger(AdminFilter.class);
 
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         HttpSession session = req.getSession(false);
-        String unauthorizedURI = req.getContextPath() + "/jsp/unauthorized.jsp";
-        boolean loggedIn = session != null && session.getAttribute("role") == "admin";
+        String unauthorizedURI = req.getContextPath() + "/user/login/";
+        boolean loggedIn = session != null && session.getAttribute("role").equals("ADMIN");
 
         if (loggedIn) {
             res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.

@@ -35,15 +35,15 @@
         <url-pattern>/html/*</url-pattern>
     </filter-mapping>
 
-<!--    <filter>-->
-<!--        <filter-name>AdminFilter</filter-name>-->
-<!--        <filter-class>it.unipd.dei.webapp.wacar.filter.AdminFilter</filter-class>-->
-<!--    </filter>-->
-<!--    &lt;!&ndash; Pages that need admin to be logged &ndash;&gt;-->
-<!--    <filter-mapping>-->
-<!--        <filter-name>AdminFilter</filter-name>-->
-<!--        <url-pattern>/admin/*</url-pattern>-->
-<!--    </filter-mapping>-->
+    <filter>
+        <filter-name>AdminFilter</filter-name>
+        <filter-class>it.unipd.dei.webapp.wacar.filter.AdminFilter</filter-class>
+    </filter>
+    <!-- Pages that need admin to be logged -->
+    <filter-mapping>
+        <filter-name>AdminFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>UserServlet</servlet-name>

@@ -229,7 +229,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                         // activate a session to keep the user data
                         HttpSession session = req.getSession();
                         session.setAttribute("account", user);
-                        session.setAttribute("role", "user");
+                        session.setAttribute("role", user.getType());
 
                         // login credentials were correct: we redirect the user to the homepage
                         // now the session is active and its data can be used to change the homepage
