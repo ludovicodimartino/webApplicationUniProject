@@ -1,8 +1,10 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+import it.unipd.dei.webapp.wacar.dao.InsertCarDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -80,23 +82,40 @@ public class AdminServlet extends AbstractDatabaseServlet {
         }
     }
 
+    /**
+     * All the operations needed to insert a car in the database.
+     *
+     * @param req the {@code HttpServletResponse} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     */
     public void insertCarOperations(HttpServletRequest req, HttpServletResponse res){
-        //TODO: Finish implementing the insertion of a car in the database
-        String model = req.getParameter("model");
-        String brand = req.getParameter("brand");
-        String description = req.getParameter("description");
-        int maxSpeed = Integer.parseInt(req.getParameter("maxSpeed"));
-        int horsepower = Integer.parseInt(req.getParameter("horsepower"));
-        int acceleration = Integer.parseInt(req.getParameter("acceleration"));
-        boolean availability = Boolean.parseBoolean(req.getParameter("availability"));
-        String type = req.getParameter("type");
+        Car car = null;
+        Message m = null;
 
-        LOGGER.info("Insert Car POST request: model: {}, " +
-                "brand: {}, description: {}, maxSpeed: {}, " +
-                "horsepower: {}, acceleration: {}, availability: {}, " +
-                "type: {}", model, brand, description, maxSpeed, horsepower, acceleration, availability, type);
-        //TODO: Add controls on maxSpeed, horsepower and acceleration (e.g. the maxSPeed can be a value between 10 and 500)
+        try{
+            //TODO: Finish implementing the insertion of a car in the database
+            String model = req.getParameter("model");
+            String brand = req.getParameter("brand");
+            String description = req.getParameter("description");
+            int maxSpeed = Integer.parseInt(req.getParameter("maxSpeed"));
+            int horsepower = Integer.parseInt(req.getParameter("horsepower"));
+            int acceleration = Integer.parseInt(req.getParameter("acceleration"));
+            boolean availability = Boolean.parseBoolean(req.getParameter("availability"));
+            String type = req.getParameter("type");
 
+            LOGGER.info("Insert Car POST request: model: {}, " +
+                    "brand: {}, description: {}, maxSpeed: {}, " +
+                    "horsepower: {}, acceleration: {}, availability: {}, " +
+                    "type: {}", model, brand, description, maxSpeed, horsepower, acceleration, availability, type);
+            Car carTmp = new Car(brand, model, description, maxSpeed, horsepower, acceleration, availability, type, "SEGNAPOSTO");
+
+            car = new InsertCarDAO(getConnection(), carTmp).access().getOutputParam();
+            //TODO: Add controls on maxSpeed, horsepower and acceleration (e.g. the maxSPeed can be a value between 10 and 500)
+
+        } catch (SQLException e) {
+            m = new Message("An error occurred SQL","E200",e.getMessage());
+            LOGGER.error("stacktrace:", e);
+        }
 
     }
 
