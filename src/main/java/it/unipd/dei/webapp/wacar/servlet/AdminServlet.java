@@ -1,13 +1,13 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+import it.unipd.dei.webapp.wacar.dao.GetCarTypesDAO;
 import it.unipd.dei.webapp.wacar.dao.InsertCarDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +31,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
      *  - insertCircuit page
      *  </pre>
      *
-     * @param req the {@code HttpServletResponse} incoming request from the client
+     * @param req the {@code HttpServletRequest} incoming request from the client
      * @param res the {@code HttpServletResponse} response object from the server
      *
      * @throws IOException if any error occurs in the client/server communication.
@@ -41,7 +41,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
         String op = req.getRequestURI();
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(op);
-        LOGGER.info("op GET {}", op);
+        LogContext.setUser(((User) (req.getSession()).getAttribute("account")).getEmail());
 
         try{
             if(op.lastIndexOf("admin") == op.length() - 5){ // Math url wacar/admin
@@ -53,9 +53,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
             switch (op){
                 case "insertCar/":
                     LogContext.setAction(Actions.GET_INSERT_CAR_PAGE);
-                    ArrayList<String> carTypeList = new ArrayList<>(Arrays.asList("Micro", "SUV", "Supercar"));
-                    req.setAttribute("carList", carTypeList);
-                    req.getRequestDispatcher("/jsp/insertCar.jsp").forward(req, res);
+                    insertCarPage(req, res);
                     break;
                 case "": // URL /wacar/admin
                     //redirect to admin page
@@ -75,6 +73,26 @@ public class AdminServlet extends AbstractDatabaseServlet {
     }
 
     /**
+     * Access the database to load the insert car page.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     *
+     * @throws IOException if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     *
+     */
+    public void insertCarPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+        try {
+            List<CarType> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("carList", carTypeList);
+            req.getRequestDispatcher("/jsp/insertCar.jsp").forward(req, res);
+        } catch (SQLException e){
+            LOGGER.error("Cannot read car types: unexpected error while accessing the database.", e);
+        }
+    }
+
+    /**
      * Handles the HTTP POST request of the admin, that are:
      *  <pre>
      *  - insertCar
@@ -85,7 +103,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
      *  - modifyCircuit
      *  </pre>
      *
-     * @param req the {@code HttpServletResponse} incoming request from the client
+     * @param req the {@code HttpServletRequest} incoming request from the client
      * @param res the {@code HttpServletResponse} response object from the server
      *
      * @throws IOException if any error occurs in the client/server communication.
@@ -127,7 +145,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
     /**
      * All the operations needed to insert a car in the database.
      *
-     * @param req the {@code HttpServletResponse} incoming request
+     * @param req the {@code HttpServletRequest} incoming request
      * @param res the {@code HttpServletResponse} response object
      *
      * @throws IOException if any error happens during the response writing operation
@@ -257,7 +275,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
     /**
      * All the operations needed to insert a circuit in the database.
      *
-     * @param req the {@code HttpServletResponse} incoming request
+     * @param req the {@code HttpServletRequest} incoming request
      * @param res the {@code HttpServletResponse} response object
      *
      * @throws IOException if any error happens during the response writing operation
