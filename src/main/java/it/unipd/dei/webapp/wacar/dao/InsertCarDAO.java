@@ -20,6 +20,12 @@ public class InsertCarDAO extends AbstractDAO<Car> {
 
     public InsertCarDAO(final Connection con, final Car car) {
         super(con);
+
+        if (car == null) {
+            LOGGER.error("The car cannot be null.");
+            throw new NullPointerException("The car cannot be null.");
+        }
+
         this.car = car;
     }
 

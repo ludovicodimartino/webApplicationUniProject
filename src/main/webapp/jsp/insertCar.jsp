@@ -39,7 +39,7 @@
     <label for="type">Type:</label><br>
     <select id="type" name="type" required>
         <c:forEach items="${carList}"  var="car" varStatus="loop">
-            <option value="${car}">${car}</option>
+            <option value="${car.name}">${car.name}</option>
         </c:forEach>
     </select><br><br>
 

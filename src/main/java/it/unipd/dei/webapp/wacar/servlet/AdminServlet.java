@@ -1,25 +1,47 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+import it.unipd.dei.webapp.wacar.dao.GetCarTypesDAO;
 import it.unipd.dei.webapp.wacar.dao.InsertCarDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.annotation.WebServlet;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 
+/**
+ * This servlet handles the operations of the admin.
+ *
+ * @author Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
+ * @version 1.00
+ * @since 1.00
+ */
 @WebServlet(name = "AdminServlet", value = "/admin/*")
 public class AdminServlet extends AbstractDatabaseServlet {
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String op = request.getRequestURI();
-        LogContext.setIPAddress(request.getRemoteAddr());
+    /**
+     * Handles the HTTP GET request of the admin, that are:
+     *  <pre>
+     *  - insertCar page
+     *  - insertCircuit page
+     *  </pre>
+     *
+     * @param req the {@code HttpServletRequest} incoming request from the client
+     * @param res the {@code HttpServletResponse} response object from the server
+     *
+     * @throws IOException if any error occurs in the client/server communication.
+     * @throws ServletException if any problem occurs while executing the servlet.
+     */
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String op = req.getRequestURI();
+        LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(op);
-        LOGGER.info("op GET {}", op);
+        LogContext.setUser(((User) (req.getSession()).getAttribute("account")).getEmail());
 
         try{
             if(op.lastIndexOf("admin") == op.length() - 5){ // Math url wacar/admin
@@ -30,9 +52,8 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
             switch (op){
                 case "insertCar/":
-                    ArrayList<String> carTypeList = new ArrayList<>(Arrays.asList("Micro", "SUV", "Supercar"));
-                    request.setAttribute("carList", carTypeList);
-                    request.getRequestDispatcher("/jsp/insertCar.jsp").forward(request, response);
+                    LogContext.setAction(Actions.GET_INSERT_CAR_PAGE);
+                    insertCarPage(req, res);
                     break;
                 case "": // URL /wacar/admin
                     //redirect to admin page
@@ -43,29 +64,67 @@ public class AdminServlet extends AbstractDatabaseServlet {
             }
         } catch (Exception e){
             LOGGER.error("Unable to serve request.", e);
+            throw e;
         } finally {
             LogContext.removeIPAddress();
             LogContext.removeAction();
             LogContext.removeResource();
         }
-
-
     }
 
-    public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+    /**
+     * Access the database to load the insert car page.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     *
+     * @throws IOException if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     *
+     */
+    public void insertCarPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+        try {
+            List<CarType> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("carList", carTypeList);
+            req.getRequestDispatcher("/jsp/insertCar.jsp").forward(req, res);
+        } catch (SQLException e){
+            LOGGER.error("Cannot read car types: unexpected error while accessing the database.", e);
+        }
+    }
+
+    /**
+     * Handles the HTTP POST request of the admin, that are:
+     *  <pre>
+     *  - insertCar
+     *  - insertCircuit
+     *  - addCircuitType
+     *  - addCarType
+     *  - modifyCar
+     *  - modifyCircuit
+     *  </pre>
+     *
+     * @param req the {@code HttpServletRequest} incoming request from the client
+     * @param res the {@code HttpServletResponse} response object from the server
+     *
+     * @throws IOException if any error occurs in the client/server communication.
+     */
+    public void doPost(HttpServletRequest req, HttpServletResponse res) throws IOException {
         //take the request uri
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
+
         String op = req.getRequestURI();
 
         try{
             op = op.substring(op.lastIndexOf("admin") + 6);
             switch (op){
                 case "insertCar/":
+                    LogContext.setAction(Actions.INSERT_CAR);
                     insertCarOperations(req, res);
                     break;
 
                 case "insertCircuit/":
+                    LogContext.setAction(Actions.INSERT_CIRCUIT);
                     insertCircuitOperations(req, res);
                     break;
 
@@ -75,6 +134,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
             }
         } catch (Exception e){
             LOGGER.error("Unable to serve request.", e);
+            throw e;
         } finally {
             LogContext.removeIPAddress();
             LogContext.removeAction();
@@ -85,41 +145,142 @@ public class AdminServlet extends AbstractDatabaseServlet {
     /**
      * All the operations needed to insert a car in the database.
      *
-     * @param req the {@code HttpServletResponse} incoming request
+     * @param req the {@code HttpServletRequest} incoming request
      * @param res the {@code HttpServletResponse} response object
+     *
+     * @throws IOException if any error happens during the response writing operation
      */
-    public void insertCarOperations(HttpServletRequest req, HttpServletResponse res){
+    public void insertCarOperations(HttpServletRequest req, HttpServletResponse res) throws IOException{
+
+        // request parameters
+        String model = null;
+        String brand = null;
+        String description;
+        int maxSpeed;
+        int horsepower;
+        int acceleration;
+        boolean availability;
+        String type = null;
+
+        // model
         Car car = null;
-        Message m = null;
+        Message m;
 
         try{
-            //TODO: Finish implementing the insertion of a car in the database
-            String model = req.getParameter("model");
-            String brand = req.getParameter("brand");
-            String description = req.getParameter("description");
-            int maxSpeed = Integer.parseInt(req.getParameter("maxSpeed"));
-            int horsepower = Integer.parseInt(req.getParameter("horsepower"));
-            int acceleration = Integer.parseInt(req.getParameter("acceleration"));
-            boolean availability = Boolean.parseBoolean(req.getParameter("availability"));
-            String type = req.getParameter("type");
+            // retrieves the request parameters
+            model = req.getParameter("model");
+            brand = req.getParameter("brand");
+            description = req.getParameter("description");
+            maxSpeed = Integer.parseInt(req.getParameter("maxSpeed"));
+            horsepower = Integer.parseInt(req.getParameter("horsepower"));
+            acceleration = Integer.parseInt(req.getParameter("acceleration"));
+            availability = Boolean.parseBoolean(req.getParameter("availability"));
+            type = req.getParameter("type");
 
-            LOGGER.info("Insert Car POST request: model: {}, " +
-                    "brand: {}, description: {}, maxSpeed: {}, " +
-                    "horsepower: {}, acceleration: {}, availability: {}, " +
-                    "type: {}", model, brand, description, maxSpeed, horsepower, acceleration, availability, type);
-            Car carTmp = new Car(brand, model, description, maxSpeed, horsepower, acceleration, availability, type, "SEGNAPOSTO");
+            // Create a new car object
+            car = new Car(brand, model, description, maxSpeed, horsepower, acceleration, availability, type, "SEGNAPOSTO");
 
-            car = new InsertCarDAO(getConnection(), carTmp).access().getOutputParam();
-            //TODO: Add controls on maxSpeed, horsepower and acceleration (e.g. the maxSPeed can be a value between 10 and 500)
+            // insert the car in the database
+            new InsertCarDAO(getConnection(), car).access().getOutputParam();
 
+            m = new Message(String.format("Car object %s %s successfully created.", brand, model));
+
+            LOGGER.info(new StringFormattedMessage("Car object %s %s successfully created.", brand, model));
+
+        } catch(NumberFormatException e) {
+            m = new Message(
+                    "Cannot create the car object. Invalid input parameters: maxSpeed, horsepower and acceleration must be integer.",
+                    "E100", e.getMessage());
         } catch (SQLException e) {
-            m = new Message("An error occurred SQL","E200",e.getMessage());
-            LOGGER.error("stacktrace:", e);
+            if ("23505".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot create the car object: car %s %s already exists.", brand, model), "E300",
+                        e.getMessage());
+                LOGGER.error(
+                        new StringFormattedMessage("Cannot create the car object: car %s %s already exists.", brand, model),
+                        e);
+            } else if ("23503".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot create the car object: car type %s does not exist.", type), "E400",
+                        e.getMessage());
+                LOGGER.error(
+                        new StringFormattedMessage("Cannot create the car object: car type %s does not exist.", type),
+                        e);
+            } else {
+                m = new Message("Cannot create the car object: unexpected error while accessing the database.", "E200",
+                        e.getMessage());
+
+                LOGGER.error("Cannot create the car object: unexpected error while accessing the database.", e);
+            }
+        }
+
+        try {
+            // set the MIME media type of the response
+            res.setContentType("text/html; charset=utf-8");
+
+            // get a stream to write the response
+            PrintWriter out = res.getWriter();
+
+            // write the HTML page
+            out.printf("<!DOCTYPE html>%n");
+
+            out.printf("<html lang=\"en\">%n");
+            out.printf("<head>%n");
+            out.printf("<meta charset=\"utf-8\">%n");
+            out.printf("<title>Create Car</title>%n");
+            out.printf("</head>%n");
+
+            out.printf("<body>%n");
+            out.printf("<h1>Create Car</h1>%n");
+            out.printf("<hr/>%n");
+
+            if (m.isError()) {
+                out.printf("<ul>%n");
+                out.printf("<li>error code: %s</li>%n", m.getErrorCode());
+                out.printf("<li>message: %s</li>%n", m.getMessage());
+                out.printf("<li>details: %s</li>%n", m.getErrorDetails());
+                out.printf("</ul>%n");
+            } else {
+                out.printf("<p>%s</p>%n", m.getMessage());
+                out.printf("<ul>%n");
+                out.printf("<li>brand: %s</li>%n", car.getBrand());
+                out.printf("<li>model: %s</li>%n", car.getModel());
+                out.printf("<li>description: %s</li>%n", car.getDescription());
+                out.printf("<li>acceleration: %s</li>%n", car.getAcceleration());
+                out.printf("<li>horsepower: %s</li>%n", car.getHorsepower());
+                out.printf("<li>max speed: %s</li>%n", car.getMaxSpeed());
+                out.printf("<li>type: %s</li>%n", car.getType());
+                out.printf("<li>available: %s</li>%n", car.isAvailable());
+                out.printf("</ul>%n");
+            }
+
+            out.printf("</body>%n");
+
+            out.printf("</html>%n");
+
+            // flush the output stream buffer
+            out.flush();
+
+            // close the output stream
+            out.close();
+        } catch (IOException e) {
+            LOGGER.error(new StringFormattedMessage("Unable to send response when creating the car object %s %s.", brand, model), e);
+            throw e;
+        } finally {
+            LogContext.removeIPAddress();
+            LogContext.removeAction();
+            LogContext.removeResource();
         }
 
     }
 
-    public void insertCircuitOperations(HttpServletRequest req, HttpServletResponse res){
+    /**
+     * All the operations needed to insert a circuit in the database.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     *
+     * @throws IOException if any error happens during the response writing operation
+     */
+    public void insertCircuitOperations(HttpServletRequest req, HttpServletResponse res) throws IOException{
         //TODO: Implement the insertion of a circuit in the database
     }
 

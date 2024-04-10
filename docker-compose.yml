@@ -16,8 +16,10 @@ services:
     volumes:
       - ./src/main/database/wacar.sql:/docker-entrypoint-initdb.d/init.sql
       - ./data:/db:/var/lib/postgresql/data
+      - ./src/main/database/init_db.sql:/init_db.sql
+      - ./src/main/database/container_health_check.sh:/container_health_check.sh
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -d wacar_db -U wacaruser" ]
+      test: [ "CMD-SHELL", "/container_health_check.sh"]
       interval: 5s
       timeout: 10s
       retries: 50
