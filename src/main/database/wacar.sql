@@ -400,11 +400,6 @@ ALTER TABLE ONLY assessment."order"
 ALTER TABLE ONLY assessment."order"
     ADD CONSTRAINT order_circuit_fkey FOREIGN KEY (circuit) REFERENCES assessment.circuit(name) ON UPDATE CASCADE NOT VALID;
 
--- DATABASE INIT (TO BE MOVED IN ANOTHER FILE)
-
-INSERT INTO assessment.account(email, password, name, surname, address, type) VALUES ('admin@example.com', 'Admin123', 'admin', 'admin', 'admin', 'ADMIN');
-INSERT INTO assessment."carType" VALUES ('SUV');
-INSERT INTO assessment."carType" VALUES ('Supercar');
 --
 -- PostgreSQL database dump complete
 --

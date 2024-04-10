@@ -1,0 +1,7 @@
+INSERT INTO assessment.account(id, name, surname, address, email, password, type) VALUES (default, 'Admin', 'Admin', 'Via casa mia, 10', 'admin@example.com', 'Admin123', 'ADMIN');
+INSERT INTO assessment.account(id, name, surname, address, email, password, type) VALUES (default, 'Default', 'User', 'Via casa sua, 10', 'default@user.unipd.it', 'Default123', 'USER');
+INSERT INTO assessment."carType"(name) VALUES ('supercar');
+INSERT INTO assessment."circuitType"(name) VALUES ('tarmac');
+INSERT INTO assessment."carCircuitSuitability"("carType", "circuitType") VALUES ('supercar', 'tarmac');
+INSERT INTO assessment.car(brand, model, type, horsepower, "0-100", "maxSpeed", description, available, image) VALUES ('Lamborghini', 'Huracan', 'supercar', 611, 3.4, 250, 'Combining the highest expression of Lamborghini’s power with the exclusive refinement of Italian handicraft, this series embodies authentic design and state-of-the-art mechanical technology.', true, '');
+INSERT INTO assessment.circuit(name, type, length, "cornersNumber", address, description, "lapPrice", available, image) VALUES ('Autodromo Nazionale Monza', 'tarmac', 5793, 11, 'Viale di Vedano, 5, 20900 Monza MB', 'A lot of straights', 20, true, '');
