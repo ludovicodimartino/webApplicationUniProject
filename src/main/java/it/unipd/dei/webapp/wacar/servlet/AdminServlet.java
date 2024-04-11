@@ -101,6 +101,8 @@ public class AdminServlet extends AbstractDatabaseServlet {
      *  - addCarType
      *  - modifyCar
      *  - modifyCircuit
+     *  - makeCarUnavailable
+     *  - makeCircuitUnavailable
      *  </pre>
      *
      * @param req the {@code HttpServletRequest} incoming request from the client
@@ -203,6 +205,12 @@ public class AdminServlet extends AbstractDatabaseServlet {
                         e.getMessage());
                 LOGGER.error(
                         new StringFormattedMessage("Cannot create the car object: car type %s does not exist.", type),
+                        e);
+            } else if ("23502".equals(e.getSQLState())) {
+                m = new Message("Cannot create the car object: one or more car attributes are null.", "E500",
+                        e.getMessage());
+                LOGGER.error(
+                        "Cannot create the car object: one or more car attributes are null.",
                         e);
             } else {
                 m = new Message("Cannot create the car object: unexpected error while accessing the database.", "E200",
