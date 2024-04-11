@@ -71,18 +71,18 @@
 
     <!-- Car list -->
     <div class="card">
-        <a href="/wacar/html/car_list.html">Car list</a>
-        <a href="/wacar/html/car_list.html"><img src="car_icon.png" alt="car_icon" width="50"></a>
+        <a href="/wacar/html/car-list.html">Car list</a>
+        <a href="/wacar/html/car-list.html"><img src="car_icon.png" alt="car_icon" width="50"></a>
     </div>
 
     <c:choose>
         <c:when test="${not empty sessionScope.account}">
             <c:choose>
                 <c:when test="${sessionScope.account.type eq 'USER'}">
-                    <!-- Reservations -->
+                    <!-- Create new order -->
                     <div class="card">
-                        <a href="/wacar/user/reservations/">Reservations</a>
-                        <a href="/wacar/user/reservations/"><img src="icon.png" alt="res_icon" width="50"></a>
+                        <a href="/wacar/user/create-order/cars">Create a new order</a>
+                        <a href="/wacar/user/create-order/cars"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
                     <div class="card">
                         <a href="/wacar/user/">User page</a>

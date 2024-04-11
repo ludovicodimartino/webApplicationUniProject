@@ -22,6 +22,9 @@ SET row_security = off;
 
 CREATE SCHEMA assessment;
 
+
+ALTER SCHEMA assessment OWNER TO wacaruser;
+
 --
 -- Name: accountType; Type: TYPE; Schema: assessment; Owner: wacaruser
 --
@@ -31,13 +34,70 @@ CREATE TYPE assessment."accountType" AS ENUM (
     'ADMIN'
 );
 
+
+ALTER TYPE assessment."accountType" OWNER TO wacaruser;
+
 --
--- Name: car_circuit_suitability_function(); Type: FUNCTION; Schema: assessment; Owner: wacaruser
+-- Name: check_car_function(); Type: FUNCTION; Schema: assessment; Owner: wacaruser
 --
 
-CREATE FUNCTION assessment.car_circuit_suitability_function() RETURNS trigger
+CREATE FUNCTION assessment.check_car_function() RETURNS trigger
     LANGUAGE plpgsql
     AS $$BEGIN
+IF (NEW."horsepower") < 0 THEN
+	RAISE EXCEPTION 'Horsepower cannot be negative';
+END IF;
+IF (NEW."0-100") < 0 THEN
+	RAISE EXCEPTION 'Acceleration cannot be negative';
+END IF;
+IF (NEW."maxSpeed") < 0 THEN
+	RAISE EXCEPTION 'Max speed cannot be negative';
+END IF;
+RETURN NEW;
+END;$$;
+
+
+ALTER FUNCTION assessment.check_car_function() OWNER TO wacaruser;
+
+--
+-- Name: check_circuit_function(); Type: FUNCTION; Schema: assessment; Owner: wacaruser
+--
+
+CREATE FUNCTION assessment.check_circuit_function() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$BEGIN
+IF (NEW."lapPrice") < 0 THEN
+	RAISE EXCEPTION 'Price for a lap cannot be negative';
+END IF;
+IF (NEW."cornersNumber") < 0 THEN
+	RAISE EXCEPTION 'Number of corners cannot be negative';
+END IF;
+IF (NEW."length") < 0 THEN
+	RAISE EXCEPTION 'Circuit length cannot be negative';
+END IF;
+RETURN NEW;
+END$$;
+
+
+ALTER FUNCTION assessment.check_circuit_function() OWNER TO wacaruser;
+
+--
+-- Name: check_order_function(); Type: FUNCTION; Schema: assessment; Owner: wacaruser
+--
+
+CREATE FUNCTION assessment.check_order_function() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$BEGIN
+IF (NEW."nLaps") < 0 THEN
+	RAISE EXCEPTION 'Number of laps cannot be negative';
+END IF;
+IF (
+	SELECT c."lapPrice" * NEW."nLaps"
+	FROM assessment."circuit" AS c
+	WHERE c."name" = NEW."circuit"
+	) <> NEW."price" THEN
+	RAISE EXCEPTION 'Price is not correct';
+END IF;
 IF (
    SELECT COUNT(*) as result
    FROM assessment."carCircuitSuitability" AS a
@@ -56,6 +116,9 @@ END IF;
 RETURN NEW;
 END;$$;
 
+
+ALTER FUNCTION assessment.check_order_function() OWNER TO wacaruser;
+
 SET default_tablespace = '';
 
 SET default_table_access_method = heap;
@@ -65,28 +128,16 @@ SET default_table_access_method = heap;
 --
 
 CREATE TABLE assessment.account (
-    id integer NOT NULL,
+    email text NOT NULL,
     name character varying(100) NOT NULL,
     surname character varying(100) NOT NULL,
     address text NOT NULL,
-    email text NOT NULL,
     password text NOT NULL,
     type assessment."accountType" NOT NULL
 );
 
---
--- Name: account_id_seq; Type: SEQUENCE; Schema: assessment; Owner: wacaruser
---
 
-ALTER TABLE assessment.account ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME assessment.account_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    MAXVALUE 1000000000
-    CACHE 1
-);
-
+ALTER TABLE assessment.account OWNER TO wacaruser;
 
 --
 -- Name: car; Type: TABLE; Schema: assessment; Owner: wacaruser
@@ -97,12 +148,15 @@ CREATE TABLE assessment.car (
     model character varying(100) NOT NULL,
     type character varying(100) NOT NULL,
     horsepower integer NOT NULL,
-    "0-100" character varying(10) NOT NULL,
-    "maxSpeed" character varying(10) NOT NULL,
+    "0-100" numeric(10,2) NOT NULL,
+    "maxSpeed" integer NOT NULL,
     description text NOT NULL,
     available boolean NOT NULL,
-    image text
+    image bytea
 );
+
+
+ALTER TABLE assessment.car OWNER TO wacaruser;
 
 --
 -- Name: carCircuitSuitability; Type: TABLE; Schema: assessment; Owner: wacaruser
@@ -113,6 +167,9 @@ CREATE TABLE assessment."carCircuitSuitability" (
     "circuitType" character varying(100) NOT NULL
 );
 
+
+ALTER TABLE assessment."carCircuitSuitability" OWNER TO wacaruser;
+
 --
 -- Name: carType; Type: TABLE; Schema: assessment; Owner: wacaruser
 --
@@ -121,6 +178,9 @@ CREATE TABLE assessment."carType" (
     name character varying(100) NOT NULL
 );
 
+
+ALTER TABLE assessment."carType" OWNER TO wacaruser;
+
 --
 -- Name: circuit; Type: TABLE; Schema: assessment; Owner: wacaruser
 --
@@ -128,14 +188,17 @@ CREATE TABLE assessment."carType" (
 CREATE TABLE assessment.circuit (
     name character varying(100) NOT NULL,
     type character varying(100) NOT NULL,
-    length character varying(100) NOT NULL,
+    length integer NOT NULL,
     "cornersNumber" integer NOT NULL,
     address text NOT NULL,
     description text NOT NULL,
     "lapPrice" integer NOT NULL,
     available boolean NOT NULL,
-    image text
+    image bytea    
 );
+
+
+ALTER TABLE assessment.circuit OWNER TO wacaruser;
 
 --
 -- Name: circuitType; Type: TABLE; Schema: assessment; Owner: wacaruser
@@ -145,6 +208,9 @@ CREATE TABLE assessment."circuitType" (
     name character varying(100) NOT NULL
 );
 
+
+ALTER TABLE assessment."circuitType" OWNER TO wacaruser;
+
 --
 -- Name: favourite; Type: TABLE; Schema: assessment; Owner: wacaruser
 --
@@ -153,30 +219,36 @@ CREATE TABLE assessment.favourite (
     circuit character varying(100) NOT NULL,
     "carBrand" character varying(100) NOT NULL,
     "carModel" character varying(100) NOT NULL,
-    "user" integer NOT NULL,
-    "createdAt" timestamp with time zone NOT NULL
+    "createdAt" timestamp with time zone NOT NULL,
+    account text NOT NULL
 );
+
+
+ALTER TABLE assessment.favourite OWNER TO wacaruser;
 
 --
 -- Name: order; Type: TABLE; Schema: assessment; Owner: wacaruser
 --
 
 CREATE TABLE assessment."order" (
-    account integer NOT NULL,
+    account text NOT NULL,
     date date NOT NULL,
     "carBrand" character varying(100) NOT NULL,
     "carModel" character varying(100) NOT NULL,
     circuit character varying(100) NOT NULL,
     "createdAt" timestamp with time zone NOT NULL,
     "nLaps" integer NOT NULL,
-    price integer NOT NULL
+    price integer NOT NULL    
 );
+
+
+ALTER TABLE assessment."order" OWNER TO wacaruser;
 
 --
 -- Data for Name: account; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
 
-COPY assessment.account (id, name, surname, address, email, password, type) FROM stdin;
+COPY assessment.account (email, name, surname, address, password, type) FROM stdin;
 \.
 
 
@@ -224,7 +296,7 @@ COPY assessment."circuitType" (name) FROM stdin;
 -- Data for Name: favourite; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
 
-COPY assessment.favourite (circuit, "carBrand", "carModel", "user", "createdAt") FROM stdin;
+COPY assessment.favourite (circuit, "carBrand", "carModel", "createdAt", account) FROM stdin;
 \.
 
 
@@ -232,15 +304,8 @@ COPY assessment.favourite (circuit, "carBrand", "carModel", "user", "createdAt")
 -- Data for Name: order; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
 
-COPY assessment."order" (account, date, "carBrand", "carModel", circuit, "createdAt", "nLaps", price) FROM stdin;
+COPY assessment."order" (date, "carBrand", "carModel", circuit, "createdAt", "nLaps", price, account) FROM stdin;
 \.
-
-
---
--- Name: account_id_seq; Type: SEQUENCE SET; Schema: assessment; Owner: wacaruser
---
-
-SELECT pg_catalog.setval('assessment.account_id_seq', 1, true);
 
 
 --
@@ -248,7 +313,7 @@ SELECT pg_catalog.setval('assessment.account_id_seq', 1, true);
 --
 
 ALTER TABLE ONLY assessment.account
-    ADD CONSTRAINT account_pkey PRIMARY KEY (id);
+    ADD CONSTRAINT account_pkey PRIMARY KEY (email);
 
 
 --
@@ -292,11 +357,11 @@ ALTER TABLE ONLY assessment.circuit
 
 
 --
--- Name: favourite favourite_pkey; Type: CONSTRAINT; Schema: assessment; Owner: wacaruser
+-- Name: favourite favourite_pk; Type: CONSTRAINT; Schema: assessment; Owner: wacaruser
 --
 
 ALTER TABLE ONLY assessment.favourite
-    ADD CONSTRAINT favourite_pkey PRIMARY KEY (circuit, "carBrand", "carModel", "user");
+    ADD CONSTRAINT favourite_pk PRIMARY KEY (account, "carModel", "carBrand", circuit);
 
 
 --
@@ -308,17 +373,31 @@ ALTER TABLE ONLY assessment."order"
 
 
 --
+-- Name: car check_car_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
+--
+
+CREATE TRIGGER check_car_trigger BEFORE INSERT ON assessment.car FOR EACH ROW EXECUTE FUNCTION assessment.check_car_function();
+
+
+--
 -- Name: favourite check_car_type_suitability_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
 --
 
-CREATE TRIGGER check_car_type_suitability_trigger BEFORE INSERT ON assessment.favourite FOR EACH ROW EXECUTE FUNCTION assessment.car_circuit_suitability_function();
+CREATE TRIGGER check_car_type_suitability_trigger BEFORE INSERT ON assessment.favourite FOR EACH ROW EXECUTE FUNCTION assessment.check_order_function();
 
 
 --
--- Name: order check_car_type_suitability_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
+-- Name: circuit check_circuit_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
 --
 
-CREATE TRIGGER check_car_type_suitability_trigger BEFORE INSERT ON assessment."order" FOR EACH ROW EXECUTE FUNCTION assessment.car_circuit_suitability_function();
+CREATE TRIGGER check_circuit_trigger BEFORE INSERT ON assessment.circuit FOR EACH ROW EXECUTE FUNCTION assessment.check_circuit_function();
+
+
+--
+-- Name: order check_order_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
+--
+
+CREATE TRIGGER check_order_trigger BEFORE INSERT ON assessment."order" FOR EACH ROW EXECUTE FUNCTION assessment.check_order_function();
 
 
 --
@@ -354,6 +433,14 @@ ALTER TABLE ONLY assessment.circuit
 
 
 --
+-- Name: favourite favourite_account_fkey; Type: FK CONSTRAINT; Schema: assessment; Owner: wacaruser
+--
+
+ALTER TABLE ONLY assessment.favourite
+    ADD CONSTRAINT favourite_account_fkey FOREIGN KEY (account) REFERENCES assessment.account(email) NOT VALID;
+
+
+--
 -- Name: favourite favourite_car_fkey; Type: FK CONSTRAINT; Schema: assessment; Owner: wacaruser
 --
 
@@ -370,19 +457,11 @@ ALTER TABLE ONLY assessment.favourite
 
 
 --
--- Name: favourite favourite_user_fkey; Type: FK CONSTRAINT; Schema: assessment; Owner: wacaruser
---
-
-ALTER TABLE ONLY assessment.favourite
-    ADD CONSTRAINT favourite_user_fkey FOREIGN KEY ("user") REFERENCES assessment.account(id);
-
-
---
 -- Name: order order_account_fkey; Type: FK CONSTRAINT; Schema: assessment; Owner: wacaruser
 --
 
 ALTER TABLE ONLY assessment."order"
-    ADD CONSTRAINT order_account_fkey FOREIGN KEY (account) REFERENCES assessment.account(id) NOT VALID;
+    ADD CONSTRAINT order_account_fkey FOREIGN KEY (account) REFERENCES assessment.account(email) NOT VALID;
 
 
 --

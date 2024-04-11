@@ -46,8 +46,8 @@ public class UserServlet extends AbstractDatabaseServlet {
                 // logout and return to homepage
                 logoutOperations(request, response);
                 break;
-            case "reservations/":
-                request.getRequestDispatcher("/html/reservations.html").forward(request, response);
+            case "create-order/cars":
+                request.getRequestDispatcher("/create-order/cars").forward(request, response);
                 break;
             case "":
                 HttpSession session = request.getSession();

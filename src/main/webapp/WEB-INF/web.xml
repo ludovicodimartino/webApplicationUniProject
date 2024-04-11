@@ -20,7 +20,7 @@
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
         <url-pattern>/order/</url-pattern>
-        <url-pattern>/user/reservations/</url-pattern>
+        <url-pattern>/user/create-order/*</url-pattern>
         <url-pattern>/user/</url-pattern>
         <url-pattern>/altro</url-pattern>
     </filter-mapping>
@@ -61,6 +61,15 @@
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin/*</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>OrderServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.OrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>OrderServlet</servlet-name>
+        <url-pattern>/user/create-order/*</url-pattern>
+    </servlet-mapping>
+
     <resource-ref>
         <description>Connection pool to the database</description>
         <res-ref-name>jdbc/WaCar</res-ref-name>
