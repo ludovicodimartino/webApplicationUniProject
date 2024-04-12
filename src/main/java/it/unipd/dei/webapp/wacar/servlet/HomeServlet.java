@@ -32,6 +32,7 @@ public class HomeServlet extends AbstractDatabaseServlet{
 
             String role = user.getType();
             LOGGER.info("Current role {}", user.getType());
+            LogContext.setUser(user.getEmail());
 
             if (role.equals("USER")) {
                 LOGGER.info("account logged is User");
@@ -46,6 +47,7 @@ public class HomeServlet extends AbstractDatabaseServlet{
 
         }
         else {
+            LogContext.setUser("User not logged");
             LOGGER.info("USER NOT LOGGED");
         }
 
