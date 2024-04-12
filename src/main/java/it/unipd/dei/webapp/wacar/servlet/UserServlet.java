@@ -14,6 +14,9 @@ import org.apache.logging.log4j.message.StringFormattedMessage;
 
 import java.sql.SQLException;
 
+//TODO: meccanismo di risposta
+//TODO: sistema action loggers
+
 @WebServlet(name = "UserServlet", value = "/user/*")
 public class UserServlet extends AbstractDatabaseServlet {
 
@@ -21,6 +24,16 @@ public class UserServlet extends AbstractDatabaseServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
+        HttpSession session = request.getSession();
+        User user = (User) session.getAttribute("account");
+        boolean isUserLogged = user!=null;
+        if (isUserLogged) {
+            LogContext.setUser(user.getEmail());
+        }
+        else {
+            LogContext.setUser("User not logged");
+        }
+
         LogContext.setResource(request.getRequestURI());
 
 
@@ -50,12 +63,16 @@ public class UserServlet extends AbstractDatabaseServlet {
                 request.getRequestDispatcher("/create-order/cars").forward(request, response);
                 break;
             case "":
-                HttpSession session = request.getSession();
+
                 LogContext.setAction("USER INFO");
-                User user = (User) session.getAttribute("account");
-                if (user!=null) {
+                if (isUserLogged) {
                     Message m = new Message("Login success");
                     writePage(user,m,response);
+                }
+                else {
+                    Message m = new Message("Login FAILED");
+                    //TODO: Gestisci errore
+                    LOGGER.error("stacktrace {}:", m.getMessage());
                 }
                 break;
 
@@ -92,6 +109,11 @@ public class UserServlet extends AbstractDatabaseServlet {
             case "signup/":
                 // the requested operation is register
                 registrationOperations(req, res);
+                break;
+
+            case "logout/":
+                // logout and return to homepage
+                logoutOperations(req, res);
                 break;
 
 
@@ -165,10 +187,11 @@ public class UserServlet extends AbstractDatabaseServlet {
                     HttpSession session = req.getSession();
                     session.setAttribute("account", user);
                     session.setAttribute("role", user.getType());
+                    LogContext.setUser(email);
 
                     // login credentials were correct: we redirect the user to the homepage
                     // now the session is active and its data can be used to change the homepage
-                    res.sendRedirect(req.getContextPath()+"/");
+                    res.sendRedirect(req.getContextPath()+"/home");
 
                 }
             }
@@ -230,6 +253,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                         HttpSession session = req.getSession();
                         session.setAttribute("account", user);
                         session.setAttribute("role", user.getType());
+                        LogContext.setUser(email);
 
                         // login credentials were correct: we redirect the user to the homepage
                         // now the session is active and its data can be used to change the homepage

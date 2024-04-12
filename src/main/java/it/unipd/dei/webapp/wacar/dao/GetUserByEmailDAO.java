@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class GetUserByEmailDAO extends AbstractDAO<Boolean> {
-    private static final String STATEMENT_USER_INFO = "SELECT id,email,password,name,surname,address FROM assessment.account WHERE email = ?;";
+    private static final String STATEMENT_USER_INFO = "SELECT email,password,name,surname,address FROM assessment.account WHERE email = ?;";
 
 
     private final String email;
