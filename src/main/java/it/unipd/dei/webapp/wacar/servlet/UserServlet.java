@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.message.StringFormattedMessage;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
 
@@ -71,7 +72,6 @@ public class UserServlet extends AbstractDatabaseServlet {
                 }
                 else {
                     Message m = new Message("Login FAILED");
-                    //TODO: Gestisci errore
                     LOGGER.error("stacktrace {}:", m.getMessage());
                 }
                 break;
@@ -165,6 +165,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
             if(isValid){
                 email = email.toLowerCase();
+                password = DigestUtils.md5Hex(req.getParameter("password")).toUpperCase();
                 LOGGER.info("email to lower {}",email);
                 User u = new User(email,password);
                 // try to find the user in the database
@@ -227,6 +228,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                     //try to authenticate the user
                     email = email.toLowerCase();
+                    password = DigestUtils.md5Hex(req.getParameter("password")).toUpperCase();
                     LOGGER.info("email to lower {}",email);
                     User u = new User(email,password);
                     // try to find the user in the database
@@ -338,29 +340,20 @@ public class UserServlet extends AbstractDatabaseServlet {
             }
             else if (!fieldEmpty){
                 email = email.toLowerCase();
+                password = DigestUtils.md5Hex(req.getParameter("password")).toUpperCase();
 
                 //else, create a new user resource
                 User user_to_reg = new User(email, password, name, surname, address);
                 //pass it to the dao to register it
-                if (true) {
-                    new UserRegisterDAO(getConnection(), user_to_reg).access().getOutputParam();
-                    LOGGER.info("REGISTERED STUDENT {}", email);
+                new UserRegisterDAO(getConnection(), user_to_reg).access().getOutputParam();
+                LOGGER.info("REGISTERED STUDENT {}", email);
 
-                    //if the registration ended correctly, forward the user to the
-                    //login service: note that, now the login service will login the user
-                    //and create the session. We are not redirecting the user to the
-                    //login page
+                //if the registration ended correctly, forward the user to the
+                //login service: note that, now the login service will login the user
+                //and create the session. We are not redirecting the user to the
+                //login page
 
-                    loginOperations(req, res, true);
-
-                }
-                else {
-
-                    m = new Message("The deadline is expired", "E200", "Deadline expired");
-                    LOGGER.error("problems with fields: {}", m.getMessage());
-
-
-                }
+                loginOperations(req, res, true);
 
 
             }

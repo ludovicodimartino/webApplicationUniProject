@@ -1,5 +1,5 @@
-INSERT INTO assessment.account(email, name, surname, address, password, type) VALUES ('admin@example.com', 'Admin', 'Admin', 'Via casa mia, 10', 'Admin123', 'ADMIN');
-INSERT INTO assessment.account(email, name, surname, address, password, type) VALUES ('default@user.unipd.it', 'Default', 'User', 'Via casa sua, 10', 'Default123', 'USER');
+INSERT INTO assessment.account(email, name, surname, address, password, type) VALUES ('admin@example.com', 'Admin', 'Admin', 'Via casa mia, 10', 'e64b78fc3bc91bcbc7dc232ba8ec59e0', 'ADMIN');
+INSERT INTO assessment.account(email, name, surname, address, password, type) VALUES ('default@user.unipd.it', 'Default', 'User', 'Via casa sua, 10', '3dba52fcf7afd1d73a04c9ea70de6416', 'USER');
 INSERT INTO assessment."carType"(name) VALUES ('performance');
 INSERT INTO assessment."carType"(name) VALUES ('supercar');
 INSERT INTO assessment."carType"(name) VALUES ('hypercar');
