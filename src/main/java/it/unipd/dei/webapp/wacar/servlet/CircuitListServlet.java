@@ -1,8 +1,8 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.resource.Car;
+import it.unipd.dei.webapp.wacar.dao.ListCircuitDAO;
+import it.unipd.dei.webapp.wacar.resource.Circuit;
 import it.unipd.dei.webapp.wacar.resource.Message;
-import it.unipd.dei.webapp.wacar.dao.ListCarDAO;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -15,30 +15,30 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
-@WebServlet(name = "CarListServlet", value = "/car_list")
-public class CarListServlet extends AbstractDatabaseServlet {
+@WebServlet(name = "CircuitListServlet", value = "/circuit_list")
+public class CircuitListServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
         req.getSession().invalidate();
 
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
-        LogContext.setAction("GET_ALL_CARS_FROM_DATABASE");
+        LogContext.setAction("GET_ALL_CIRCUITS_FROM_DATABASE");
 
-        List<Car> cars = null;
+        List<Circuit> circuits = null;
         Message m = null;
 
         try {
-            cars = new ListCarDAO(getConnection()).access().getOutputParam();
+            circuits = new ListCircuitDAO(getConnection()).access().getOutputParam();
 
-            m = new Message("Cars successfully retrieved");
+            m = new Message("Circuits successfully retrieved");
 
-            LOGGER.info("Cars successfully retrieved");
+            LOGGER.info("Circuits successfully retrieved");
 
         } catch (SQLException ex) {
-            m = new Message("Cannot search for cars: unexpected error while accessing the database.", "E200", ex.getMessage());
+            m = new Message("Cannot search for circuits: unexpected error while accessing the database.", "E200", ex.getMessage());
 
-            LOGGER.error("Cannot search for cars: unexpected error while accessing the database.", ex);
+            LOGGER.error("Cannot search for circuits: unexpected error while accessing the database.", ex);
         } finally {
             LogContext.removeIPAddress();
             LogContext.removeAction();
@@ -46,11 +46,10 @@ public class CarListServlet extends AbstractDatabaseServlet {
         }
 
         // Set the list of cars and the message as request attributes
-        req.setAttribute("cars", cars);
+        req.setAttribute("circuits", circuits);
         req.setAttribute("message", m);
 
         // Forward the request to the JSP page
-        req.getRequestDispatcher("/jsp/ListCar.jsp").forward(req, res);
+        req.getRequestDispatcher("/jsp/circuit-list.jsp").forward(req, res);
     }
 }
-

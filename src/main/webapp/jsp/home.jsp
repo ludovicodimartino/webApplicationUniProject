@@ -65,24 +65,24 @@
 
     <!-- Circuit list -->
     <div class="card">
-        <a href="/wacar/html/circuit_list.html">Circuit list</a>
-        <a href="/wacar/html/circuit_list.html"><img src="circuit_icon.png" alt="circuit_icon" width="50"></a>
+        <a href="/wacar/circuit_list">Circuit list</a>
+        <a href="/wacar/circuit_list"><img src="circuit_icon.png" alt="circuit_icon" width="50"></a>
     </div>
 
     <!-- Car list -->
     <div class="card">
-        <a href="/wacar/html/car-list.html">Car list</a>
-        <a href="/wacar/html/car-list.html"><img src="car_icon.png" alt="car_icon" width="50"></a>
+        <a href="/wacar/car_list">Car list</a>
+        <a href="/wacar/car_list"><img src="car_icon.png" alt="car_icon" width="50"></a>
     </div>
 
     <c:choose>
         <c:when test="${not empty sessionScope.account}">
             <c:choose>
                 <c:when test="${sessionScope.account.type eq 'USER'}">
-                    <!-- Create new order -->
+                    <!-- Reservations -->
                     <div class="card">
-                        <a href="/wacar/user/create-order/cars">Create a new order</a>
-                        <a href="/wacar/user/create-order/cars"><img src="icon.png" alt="res_icon" width="50"></a>
+                        <a href="/wacar/user/reservations/">Reservations</a>
+                        <a href="/wacar/user/reservations/"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
                     <div class="card">
                         <a href="/wacar/user/">User page</a>

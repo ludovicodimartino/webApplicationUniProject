@@ -15,12 +15,12 @@ public class Car {
     private final String description;
     private final int maxSpeed;
     private final int horsepower;
-    private final int acceleration;
+    private final float acceleration;
     private final boolean available;
     private final String type;
     private final String image; // Temporary
 
-    public Car(String brand, String model, String description, int maxSpeed, int horsepower, int acceleration, boolean available, String type, String image) {
+    public Car(String brand, String model, String description, int maxSpeed, int horsepower, float acceleration, boolean available, String type, String image) {
         this.brand = brand;
         this.model = model;
         this.description = description;
@@ -52,7 +52,7 @@ public class Car {
         return horsepower;
     }
 
-    public int getAcceleration() {
+    public float getAcceleration() {
         return acceleration;
     }
 

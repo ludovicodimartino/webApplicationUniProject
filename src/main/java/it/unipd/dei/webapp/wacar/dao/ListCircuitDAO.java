@@ -1,6 +1,6 @@
 package it.unipd.dei.webapp.wacar.dao;
 
-import it.unipd.dei.webapp.wacar.resource.Car;
+import it.unipd.dei.webapp.wacar.resource.Circuit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,21 +9,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is the data access object for listing the cars in the database
+ * This class is the data access object for listing the circuits in the database
  *
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */
-public class ListCarDAO extends AbstractDAO<List<Car>> {
-    private static final String STATEMENT = "Select * from assessment.car";
+public class ListCircuitDAO extends AbstractDAO<List<Circuit>> {
+    private static final String STATEMENT = "Select * from assessment.circuit";
 
     /**
      * Creates a new DAO object.
      *
      * @param con the connection to be used for accessing the database.
      */
-    public ListCarDAO(Connection con) {
+    public ListCircuitDAO(Connection con) {
         super(con);
     }
 
@@ -35,7 +35,7 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        final List<Car> cars = new ArrayList<>();
+        final List<Circuit> circuits = new ArrayList<>();
 
         try {
             pstmt = con.prepareStatement(STATEMENT);
@@ -43,25 +43,26 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
             rs = pstmt.executeQuery();
 
             while (rs.next()) {
-                cars.add(new Car(
-                        rs.getString("brand"),
-                        rs.getString("model"),
-                        rs.getString("description"),
-                        rs.getInt("maxSpeed"),
-                        rs.getInt("horsepower"),
-                        rs.getFloat("0-100"),
-                        rs.getBoolean("available"),
+                circuits.add(new Circuit(
+                        rs.getString("name"),
                         rs.getString("type"),
+                        rs.getInt("length"),
+                        rs.getInt("cornersNumber"),
+                        rs.getString("address"),
+                        rs.getString("description"),
+                        rs.getInt("lapPrice"),
+                        rs.getBoolean("available"),
                         rs.getString("image")));
             }
 
-            LOGGER.info("All cars successfully retrieved");
+            LOGGER.info("All circuits successfully retrieved");
+
         } finally {
             if (rs != null)
                 rs.close();
             if (pstmt != null)
                 pstmt.close();
         }
-        this.outputParam = cars;
+        this.outputParam = circuits;
     }
 }

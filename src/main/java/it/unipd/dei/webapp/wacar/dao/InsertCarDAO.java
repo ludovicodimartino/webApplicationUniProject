@@ -37,7 +37,7 @@ public class InsertCarDAO extends AbstractDAO<Car> {
             stmnt.setString(2, car.getModel());
             stmnt.setString(3, car.getType());
             stmnt.setInt(4, car.getHorsepower());
-            stmnt.setInt(5, car.getAcceleration());
+            stmnt.setFloat(5, car.getAcceleration());
             stmnt.setInt(6, car.getMaxSpeed());
             stmnt.setString(7, car.getDescription());
             stmnt.setBoolean(8, car.isAvailable());
