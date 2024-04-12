@@ -16,7 +16,7 @@ import java.util.List;
  * @since 1.00
  */
 public class ListCarDAO extends AbstractDAO<List<Car>> {
-    private static final String STATEMENT = "Select * from assessment.car";
+    private static final String STATEMENT = "SELECT * FROM assessment.car";
 
     /**
      * Creates a new DAO object.
@@ -25,6 +25,7 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
      */
     public ListCarDAO(Connection con) {
         super(con);
+        // Possible controls over the returned Car object?
     }
 
     /**
@@ -35,7 +36,7 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        final List<Car> cars = new ArrayList<>();
+        final List<Car> cars = new ArrayList<Car>();
 
         try {
             pstmt = con.prepareStatement(STATEMENT);
@@ -49,7 +50,7 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
                         rs.getString("description"),
                         rs.getInt("maxSpeed"),
                         rs.getInt("horsepower"),
-                        rs.getFloat("0-100"),
+                        rs.getInt("acceleration"),
                         rs.getBoolean("available"),
                         rs.getString("type"),
                         rs.getString("image")));

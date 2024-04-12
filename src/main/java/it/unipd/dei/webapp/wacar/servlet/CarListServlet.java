@@ -19,10 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class CarListServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        req.getSession().invalidate();
-
         LogContext.setIPAddress(req.getRemoteAddr());
-        LogContext.setResource(req.getRequestURI());
         LogContext.setAction("GET_ALL_CARS_FROM_DATABASE");
 
         List<Car> cars = null;
@@ -33,24 +30,74 @@ public class CarListServlet extends AbstractDatabaseServlet {
 
             m = new Message("Cars successfully retrieved");
 
-            LOGGER.info("Cars successfully retrieved");
-
+            LOGGER.info("Cars successfully retrieved from database without parameters");
         } catch (SQLException ex) {
             m = new Message("Cannot search for cars: unexpected error while accessing the database.", "E200", ex.getMessage());
 
             LOGGER.error("Cannot search for cars: unexpected error while accessing the database.", ex);
+        }
+
+        try {
+            // set the MIME media type of the response
+            res.setContentType("text/html; charset=utf-8");
+            // get a stream to write the response
+            PrintWriter out = res.getWriter();
+            // write the HTML page
+            out.printf("<!DOCTYPE html>%n");
+            out.printf("<html lang=\"en\">%n");
+            out.printf("<head>%n");
+            out.printf("<meta charset=\"utf-8\">%n");
+            out.printf("<title>Search Employee</title>%n");
+            out.printf("</head>%n");
+
+            out.printf("<body>%n");
+            out.printf("<h1>Search Employee</h1>%n");
+            out.printf("<hr/>%n");
+
+            if (m.isError()) {
+                out.printf("<ul>%n");
+                out.printf("<li>error code: %s</li>%n", m.getErrorCode());
+                out.printf("<li>message: %s</li>%n", m.getMessage());
+                out.printf("<li>details: %s</li>%n", m.getErrorDetails());
+                out.printf("</ul>%n");
+            } else {
+                out.printf("<p>%s</p>%n", m.getMessage());
+
+                out.printf("<table>%n");
+                out.printf("<tr>%n");
+                out.printf("<td>Badge</td><td>Surname</td><td>Age</td><td>Salary</td>%n");
+                out.printf("</tr>%n");
+
+                for (Car car : cars) {
+                    out.println("<tr>");
+                    out.printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%d</td> <td>%d</td> <td>%d</td> <td>%s</td> <td>%s</td>%n",
+                            car.getBrand(),
+                            car.getModel(),
+                            car.getType(),
+                            car.getHorsepower(),
+                            car.getAcceleration(),
+                            car.getMaxSpeed(),
+                            car.getDescription(),
+                            car.isAvailable() ? "Yes" : "No"); // Assuming isAvailable() returns a boolean
+                    out.println("</tr>");
+                }
+                out.println("</table>");
+            }
+            out.printf("</body>%n");
+            out.printf("</html>%n");
+            // flush the output stream buffer
+            out.flush();
+            // close the output stream
+            out.close();
+        }
+        catch (IOException ex) {
+            LOGGER.error("Unable to send response when creating employee %d.", ex);
+            throw ex;
         } finally {
             LogContext.removeIPAddress();
             LogContext.removeAction();
             LogContext.removeUser();
         }
-
-        // Set the list of cars and the message as request attributes
-        req.setAttribute("cars", cars);
-        req.setAttribute("message", m);
-
-        // Forward the request to the JSP page
-        req.getRequestDispatcher("/jsp/ListCar.jsp").forward(req, res);
     }
 }
 
