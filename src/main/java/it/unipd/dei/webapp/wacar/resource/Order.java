@@ -14,7 +14,7 @@ public class Order {
     /**
      * The account that made the order
      */
-    private final int account;
+    private final String account;
 
     /**
      * The date
@@ -51,7 +51,7 @@ public class Order {
      */
     private final int price;
 
-    public Order(int account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
+    public Order(String account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
         this.account = account;
         this.date = date;
         this.carBrand =carBrand;
@@ -62,7 +62,7 @@ public class Order {
         this.price = price;
     }
 
-    public int getAccount() {
+    public String getAccount() {
         return account;
     }
 
