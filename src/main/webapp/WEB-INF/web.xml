@@ -52,9 +52,9 @@
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user/login</url-pattern>
-        <url-pattern>/user/signup</url-pattern>
-        <url-pattern>/user/logout</url-pattern>
+        <url-pattern>/user/login/</url-pattern>
+        <url-pattern>/user/signup/</url-pattern>
+        <url-pattern>/user/logout/</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
@@ -67,7 +67,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CarListServlet</servlet-name>
-        <url-pattern>/car_list</url-pattern>
+        <url-pattern>/car_list/</url-pattern>
     </servlet-mapping>
 
     <servlet>
@@ -76,7 +76,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CircuitListServlet</servlet-name>
-        <url-pattern>/circuit_list</url-pattern>
+        <url-pattern>/circuit_list/</url-pattern>
     </servlet-mapping>
 
     <servlet>
