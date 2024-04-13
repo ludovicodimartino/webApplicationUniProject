@@ -88,6 +88,15 @@
         <url-pattern>/user/create-order/*</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>LoadCarImageServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.LoadCarImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoadCarImageServlet</servlet-name>
+        <url-pattern>/loadCarImage</url-pattern>
+    </servlet-mapping>
+
     <resource-ref>
         <description>Connection pool to the database</description>
         <res-ref-name>jdbc/WaCar</res-ref-name>

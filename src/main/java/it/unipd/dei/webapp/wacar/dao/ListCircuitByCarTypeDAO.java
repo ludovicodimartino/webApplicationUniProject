@@ -46,8 +46,7 @@ public class ListCircuitByCarTypeDAO extends AbstractDAO<List<Circuit>> {
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                circuits.add(new Circuit(rs.getString("name"), rs.getString("type"), rs.getInt("length"), rs.getInt("cornersNumber"), rs.getString("address"), rs.getString("description"), rs.getInt("lapPrice"), rs.getString("image")));
-
+                circuits.add(new Circuit(rs.getString("name"), rs.getString("type"), rs.getInt("length"), rs.getInt("cornersNumber"), rs.getString("address"), rs.getString("description"), rs.getInt("lapPrice"), rs.getBytes("image"), rs.getString("imageMediaType")));
                 LOGGER.info("Circuit(s) where the car type %s can race successfully listed.", carType);
             }
         } finally {

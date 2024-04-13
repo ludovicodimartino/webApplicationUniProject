@@ -53,7 +53,8 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
                         rs.getInt("acceleration"),
                         rs.getBoolean("available"),
                         rs.getString("type"),
-                        rs.getString("image")));
+                        rs.getBytes("image"),
+                        rs.getString("imageMediaType")));
             }
 
             LOGGER.info("All cars successfully retrieved");

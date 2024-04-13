@@ -10,7 +10,7 @@
 </head>
 <body>
 <h1>Add New Car</h1>
-<form action=${pageContext.request.contextPath}/admin/insertCar/" method="POST">
+<form enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/insertCar/" method="POST">
     <label for="brand">Brand:</label><br>
     <input type="text" id="brand" name="brand" required><br><br>
 
@@ -35,6 +35,10 @@
         <option value="true">True</option>
         <option value="false">False</option>
     </select><br><br>
+
+    <label for="image">Choose the car image:</label><br>
+    <input type="file" id="image" name="image" accept="image/png, image/jpeg" /><br><br>
+
 
     <label for="type">Type:</label><br>
 

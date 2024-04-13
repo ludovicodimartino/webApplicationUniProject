@@ -15,10 +15,10 @@ import java.util.List;
  * @version 1.00
  * @since 1.00
  */
-public class GetCarTypesDAO extends AbstractDAO<List<Type>> {
-    private static final String STATEMENT_CAR_TYPE = "SELECT * FROM assessment.\"carType\"";
+public class GetCircuitTypesDAO extends AbstractDAO<List<Type>> {
+    private static final String STATEMENT_CAR_TYPE = "SELECT * FROM assessment.\"circuitType\"";
 
-    public GetCarTypesDAO(Connection con) {
+    public GetCircuitTypesDAO(Connection con) {
         super(con);
     }
 

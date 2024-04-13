@@ -43,8 +43,8 @@ public class ListCircuitByNameDAO extends AbstractDAO<Circuit> {
 
             rs = pstmt.executeQuery();
 
-            circuit = new Circuit(rs.getString("name"), rs.getString("type"), rs.getInt("length"), rs.getInt("cornersNumber"), rs.getString("address"), rs.getString("description"), rs.getInt("lapPrice"), rs.getString("image"));
-            LOGGER.info("Circuit with name %s can race successfully listed.", name);
+            circuit = new Circuit(rs.getString("name"), rs.getString("type"), rs.getInt("length"), rs.getInt("cornersNumber"), rs.getString("address"), rs.getString("description"), rs.getInt("lapPrice"), rs.getBytes("image"), rs.getString("imageMimeType"));
+            LOGGER.info(String.format("Circuit with name %s can race successfully listed.", name));
         } finally {
             if (rs != null) {
                 rs.close();

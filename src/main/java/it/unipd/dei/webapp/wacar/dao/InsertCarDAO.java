@@ -14,7 +14,7 @@ import java.sql.PreparedStatement;
  */
 public class InsertCarDAO extends AbstractDAO<Car> {
 
-    private static final String CAR_INSERT_STATEMENT = "INSERT INTO assessment.car (brand, model, \"type\", horsepower, \"0-100\", \"maxSpeed\", description, available, image) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String CAR_INSERT_STATEMENT = "INSERT INTO assessment.car (brand, model, \"type\", horsepower, \"0-100\", \"maxSpeed\", description, available, image, imageMediaType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
     private final Car car;
 
@@ -41,13 +41,11 @@ public class InsertCarDAO extends AbstractDAO<Car> {
             stmnt.setInt(6, car.getMaxSpeed());
             stmnt.setString(7, car.getDescription());
             stmnt.setBoolean(8, car.isAvailable());
-            stmnt.setString(9, car.getImage());
-
+            stmnt.setBytes(9, car.getImage());
+            stmnt.setString(10, car.getImageMediaType());
 
             stmnt.execute();
             LOGGER.info("Car inserted: " + car);
-
-
         }
     }
 }

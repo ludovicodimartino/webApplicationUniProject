@@ -10,17 +10,57 @@ import org.json.JSONObject;
  * @since 1.00
  */
 public class Car {
+    /**
+     * The brand of the car
+     */
     private final String brand;
-    private final String model;
-    private final String description;
-    private final int maxSpeed;
-    private final int horsepower;
-    private final int acceleration;
-    private final boolean available;
-    private final String type;
-    private final String image; // Temporary
 
-    public Car(String brand, String model, String description, int maxSpeed, int horsepower, int acceleration, boolean available, String type, String image) {
+    /**
+     * The model of the car
+     */
+    private final String model;
+
+    /**
+     * The description of the car
+     */
+    private final String description;
+
+    /**
+     * The max speed of the car
+     */
+    private final int maxSpeed;
+
+    /**
+     * The horsepower of the car
+     */
+    private final int horsepower;
+
+    /**
+     * The acceleration of the car (0-100) in seconds
+     */
+    private final int acceleration;
+
+    /**
+     * Whether the car is available or not
+     */
+    private final boolean available;
+
+    /**
+     * The type of the car
+     */
+    private final String type;
+
+    /**
+     * The image of the car
+     */
+    private final byte[] image;
+
+    /**
+     * The MIME media type of the image of the car
+     */
+    private final String imageMediaType;
+
+    public Car(final String brand, final String model, final String description, final int maxSpeed, final int horsepower, final int acceleration, final boolean available, final String type, final byte[] image, final String imageMediaType) {
         this.brand = brand;
         this.model = model;
         this.description = description;
@@ -30,6 +70,7 @@ public class Car {
         this.available = available;
         this.type = type;
         this.image = image;
+        this.imageMediaType = imageMediaType;
     }
 
     public String getBrand() {
@@ -64,8 +105,12 @@ public class Car {
         return type;
     }
 
-    public String getImage() {
+    public byte[] getImage() {
         return image;
+    }
+
+    public String getImageMediaType() {
+        return imageMediaType;
     }
 
     public JSONObject toJSON(){

@@ -46,7 +46,7 @@ public class ListCarByAvailabilityDAO extends AbstractDAO<List<Car>> {
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                cars.add(new Car(rs.getString("brand"), rs.getString("model"), rs.getString("description"), rs.getInt("maxSpeed"), rs.getInt("horsepower"), rs.getInt("0-100"), available, rs.getString("type"), rs.getString("image")));
+                cars.add(new Car(rs.getString("brand"), rs.getString("model"), rs.getString("description"), rs.getInt("maxSpeed"), rs.getInt("horsepower"), rs.getInt("0-100"), available, rs.getString("type"), rs.getBytes("image"), rs.getString("imageMimeType")));
             }
 
             if (available) {

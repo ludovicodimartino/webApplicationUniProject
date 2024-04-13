@@ -20,9 +20,15 @@ public class Actions {
     public static final String INSERT_CIRCUIT = "INSERT_CIRCUIT";
 
     /**
-     * Insertion of a new circuit.
+     * Get the page for the insertion of a new car.
      */
     public static final String GET_INSERT_CAR_PAGE = "GET_INSERT_CAR_PAGE";
+
+
+	/**
+	 * Get the page for the insertion of a new circuit.
+	 */
+	public static final String GET_INSERT_CIRCUIT_PAGE = "GET_INSERT_CIRCUIT_PAGE";
 
 	/**
 	 * The search of circuit where a type of car can race
@@ -48,6 +54,11 @@ public class Actions {
 	 * Insertion of a new order
 	 */
 	public static final String INSERT_ORDER = "INSERT_ORDER";
+
+	/**
+	 * Loading of a car image
+	 */
+	public static final String LOAD_CAR_IMAGE = "LOAD_CAR_IMAGE";
 
     /**
      * This class can be neither instantiated nor sub-classed.

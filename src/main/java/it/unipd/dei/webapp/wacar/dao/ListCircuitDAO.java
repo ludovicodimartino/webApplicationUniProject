@@ -52,7 +52,8 @@ public class ListCircuitDAO extends AbstractDAO<List<Circuit>> {
                         rs.getString("description"),
                         rs.getInt("lapPrice"),
                         rs.getBoolean("available"),
-                        rs.getString("image")));
+                        rs.getBytes("image"),
+                        rs.getString("imageMediaType")));
             }
 
             LOGGER.info("All circuits successfully retrieved");
