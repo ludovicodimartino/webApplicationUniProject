@@ -5,8 +5,9 @@ INSERT INTO assessment."carType"(name) VALUES ('supercar');
 INSERT INTO assessment."carType"(name) VALUES ('hypercar');
 INSERT INTO assessment."circuitType"(name) VALUES ('grandPrix');
 INSERT INTO assessment."circuitType"(name) VALUES ('tourism');
+INSERT INTO assessment."circuitType"(name) VALUES ('straigths');
 INSERT INTO assessment."carCircuitSuitability"("carType", "circuitType") VALUES ('supercar', 'straigths');
-INSERT INTO assessment."carCircuitSuitability"("carType", "circuitType") VALUES ('hypercar', 'straigths');
+INSERT INTO assessment."carCircuitSuitability"("carType", "circuitType") VALUES ('hypercar', 'tourism');
 INSERT INTO assessment."carCircuitSuitability"("carType", "circuitType") VALUES ('hypercar', 'grandPrix');
 INSERT INTO assessment."carCircuitSuitability"("carType", "circuitType") VALUES ('performance', 'tourism');
 INSERT INTO assessment.car(brand, model, type, horsepower, "0-100", "maxSpeed", description, available, image) VALUES ('Maserati', 'GranTurismo Trofeo', 'performance', 550, 3.5, 320, 'The GranTurismo brings racetrack innovation to the road for unprecedented performance.', true, '');
@@ -14,4 +15,4 @@ INSERT INTO assessment.car(brand, model, type, horsepower, "0-100", "maxSpeed", 
 INSERT INTO assessment.car(brand, model, type, horsepower, "0-100", "maxSpeed", description, available, image) VALUES ('Pagani', 'Zonda R', 'hypercar', 750, 2.7, 375, 'Flying on the wings of a wind that keeps blowing harder and faster, the Zonda R was designed for the racetrack, and from the racetrack, without limits.', true, '');
 INSERT INTO assessment.circuit(name, type, length, "cornersNumber", address, description, "lapPrice", available, image) VALUES ('Autodromo Nazionale Monza', 'straigths', 5793, 11, 'Viale di Vedano, 5, 20900 Monza MB', 'There are a lot of straights', 20, true, '');
 INSERT INTO assessment.circuit(name, type, length, "cornersNumber", address, description, "lapPrice", available, image) VALUES ('Autodromo Enzo e Dino Ferrari', 'grandPrix', 4909, 19, 'Piazza Ayrton Senna da Silva, 1, 40026 Imola BO', 'The Autodromo Internazionale Enzo e Dino Ferrari is universally recognized as an extremely technical track, difficult to read, with complex curves and off-cuts: traveling at a high pace requires a professional skill level.', 30, true, '');
-INSERT INTO assessment.circuit(name, type, length, "cornersNumber", address, description, "lapPrice", available, image) VALUES ('Autodromo Vallelunga', 'tourism', 4085, 15, Via della Mola Maggiorana, 4, 00063 Campagnano di Roma RM', 'Some description.', 12, true, '');
+INSERT INTO assessment.circuit(name, type, length, "cornersNumber", address, description, "lapPrice", available, image) VALUES ('Autodromo Vallelunga', 'tourism', 4085, 15, 'Via della Mola Maggiorana, 4, 00063 Campagnano di Roma RM', 'Some description.', 12, true, '');

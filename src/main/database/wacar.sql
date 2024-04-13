@@ -99,6 +99,13 @@ IF (
 	RAISE EXCEPTION 'Price is not correct';
 END IF;
 IF (
+	SELECT a."type"
+	FROM assessment."account" as a
+	WHERE a."email" = NEW.account
+	) <> 'USER' THEN
+	RAISE EXCEPTION 'Admin cannot create an order';
+END IF;
+IF (
    SELECT COUNT(*) as result
    FROM assessment."carCircuitSuitability" AS a
    WHERE a."carType" = (
@@ -152,7 +159,8 @@ CREATE TABLE assessment.car (
     "maxSpeed" integer NOT NULL,
     description text NOT NULL,
     available boolean NOT NULL,
-    image bytea
+    image bytea,
+    imageMediaType text
 );
 
 
@@ -194,7 +202,8 @@ CREATE TABLE assessment.circuit (
     description text NOT NULL,
     "lapPrice" integer NOT NULL,
     available boolean NOT NULL,
-    image bytea    
+    image bytea,
+    imageMediaType text
 );
 
 
