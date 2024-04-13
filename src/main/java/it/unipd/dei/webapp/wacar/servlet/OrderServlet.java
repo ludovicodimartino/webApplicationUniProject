@@ -49,7 +49,6 @@ public class OrderServlet  extends AbstractDatabaseServlet {
             case "complete-order/":
                 LogContext.setIPAddress(req.getRemoteAddr());
                 LogContext.setAction(Actions.CREATE_ORDER_SET_OTHER_INFO);
-                LOGGER.info("I am here");
 
                 completeOrder(req, res);
                 break;
@@ -58,9 +57,11 @@ public class OrderServlet  extends AbstractDatabaseServlet {
                 LogContext.setIPAddress(req.getRemoteAddr());
                 LogContext.setAction(Actions.SHOW_ORDER);
 
+                User user = (User) req.getSession().getAttribute("account");
+
                 Message m = null;
                 Order order = null;
-                int account = -1;
+                String account = "";
                 java.sql.Date date;
                 String carBrand;
                 String carModel;
@@ -70,7 +71,7 @@ public class OrderServlet  extends AbstractDatabaseServlet {
                 int lapPrice;
 
                 try {
-                    account = Integer.parseInt("2");
+                    account = user.getEmail();
                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
                     java.util.Date d = df.parse(req.getParameter("date"));
                     date = new java.sql.Date(d.getTime());
@@ -163,7 +164,9 @@ public class OrderServlet  extends AbstractDatabaseServlet {
         try {
             circuits = new ListCircuitByCarTypeDAO(getConnection(), carType).access().getOutputParam();
 
-            LOGGER.info("Circuits where {} can race are successfully searched", carType);
+            m = new Message(String.format("List of circuits where carType = {} are successfully retrieved.", carType));
+
+            LOGGER.info("List of circuits where carType = {} can race are successfully searched", carType);
         } catch (SQLException e) {
             m = new Message("Unable to search for circuits: unexpected error while accessing the database.", "E5A1",
                     e.getMessage());
@@ -197,7 +200,7 @@ public class OrderServlet  extends AbstractDatabaseServlet {
             req.setAttribute("carModel", carModel);
             req.setAttribute("lapPrice", lapPrice);
 
-            req.getRequestDispatcher("/jsp/complete-order.jsp").forward(req, res);
+            req.getRequestDispatcher("/jsp/create-order.jsp").forward(req, res);
         } catch(Exception e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating latest page: {}", e));
         } finally {

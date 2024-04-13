@@ -47,7 +47,7 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
             pstmt.setTimestamp(5, order.getCreatedAt());
             pstmt.setInt(6, order.getNLaps());
             pstmt.setInt(7, order.getPrice());
-            pstmt.setInt(8, order.getAccount());
+            pstmt.setString(8, order.getAccount());
 
             LOGGER.info("car brand: " + order.getCarBrand());
             LOGGER.info("car model: " + order.getCarModel());

@@ -11,20 +11,23 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Complete your order</title>
+		<title>Recap of your order</title>
 	</head>
 
     <body>
-        <h1>Recap of your order: </h1>
-        <li>User: <c:out value="${newOrder.account}"></li>
-        <li>User: <c:out value="${newOrder.}"></li>
-        <li>User: <c:out value="${newOrder.account}"></li>
-        <li>User: <c:out value="${newOrder.account}"></li>
-        <li>User: <c:out value="${newOrder.account}"></li>
-        <li>User: <c:out value="${newOrder.account}"></li>
-                        out.printf("<li>name: %s</li>%n", s.getName());
-                        out.printf("<li>email: %s</li>%n", s.getEmail());
-                        out.printf("<li>address: %s</li>%n", s.getAddress());
-        <h3><c:out value="${newOrder.createdAt} ${newOrder.carModel}"/></h3>
+        <div>
+            <c:if test="${not empty newOrder}">
+                <h1>Recap of your order: </h1>
+                <ul>
+                    <li>User: <c:out value="${newOrder.account}"/></li>
+                    <li>Circuit: <c:out value="${newOrder.circuit}"/></li>
+                    <li>Car: <c:out value="${newOrder.carBrand} ${newOrder.carModel}"/></li>
+                    <li>Date: <c:out value="${newOrder.date}"/></li>
+                    <li>Number of laps: <c:out value="${newOrder.NLaps}"/></li>
+                    <li>Total price: <c:out value="${newOrder.price}"/></li>
+                </ul>
+                <a href="/wacar/">Back to home</a>
+            </c:if>
+        </div>
     </body>
 </html>
