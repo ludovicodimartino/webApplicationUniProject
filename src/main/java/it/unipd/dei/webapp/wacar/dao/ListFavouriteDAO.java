@@ -56,7 +56,7 @@ public class ListFavouriteDAO extends AbstractDAO{
                 stmnt.close();
             }
 
-
         }
+        this.outputParam = favourites;
     }
 }
