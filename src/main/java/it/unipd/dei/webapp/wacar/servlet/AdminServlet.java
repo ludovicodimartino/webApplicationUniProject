@@ -1,9 +1,6 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.dao.GetCarTypesDAO;
-import it.unipd.dei.webapp.wacar.dao.GetCircuitTypesDAO;
-import it.unipd.dei.webapp.wacar.dao.InsertCarDAO;
-import it.unipd.dei.webapp.wacar.dao.InsertCircuitDAO;
+import it.unipd.dei.webapp.wacar.dao.*;
 import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
@@ -66,8 +63,12 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     LogContext.setAction(Actions.GET_INSERT_CIRCUIT_PAGE);
                     insertCircuitPage(req, res);
                     break;
+                case "insertMapping/":
+                    LogContext.setAction(Actions.GET_MAPPING_PAGE);
+                    carCircuitSuitabilityPage(req, res);
+                    break;
                 case "": // URL /wacar/admin
-                    //redirect to admin page
+                    //redirect to admin page (that is the user-info page)
                     break;
                 default:
                     Message m = new Message("An error occurred default", "E200", "Operation Unknown");
@@ -118,6 +119,29 @@ public class AdminServlet extends AbstractDatabaseServlet {
             req.getRequestDispatcher("/jsp/insert-circuit.jsp").forward(req, res);
         } catch (SQLException e) {
             LOGGER.error("Cannot read car types: unexpected error while accessing the database.", e);
+        }
+    }
+
+    /**
+     * Access the database to load the mapping page.
+     * In particular, only the circuit types, car types and carCircuitSuitability present in the database will be shown.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     */
+    private void carCircuitSuitabilityPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+        try {
+            List<CarCircuitSuitability> cCSuitList = new ListCarCircuitSuitabilityDAO(getConnection()).access().getOutputParam();
+            List<Type> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
+            List<Type> circuitTypeList = new GetCircuitTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("cCSuitList", cCSuitList);
+            req.setAttribute("carTypeList", carTypeList);
+            req.setAttribute("circuitTypeList", circuitTypeList);
+            req.getRequestDispatcher("/jsp/car-circuit-suitability.jsp").forward(req, res);
+        } catch (SQLException e) {
+            LOGGER.error("Cannot read car-suitability types: unexpected error while accessing the database.", e);
         }
     }
 
