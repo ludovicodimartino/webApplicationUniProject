@@ -56,7 +56,17 @@ public class Actions {
 	public static final String INSERT_ORDER = "INSERT_ORDER";
 
 	/**
-	 * Loading of a car image.
+	 * Insertion of a new favourite
+	 */
+	public static final String INSERT_FAVOURITE = "INSERT_FAVOURITE";
+
+	/**
+	 * Show the new favourite
+	 */
+	public static final String SHOW_FAVOURITE = "SHOW_FAVOURITE";
+
+	/**
+	 * Loading of a car image
 	 */
 	public static final String LOAD_CAR_IMAGE = "LOAD_CAR_IMAGE";
 

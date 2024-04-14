@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * @since 1.00
  */
 public class ListCircuitByCarTypeDAO extends AbstractDAO<List<Circuit>> {
-    private static final String STATEMENT_CIRCUIT_BY_CAR_TYPE = "SELECT j.name, j.type, j.length, j.\"cornersNumber\", j.address, j.description, j.\"lapPrice\", j.image FROM (assessment.circuit as c INNER JOIN assessment.\"carCircuitSuitability\" as s ON c.type = s.\"circuitType\") as j WHERE j.\"carType\" = ? AND j.available = true";
+    private static final String STATEMENT_CIRCUIT_BY_CAR_TYPE = "SELECT j.name, j.type, j.length, j.\"cornersNumber\", j.address, j.description, j.\"lapPrice\" FROM (assessment.circuit as c INNER JOIN assessment.\"carCircuitSuitability\" as s ON c.type = s.\"circuitType\") as j WHERE j.\"carType\" = ? AND j.available = true";
     private final String carType;
 
     /**
@@ -46,7 +46,7 @@ public class ListCircuitByCarTypeDAO extends AbstractDAO<List<Circuit>> {
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                circuits.add(new Circuit(rs.getString("name"), rs.getString("type"), rs.getInt("length"), rs.getInt("cornersNumber"), rs.getString("address"), rs.getString("description"), rs.getInt("lapPrice"), rs.getBytes("image"), rs.getString("imageMediaType")));
+                circuits.add(new Circuit(rs.getString("name"), rs.getString("type"), rs.getInt("length"), rs.getInt("cornersNumber"), rs.getString("address"), rs.getString("description"), rs.getInt("lapPrice"), null, ""));
                 LOGGER.info("Circuit(s) where the car type %s can race successfully listed.", carType);
             }
         } finally {

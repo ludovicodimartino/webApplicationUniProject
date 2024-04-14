@@ -19,11 +19,12 @@
 
             .card{
               border-radius: 10px;
-              height: 300px;
-              width: 400px;
+              height: 250px;
+              width: 350px;
               background-color: lightgrey;
               padding: 15px;
-              display: inline-block;
+              margin: 20px;
+              display: flex;
               flex-direction: column;
               align-items: center;
               justify-content: center;
@@ -39,15 +40,16 @@
             }
 
             .card h1 {
-              font-size: 22px;
-              margin-top: 8px;
+              font-size: 20px;
+              margin-top: auto;
+              margin-bottom: 5px;
             }
 
             .card h5 {
-              font-size: 18px;
+              font-size: 15px;
               color: grey;
-              margin-top: 10px;
-              margin-bottom: 15px;
+              margin-top: 3px;
+              margin-bottom: 10px;
             }
 
             .card .btn {
@@ -72,6 +74,7 @@
                         <div>
                             <div>
                                 <div class="card">
+                                    <img src="<c:url value="/loadCarImage"><c:param name="brand" value="${car.brand}"/><c:param name="model" value="${car.model}"/></c:url>"/>
                                     <h1><c:out value="${car.brand} ${car.model}"/></h1>
                                     <h5><c:out value="${car.type}"/></h5>
                                     <a href="circuits/?carBrand=${car.brand}&carModel=${car.model}&carType=${car.type}" class="btn link" type="button">
@@ -105,7 +108,7 @@
         <div>
             <c:if test="${not empty carBrand && not empty carModel && not empty circuitName}">
                 <h1>Save as favourite</h1>
-                <form method="GET" action="/wacar/user/complete-order/">
+                <form method="POST" action="/wacar/user/create-favourite/recap">
                     <input type="hidden" name="carBrand" value="${carBrand}">
                     <input type="hidden" name="carModel" value="${carModel}">
                     <input type="hidden" name="circuitName" value="${circuitName}">
@@ -113,7 +116,7 @@
                     <button type="submit">Save as favourite</button><br/>
                 </form>
                 <h1>Complete your order</h1>
-                <form method="GET" action="/wacar/user/create-order/recap">
+                <form method="POST" action="/wacar/user/create-order/recap">
                     <label for="date">Select a date:</label>
                     <input type="date" name="date" min="2018-01-01" /></br>
                     <label for="nLaps">Select the number of laps:</label>

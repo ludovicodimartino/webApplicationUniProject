@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * @since 1.00
  */
 public class ListCarByAvailabilityDAO extends AbstractDAO<List<Car>> {
-    private static final String STATEMENT_CAR_LIST_BY_AVAILABILITY = "SELECT c.brand, c.model, c.type, c.horsepower, c.\"0-100\", c.\"maxSpeed\", c.description, c.image FROM assessment.car as c WHERE c.available = ?";
+    private static final String STATEMENT_CAR_LIST_BY_AVAILABILITY = "SELECT c.brand, c.model, c.type, c.horsepower, c.\"0-100\", c.\"maxSpeed\", c.description FROM assessment.car as c WHERE c.available = ?";
     private final boolean available;
 
 
@@ -46,7 +46,7 @@ public class ListCarByAvailabilityDAO extends AbstractDAO<List<Car>> {
 
             rs = pstmt.executeQuery();
             while (rs.next()) {
-                cars.add(new Car(rs.getString("brand"), rs.getString("model"), rs.getString("description"), rs.getInt("maxSpeed"), rs.getInt("horsepower"), rs.getInt("0-100"), available, rs.getString("type"), rs.getBytes("image"), rs.getString("imageMimeType")));
+                cars.add(new Car(rs.getString("brand"), rs.getString("model"), rs.getString("description"), rs.getInt("maxSpeed"), rs.getInt("horsepower"), rs.getInt("0-100"), available, rs.getString("type"), null, ""));
             }
 
             if (available) {

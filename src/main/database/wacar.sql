@@ -389,13 +389,6 @@ CREATE TRIGGER check_car_trigger BEFORE INSERT ON assessment.car FOR EACH ROW EX
 
 
 --
--- Name: favourite check_car_type_suitability_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
---
-
-CREATE TRIGGER check_car_type_suitability_trigger BEFORE INSERT ON assessment.favourite FOR EACH ROW EXECUTE FUNCTION assessment.check_order_function();
-
-
---
 -- Name: circuit check_circuit_trigger; Type: TRIGGER; Schema: assessment; Owner: wacaruser
 --
 

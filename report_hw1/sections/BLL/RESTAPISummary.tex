@@ -15,10 +15,11 @@ A that only administrators can request the specified URI to the server.
 /car\_list/  & GET &  Returns list of all cars in the database & \\\hline
 /circuit\_list/  & GET &  Returns list of all circuits in the database & \\\hline
 /admin/insertCar/ & POST &   & A\\\hline
-/create-order/cars/ & POST &   & U\\\hline
-/create-order/circuits/ & POST &   & U\\\hline
-/create-order/complete-order/ & POST &   & U\\\hline
-/create-order/recap/ & POST &   & U\\\hline
+/create-order/cars/ & POST & Shows a list of availabe cars, and the user must select one of these options. & U\\\hline
+/create-order/circuits/ & POST & Shows the list of possible circuits where the user can race with the selected car & U\\\hline
+/create-order/complete-order/ & POST & Show the form in which the user inserts the date and the number of laps & U\\\hline
+/create-order/recap/ & POST & Shows the information of the selected items and the total price & U\\\hline
+/create-favourite/recap/ & POST & Shows the information of the new favourite item & U\\\hline
 
 \caption{REST API Table}
 \label{tab:termGlossary}
