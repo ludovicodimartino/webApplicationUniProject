@@ -1,17 +1,16 @@
 package it.unipd.dei.webapp.wacar.dao;
 
 import it.unipd.dei.webapp.wacar.resource.Favourite;
-import it.unipd.dei.webapp.wacar.resource.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class FavouriteDAO extends AbstractDAO{
+public class InsertFavouriteDAO extends AbstractDAO{
     private static final String STATEMENT_REGISTRATION = "INSERT INTO assessment.favourite (circuit, \"carBrand\", \"carModel\", \"user\", \"createdAt\") VALUES ('?', '?', '?', '?', '?');";
     private final Favourite favourite;
 
-    public FavouriteDAO(final Connection con, final Favourite favourite) {
+    public InsertFavouriteDAO(final Connection con, final Favourite favourite) {
         super(con);
         this.favourite = favourite;
     }
