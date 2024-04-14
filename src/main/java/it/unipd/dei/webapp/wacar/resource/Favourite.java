@@ -8,7 +8,7 @@ public class Favourite{
     private String circuit;
     private String carBrand;
     private String carModel;
-    private int user;
+    private String account;
     private Timestamp createdAt;
 
     /**
@@ -16,14 +16,14 @@ public class Favourite{
      * @param circuit
      * @param carBrand
      * @param carModel
-     * @param user
+     * @param account
      * @param createdAt
      */
-    public Favourite(String circuit, String carBrand, String carModel, int user, Timestamp createdAt){
+    public Favourite(String circuit, String carBrand, String carModel, String account, Timestamp createdAt){
         this.circuit = circuit;
         this.carBrand = carBrand;
         this.carModel = carModel;
-        this.user = user;
+        this.account = account;
         this.createdAt = createdAt;
     }
 
@@ -31,8 +31,8 @@ public class Favourite{
         return circuit;
     }
 
-    public final int getUser() {
-        return user;
+    public final String getAccount() {
+        return account;
     }
 
     public final String getCarBrand() {
@@ -52,7 +52,7 @@ public class Favourite{
         uJson.put("circuit", circuit);
         uJson.put("carBrand", carBrand);
         uJson.put("carModel", carModel);
-        uJson.put("user", user);
+        uJson.put("account", account);
         uJson.put("createdAt", createdAt);
 
         return uJson;
