@@ -68,6 +68,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 LogContext.setAction("USER INFO");
                 if (isUserLogged) {
                     Message m = new Message("Login success");
+                    request.getRequestDispatcher("/jsp/userPage.jsp").forward(request, response);
                     writePage(user,m,response);
                 }
                 else {
