@@ -92,6 +92,11 @@ public class Actions {
 	public static final String GET_ALL_CIRCUITS = "GET_ALL_CIRCUITS";
 
 	/**
+	 * Getting the orders of a specific user.
+	 */
+	public static final String GET_ORDERS_BY_ACCOUNT = "GET_ORDERS_BY_ACCOUNT";
+
+	/**
      * This class can be neither instantiated nor sub-classed.
      */
     private Actions() {

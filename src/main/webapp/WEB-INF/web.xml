@@ -116,6 +116,14 @@
         <url-pattern>/loadCircuitImage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>ListOrderdsByAccountServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.ListOrdersByAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListOrderdsByAccountServlet</servlet-name>
+        <url-pattern>/user/listOrdersByAccount</url-pattern>
+    </servlet-mapping>
 
     <resource-ref>
         <description>Connection pool to the database</description>

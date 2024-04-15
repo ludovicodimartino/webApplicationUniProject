@@ -10,7 +10,7 @@ import java.sql.Date;
  * @version 1.00
  * @since 1.00
  */
-public class Order {
+public class    Order {
     /**
      * The account that made the order
      */
