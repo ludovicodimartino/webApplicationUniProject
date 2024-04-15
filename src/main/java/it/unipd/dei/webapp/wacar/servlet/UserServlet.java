@@ -5,6 +5,8 @@ import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -49,12 +51,12 @@ public class UserServlet extends AbstractDatabaseServlet {
             case "login/":
                 request.getSession().invalidate();
                 LogContext.setAction("LOGIN");
-                request.getRequestDispatcher("/html/login.html").forward(request, response);
+                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
                 break;
             case "signup/":
                 request.getSession().invalidate();
                 LogContext.setAction("SIGNUP");
-                request.getRequestDispatcher("/html/signup.html").forward(request, response);
+                request.getRequestDispatcher("/jsp/signup.jsp").forward(request, response);
                 break;
             case "logout/":
                 // logout and return to homepage
@@ -176,9 +178,13 @@ public class UserServlet extends AbstractDatabaseServlet {
                 //matches
                 if (user == null){
                     //if not, tell it to the user
+                    //TODO: cambia errore generico con altro
+                    ErrorCode ec = ErrorCode.INTERNAL_ERROR;
+                    res.setStatus(ec.getHTTPCode());
                     m = new Message("The user does not exist","E200","Missing user");
                     LOGGER.error("problems with user: {}", m.getMessage());
-
+                    req.setAttribute("message", m);
+                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
                 }
                 else{
                     m = new Message("Login success");
@@ -202,27 +208,38 @@ public class UserServlet extends AbstractDatabaseServlet {
                 if (email == null || email.equals("")) {
                     //the email is null (was not set on the parameters) or an empty string
                     //notify this to the user
-                    m = new Message("Insert an email","E200","Missing fields");
+                    ErrorCode ec = ErrorCode.EMAIL_MISSING;
+                    res.setStatus(ec.getHTTPCode());
+                    m = new Message("Insert an email",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                    req.setAttribute("message", m);
                     LOGGER.error("problems with fields: {}", m.getMessage());
 
                 } else if (password == null || password.equals("")) {
                     //the password was empty
-
-                    m = new Message("Insert the password","E200","Missing fields");
+                    ErrorCode ec = ErrorCode.PASSWORD_MISSING;
+                    m = new Message("Insert the password",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                     LOGGER.error("problems with fields: {}", m.getMessage());
-
+                    req.setAttribute("message", m);
+                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
                 }
                 // check password is compliant
                 else if (!password.matches(regex_psw)){
-                    m = new Message("This password is not compliant","E200","Password not compliant");
+                    ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
+                    m = new Message("This password is not compliant",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
 
                     LOGGER.error("problems with fields: {}", m.getMessage());
+                    req.setAttribute("message", m);
+                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
 
                 }
                 // check email is compliant
                 else if (!email.matches(regex_email)){
-                    m = new Message("This is not an email","E200","Email not compliant");
+                    ErrorCode ec = ErrorCode.MAIL_NOT_COMPLIANT;
+
+                    m = new Message("This is not an email",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                     LOGGER.error("problems with fields: {}", m.getMessage());
+                    req.setAttribute("message", m);
+                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
 
                 }
                 else{
@@ -242,8 +259,11 @@ public class UserServlet extends AbstractDatabaseServlet {
                     //matches
                     if (user == null){
                         //if not, tell it to the user
-                        m = new Message("The user does not exist","E200","Missing user");
+                        ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
+                        m = new Message("The user does not exist",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                         LOGGER.error("problems with user: {}", m.getMessage());
+                        req.setAttribute("message", m);
+                        req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
 
                     }
                     else{
@@ -333,10 +353,19 @@ public class UserServlet extends AbstractDatabaseServlet {
             LOGGER.info("Checking if user already exists");
             boolean userExists = new GetUserByEmailDAO(getConnection(), new User(email)).access().getOutputParam();
 
+
+            LOGGER.info("User exists: {}",userExists);
+
             if (userExists) {
                 // the user has already signed up with this email
+                LOGGER.error("Email {} already used",email);
+
+                ErrorCode ec = ErrorCode.MAIL_ALREADY_USED;
+                res.setStatus(ec.getHTTPCode());
                 m = new Message("This user already exists", "E200", "User already existing");
-                LOGGER.error("problems with fields: {}", m.getMessage());
+                req.setAttribute("message", m);
+                req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
+
 
             }
             else if (!fieldEmpty){

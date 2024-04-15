@@ -26,8 +26,6 @@ import jakarta.servlet.http.HttpServletResponse;
 public class CircuitListServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        req.getSession().invalidate();
-
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
         LogContext.setAction(Actions.GET_ALL_CIRCUITS);
