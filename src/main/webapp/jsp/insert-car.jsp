@@ -28,7 +28,7 @@
     <input type="number" id="horsepower" name="horsepower" required><br><br>
 
     <label for="acceleration">0-100 (in seconds):</label><br>
-    <input type="number" id="acceleration" name="acceleration" required><br><br>
+    <input type="number" id="acceleration" name="acceleration" step=".01" required><br><br>
 
     <label for="availability">Availability:</label><br>
     <select id="availability" name="availability" required>

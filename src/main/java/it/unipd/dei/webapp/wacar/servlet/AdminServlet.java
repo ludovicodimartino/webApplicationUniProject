@@ -210,11 +210,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
         // request parameters
         String model = null;
         String brand = null;
-        String description;
-        int maxSpeed;
-        int horsepower;
-        int acceleration;
-        boolean availability;
+        String description = null;
+        int maxSpeed = -1;
+        int horsepower = -1;
+        float acceleration = -1;
+        boolean availability = false;
         String type = null;
         byte[] image = null;
         String imageMediaType = null;
@@ -224,15 +224,6 @@ public class AdminServlet extends AbstractDatabaseServlet {
         Message m;
 
         try {
-            // retrieves the request parameters
-            model = req.getParameter("model");
-            brand = req.getParameter("brand");
-            description = req.getParameter("description");
-            maxSpeed = Integer.parseInt(req.getParameter("maxSpeed"));
-            horsepower = Integer.parseInt(req.getParameter("horsepower"));
-            acceleration = Integer.parseInt(req.getParameter("acceleration"));
-            availability = Boolean.parseBoolean(req.getParameter("availability"));
-            type = req.getParameter("type");
 
             // retrieves the request parameters
             for (Part p : req.getParts()) {
@@ -276,7 +267,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
                     case "acceleration":
                         try (InputStream is = p.getInputStream()) {
-                            acceleration = Integer.parseInt(new String(is.readAllBytes(), StandardCharsets.UTF_8).trim());
+                            acceleration = Float.parseFloat(new String(is.readAllBytes(), StandardCharsets.UTF_8).trim());
                         }
                         break;
 
@@ -344,7 +335,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
         try {
 
-            // stores the employee and the message as a request attribute
+            // stores the car and the message as a request attribute
             req.setAttribute("car", car);
             req.setAttribute("message", m);
 
@@ -497,54 +488,12 @@ public class AdminServlet extends AbstractDatabaseServlet {
         }
 
         try {
-            // set the MIME media type of the response
-            res.setContentType("text/html; charset=utf-8");
+            // stores the car and the message as a request attribute
+            req.setAttribute("circuit", circuit);
+            req.setAttribute("message", m);
 
-            // get a stream to write the response
-            PrintWriter out = res.getWriter();
-
-            // write the HTML page
-            out.printf("<!DOCTYPE html>%n");
-
-            out.printf("<html lang=\"en\">%n");
-            out.printf("<head>%n");
-            out.printf("<meta charset=\"utf-8\">%n");
-            out.printf("<title>Create Circuit</title>%n");
-            out.printf("</head>%n");
-
-            out.printf("<body>%n");
-            out.printf("<h1>Create Circuit</h1>%n");
-            out.printf("<hr/>%n");
-
-            if (m.isError()) {
-                out.printf("<ul>%n");
-                out.printf("<li>error code: %s</li>%n", m.getErrorCode());
-                out.printf("<li>message: %s</li>%n", m.getMessage());
-                out.printf("<li>details: %s</li>%n", m.getErrorDetails());
-                out.printf("</ul>%n");
-            } else {
-                out.printf("<p>%s</p>%n", m.getMessage());
-                out.printf("<ul>%n");
-                out.printf("<li>name: %s</li>%n", circuit.getName());
-                out.printf("<li>address: %s</li>%n", circuit.getAddress());
-                out.printf("<li>description: %s</li>%n", circuit.getDescription());
-                out.printf("<li>length: %s</li>%n", circuit.getLength());
-                out.printf("<li>corners number: %s</li>%n", circuit.getCornersNumber());
-                out.printf("<li>lap price: %s</li>%n", circuit.getLapPrice());
-                out.printf("<li>type: %s</li>%n", circuit.getType());
-                out.printf("<li>available: %s</li>%n", circuit.getAvailable());
-                out.printf("</ul>%n");
-            }
-
-            out.printf("</body>%n");
-
-            out.printf("</html>%n");
-
-            // flush the output stream buffer
-            out.flush();
-
-            // close the output stream
-            out.close();
+            // forwards the control to the create-employee-result JSP
+            req.getRequestDispatcher("/jsp/create-circuit-result.jsp").forward(req, res);
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating the circuit object %s.", name), e);
             throw e;

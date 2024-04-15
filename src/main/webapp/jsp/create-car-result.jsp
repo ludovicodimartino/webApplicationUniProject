@@ -16,7 +16,6 @@
 
 <!-- display the just created car, if any and no errors -->
 <jsp:useBean id="message" scope="request" type="it.unipd.dei.webapp.wacar.resource.Message"/>
-<jsp:useBean id="car" scope="request" type="it.unipd.dei.webapp.wacar.resource.Car"/>
 <c:if test="${not empty car && !message.error}">
     <ul>
         <li>brand: <c:out value="${car.brand}"/></li>

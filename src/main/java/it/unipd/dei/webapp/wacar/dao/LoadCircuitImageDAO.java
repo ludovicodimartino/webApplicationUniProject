@@ -8,16 +8,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class LoadCircuitImageDAO extends AbstractDAO<Circuit> {
-    private static final String STATEMENT = "SELECT image, imageMediaType FROM assessment.circuit WHERE name=? and type=?";
+    private static final String STATEMENT = "SELECT image, imageMediaType FROM assessment.circuit WHERE name=?";
 
     private final String name;
 
-    private final String type;
 
-    public LoadCircuitImageDAO(final Connection con, final String name, final String type) {
+    public LoadCircuitImageDAO(final Connection con, final String name) {
         super(con);
         this.name = name;
-        this.type = type;
     }
 
     @Override
@@ -30,7 +28,6 @@ public class LoadCircuitImageDAO extends AbstractDAO<Circuit> {
         try {
             stmnt = con.prepareStatement(STATEMENT);
             stmnt.setString(1, name);
-            stmnt.setString(2, type);
 
             rs = stmnt.executeQuery();
 
@@ -47,10 +44,10 @@ public class LoadCircuitImageDAO extends AbstractDAO<Circuit> {
                         rs.getBytes("image"),
                         rs.getString("imageMediaType"));
 
-                LOGGER.info(String.format("Image for circuit %s %s successfully loaded.", name, type));
+                LOGGER.info(String.format("Image for circuit %s successfully loaded.", name));
             } else {
-                LOGGER.warn(String.format("Circuit %s %s not found.", name, type));
-                throw new SQLException(String.format("Circuit %s %s not found.", name, type), "NOT_FOUND");
+                LOGGER.warn(String.format("Circuit %s not found.", name));
+                throw new SQLException(String.format("Circuit %s not found.", name), "NOT_FOUND");
             }
         } finally {
             if (rs != null) {

@@ -15,24 +15,22 @@ public class LoadCircuitImageServlet extends AbstractDatabaseServlet {
         LogContext.setAction(Actions.LOAD_CIRCUIT_IMAGE);
 
         String name;
-        String type;
 
         Circuit circuit;
 
         try {
 
             name = req.getParameter("name");
-            type = req.getParameter("type");
 
             LogContext.setResource(req.getRequestURI());
 
-            circuit = new LoadCircuitImageDAO(getConnection(), name, type).access().getOutputParam();
+            circuit = new LoadCircuitImageDAO(getConnection(), name).access().getOutputParam();
 
             res.setContentType(circuit.getImageMediaType());
             res.getOutputStream().write(circuit.getImage());
             res.getOutputStream().flush();
 
-            LOGGER.info(String.format("Image for circuit %s %s successfully sent.", name, type));
+            LOGGER.info(String.format("Image for circuit %s successfully sent.", name));
 
 
         } catch (Exception e) {

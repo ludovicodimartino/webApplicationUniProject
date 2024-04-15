@@ -38,7 +38,7 @@ public class Car {
     /**
      * The acceleration of the car (0-100) in seconds
      */
-    private final int acceleration;
+    private final float acceleration;
 
     /**
      * Whether the car is available or not
@@ -60,7 +60,7 @@ public class Car {
      */
     private final String imageMediaType;
 
-    public Car(final String brand, final String model, final String description, final int maxSpeed, final int horsepower, final int acceleration, final boolean available, final String type, final byte[] image, final String imageMediaType) {
+    public Car(final String brand, final String model, final String description, final int maxSpeed, final int horsepower, final float acceleration, final boolean available, final String type, final byte[] image, final String imageMediaType) {
         this.brand = brand;
         this.model = model;
         this.description = description;
@@ -93,7 +93,7 @@ public class Car {
         return horsepower;
     }
 
-    public int getAcceleration() {
+    public float getAcceleration() {
         return acceleration;
     }
 
