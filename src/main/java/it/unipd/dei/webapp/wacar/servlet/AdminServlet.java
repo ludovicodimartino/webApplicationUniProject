@@ -5,9 +5,10 @@ import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import jakarta.activation.MimeTypeParseException;
@@ -131,12 +132,19 @@ public class AdminServlet extends AbstractDatabaseServlet {
      * @throws IOException      if any error happens during the response writing operation
      * @throws ServletException if any problem occurs while executing the servlet.
      */
-    private void carCircuitSuitabilityPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException{
+    private void carCircuitSuitabilityPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         try {
             List<CarCircuitSuitability> cCSuitList = new ListCarCircuitSuitabilityDAO(getConnection()).access().getOutputParam();
             List<Type> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
             List<Type> circuitTypeList = new GetCircuitTypesDAO(getConnection()).access().getOutputParam();
-            req.setAttribute("cCSuitList", cCSuitList);
+
+            // Pre-processing of the cCSuitList for the jsp page
+            HashMap<String, List<String>> ccSuitMap = new HashMap<>();
+            for (CarCircuitSuitability el : cCSuitList) {
+                List<String> carList = ccSuitMap.computeIfAbsent(el.getCarType(), k -> new ArrayList<>());
+                carList.add(el.getCircuitType());
+            }
+            req.setAttribute("cCSuitMap", ccSuitMap);
             req.setAttribute("carTypeList", carTypeList);
             req.setAttribute("circuitTypeList", circuitTypeList);
             req.getRequestDispatcher("/jsp/car-circuit-suitability.jsp").forward(req, res);
@@ -181,6 +189,16 @@ public class AdminServlet extends AbstractDatabaseServlet {
                 case "insertCircuit/":
                     LogContext.setAction(Actions.INSERT_CIRCUIT);
                     insertCircuitOperations(req, res);
+                    break;
+
+                case "insertMapping/":
+                    LogContext.setAction(Actions.INSERT_MAPPING);
+                    insertCarCircuitSuitabilityOperations(req, res);
+                    break;
+
+                case "deleteMapping/":
+                    LogContext.setAction(Actions.DELETE_MAPPING);
+                    deleteMappingOperations(req, res);
                     break;
 
                 default:
@@ -453,9 +471,9 @@ public class AdminServlet extends AbstractDatabaseServlet {
             LOGGER.info(new StringFormattedMessage("Circuit object %s successfully created.", name));
 
         } catch (NumberFormatException e) {
-        m = new Message(
-                "Cannot create the circuit object. Invalid input parameters: maxSpeed, horsepower and acceleration must be integer.",
-                "E100", e.getMessage());
+            m = new Message(
+                    "Cannot create the circuit object. Invalid input parameters: maxSpeed, horsepower and acceleration must be integer.",
+                    "E100", e.getMessage());
         } catch (MimeTypeParseException e) {
             m = new Message(
                     "Cannot create the circuit object. Unsupported MIME media type for circuit image. Expected: image/png or image/jpeg.",
@@ -492,10 +510,147 @@ public class AdminServlet extends AbstractDatabaseServlet {
             req.setAttribute("circuit", circuit);
             req.setAttribute("message", m);
 
-            // forwards the control to the create-employee-result JSP
+            // forwards the control to the JSP
             req.getRequestDispatcher("/jsp/create-circuit-result.jsp").forward(req, res);
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating the circuit object %s.", name), e);
+            throw e;
+        } finally {
+            LogContext.removeIPAddress();
+            LogContext.removeAction();
+            LogContext.removeResource();
+        }
+    }
+
+    /**
+     * All the operations needed to insert a mapping between a car and a circuit in the database.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any error occurs while executing the servlet.
+     */
+    private void insertCarCircuitSuitabilityOperations(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+
+        // request parameters
+        String carType = null;
+        String circuitType = null;
+
+        // model
+        CarCircuitSuitability cCSuit;
+        Message m;
+
+        try {
+            carType = req.getParameter("carType");
+            circuitType = req.getParameter("circuitType");
+
+            // Create a new car object
+            cCSuit = new CarCircuitSuitability(carType, circuitType);
+
+            // insert the car in the database
+            new InsertCarCircuitSuitabilityDAO(getConnection(), cCSuit).access();
+
+            m = new Message(String.format("Mapping between car type %s and circuit type %s successfully created.", carType, circuitType));
+
+            LOGGER.info(String.format("Mapping between car type %s and circuit type %s successfully created.", carType, circuitType));
+        } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot create the mapping: mapping %s %s already exists.", carType, circuitType), "E300",
+                        e.getMessage());
+                LOGGER.error(String.format("Cannot create the mapping: mapping %s %s already exists.", carType, circuitType));
+            } else if ("23503".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot create the mapping: car type %s or circuit type %s does not exist.", carType, circuitType), "E400",
+                        e.getMessage());
+                LOGGER.error(
+                        String.format("Cannot create the mapping: car type %s or circuit type %s does not exist.", carType, circuitType),
+                        e);
+            } else if ("23502".equals(e.getSQLState())) {
+                m = new Message("Cannot create the mapping: the circuit type or the car type are null.", "E500",
+                        e.getMessage());
+                LOGGER.error(
+                        "Cannot create the mapping: the circuit type or the car type are null.",
+                        e);
+            } else {
+                m = new Message("Cannot create the mapping: unexpected error while accessing the database.", "E200",
+                        e.getMessage());
+
+                LOGGER.error("Cannot create the mapping: unexpected error while accessing the database.", e);
+            }
+        }
+        try {
+            // forwards the control to the JSP
+            req.setAttribute("message", m);
+            carCircuitSuitabilityPage(req, res);
+        } catch (IOException e) {
+            LOGGER.error(new StringFormattedMessage("Unable to send response when creating the mapping (%s, %s).", carType, circuitType), e);
+            throw e;
+        } finally {
+            LogContext.removeIPAddress();
+            LogContext.removeAction();
+            LogContext.removeResource();
+        }
+    }
+
+    /**
+     * All the operations needed to delete a mapping between a car and a circuit in the database.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any error occurs while executing the servlet.
+     */
+    private void deleteMappingOperations(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{
+        // request parameters
+        String carType = null;
+        String circuitType = null;
+
+        // model
+        CarCircuitSuitability cCSuit;
+        Message m;
+
+        try {
+            carType = req.getParameter("carType");
+            circuitType = req.getParameter("circuitType");
+
+            // Create a new car object
+            cCSuit = new CarCircuitSuitability(carType, circuitType);
+
+            // insert the car in the database
+            new DeleteCarCircuitSuitabilityDAO(getConnection(), cCSuit).access();
+
+            m = new Message(String.format("Mapping between car type %s and circuit type %s successfully deleted.", carType, circuitType));
+
+            LOGGER.info(String.format("Mapping between car type %s and circuit type %s successfully deleted.", carType, circuitType));
+        } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot delete the mapping: mapping %s %s already exists.", carType, circuitType), "E300",
+                        e.getMessage());
+                LOGGER.error(String.format("Cannot delete the mapping: mapping %s %s already exists.", carType, circuitType));
+            } else if ("23503".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot delete the mapping: car type %s or circuit type %s does not exist.", carType, circuitType), "E400",
+                        e.getMessage());
+                LOGGER.error(
+                        String.format("Cannot delete the mapping: car type %s or circuit type %s does not exist.", carType, circuitType),
+                        e);
+            } else if ("23502".equals(e.getSQLState())) {
+                m = new Message("Cannot delete the mapping: the circuit type or the car type are null.", "E500",
+                        e.getMessage());
+                LOGGER.error(
+                        "Cannot delete the mapping: the circuit type or the car type are null.",
+                        e);
+            } else {
+                m = new Message("Cannot delete the mapping: unexpected error while accessing the database.", "E200",
+                        e.getMessage());
+
+                LOGGER.error("Cannot delete the mapping: unexpected error while accessing the database.", e);
+            }
+        }
+        try {
+            // forwards the control to the JSP
+            req.setAttribute("message", m);
+            carCircuitSuitabilityPage(req, res);
+        } catch (IOException e) {
+            LOGGER.error(new StringFormattedMessage("Unable to send response when deleting the mapping (%s, %s).", carType, circuitType), e);
             throw e;
         } finally {
             LogContext.removeIPAddress();
@@ -509,7 +664,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
      *
      * @param imageMediaType the media type of the image.
      */
-    private void parseImageMediaType(final String imageMediaType) throws MimeTypeParseException{
+    private void parseImageMediaType(final String imageMediaType) throws MimeTypeParseException {
         switch (imageMediaType.toLowerCase().trim()) {
 
             case "image/png":

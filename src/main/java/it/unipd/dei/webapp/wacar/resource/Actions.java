@@ -82,6 +82,17 @@ public class Actions {
 	public static final String GET_MAPPING_PAGE = "GET_MAPPING_PAGE";
 
 	/**
+	 * Insert a car-circuit mapping.
+	 */
+	public static final String INSERT_MAPPING = "INSERT_MAPPING";
+
+	/**
+	 * Delete a car-circuit mapping.
+	 */
+	public static final String DELETE_MAPPING = "DELETE_MAPPING";
+
+
+	/**
 	 * Getting the page to insert/visualize and delete car-circuit mappings.
 	 */
 	public static final String GET_ALL_CARS = "GET_ALL_CARS";
