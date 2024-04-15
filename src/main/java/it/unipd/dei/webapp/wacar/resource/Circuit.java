@@ -5,6 +5,7 @@ package it.unipd.dei.webapp.wacar.resource;
  * 
  * @author Manuel Rigobello (manuel.rigobello@studenti.unipd.it)
  * @author Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
+ * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */
@@ -137,5 +138,9 @@ public class Circuit {
                 ", lapPrice=" + lapPrice +
                 ", available=" + available +
                 '}';
+    }
+
+    public final boolean hasPhoto() {
+        return image != null && image.length > 0 && imageMediaType != null && !imageMediaType.isBlank();
     }
 }

@@ -34,7 +34,22 @@
                 <td><c:out value="${car.horsepower}"/></td>
                 <td><c:out value="${car.acceleration}"/></td>
                 <td><c:out value="${car.available}"/></td>
-                <td><c:out value="${car.type}"/></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${car.hasPhoto()}">
+                            <td>
+                                <c:out value="${car.imageMediaType}"/>
+                            </td>
+                            <td>
+                                <img src="<c:url value="/loadCarImage"><c:param name="model" value="${car.model}"/><c:param name="brand" value="${car.brand}"/></c:url>" alt="car image"/>
+                            </td>
+                        </c:when>
+                        <c:otherwise>
+                            <!-- Define behavior when the car doesn't have a photo -->
+                            <td>No photo available</td>
+                        </c:otherwise>
+                    </c:choose>
+                </td>
             </tr>
         </c:forEach>
     </c:if>

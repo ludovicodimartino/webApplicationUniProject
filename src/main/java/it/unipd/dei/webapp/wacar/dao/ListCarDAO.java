@@ -50,7 +50,7 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
                         rs.getString("description"),
                         rs.getInt("maxSpeed"),
                         rs.getInt("horsepower"),
-                        rs.getInt("acceleration"),
+                        rs.getInt("0-100"),
                         rs.getBoolean("available"),
                         rs.getString("type"),
                         rs.getBytes("image"),

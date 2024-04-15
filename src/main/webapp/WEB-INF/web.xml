@@ -107,6 +107,16 @@
         <url-pattern>/loadCarImage</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>LoadCircuitImageServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.LoadCircuitImageServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LoadCircuitImageServlet</servlet-name>
+        <url-pattern>/loadCircuitImage</url-pattern>
+    </servlet-mapping>
+
+
     <resource-ref>
         <description>Connection pool to the database</description>
         <res-ref-name>jdbc/WaCar</res-ref-name>

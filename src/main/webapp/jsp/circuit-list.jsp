@@ -35,7 +35,22 @@
                 <td><c:out value="${circuit.description}"/></td>
                 <td><c:out value="${circuit.lapPrice}"/></td>
                 <td><c:out value="${circuit.available}"/></td>
-                <td><c:out value="${circuit.image}"/></td>
+                <td>
+                    <c:choose>
+                        <c:when test="${circuit.hasPhoto()}">
+                        <td>
+                            <c:out value="${circuit.imageMediaType}"/>
+                        </td>
+                        <td>
+                            <img src="<c:url value="/loadCircuitImage"><c:param name="name" value="${circuit.name}"/><c:param name="type" value="${circuit.type}"/></c:url>" alt="circuit image"/>
+                        </td>
+                        </c:when>
+                    <c:otherwise>
+                        <!-- Define behavior when the car doesn't have a photo -->
+                        <td>No photo available</td>
+                    </c:otherwise>
+                </c:choose>
+                </td>
             </tr>
         </c:forEach>
     </c:if>

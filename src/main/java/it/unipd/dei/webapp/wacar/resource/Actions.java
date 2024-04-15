@@ -5,6 +5,7 @@ package it.unipd.dei.webapp.wacar.resource;
  *
  * @author Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
  * @author Manuel Rigobello (manuel.rigobello@studenti.unipd.it)
+ * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */
@@ -71,11 +72,26 @@ public class Actions {
 	public static final String LOAD_CAR_IMAGE = "LOAD_CAR_IMAGE";
 
 	/**
+	 * Loading of a car image
+	 */
+	public static final String LOAD_CIRCUIT_IMAGE = "LOAD_CIRCUIT_IMAGE";
+
+	/**
 	 * Getting the page to insert/visualize and delete car-circuit mappings.
 	 */
 	public static final String GET_MAPPING_PAGE = "GET_MAPPING_PAGE";
 
-    /**
+	/**
+	 * Getting the page to insert/visualize and delete car-circuit mappings.
+	 */
+	public static final String GET_ALL_CARS = "GET_ALL_CARS";
+
+	/**
+	 * Getting the page to insert/visualize and delete car-circuit mappings.
+	 */
+	public static final String GET_ALL_CIRCUITS = "GET_ALL_CIRCUITS";
+
+	/**
      * This class can be neither instantiated nor sub-classed.
      */
     private Actions() {

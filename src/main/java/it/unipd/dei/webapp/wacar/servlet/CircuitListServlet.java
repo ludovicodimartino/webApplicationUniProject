@@ -1,6 +1,7 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.dao.ListCircuitDAO;
+import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Circuit;
 import it.unipd.dei.webapp.wacar.resource.Message;
 
@@ -14,7 +15,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-
+/**
+ * Servlet to list all circuits
+ *
+ * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
+ * @version 1.00
+ * @since 1.00
+ */
 @WebServlet(name = "CircuitListServlet", value = "/circuit_list/")
 public class CircuitListServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -23,7 +30,7 @@ public class CircuitListServlet extends AbstractDatabaseServlet {
 
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
-        LogContext.setAction("GET_ALL_CIRCUITS_FROM_DATABASE");
+        LogContext.setAction(Actions.GET_ALL_CIRCUITS);
 
         List<Circuit> circuits = null;
         Message m = null;

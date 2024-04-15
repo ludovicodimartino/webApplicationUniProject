@@ -138,4 +138,8 @@ public class Car {
                 ", type='" + type + '\'' +
                 '}';
     }
+
+    public final boolean hasPhoto() {
+        return image != null && image.length > 0 && imageMediaType != null && !imageMediaType.isBlank();
+    }
 }
