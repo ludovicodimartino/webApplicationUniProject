@@ -36,14 +36,14 @@ public class OrderServlet  extends AbstractDatabaseServlet {
                 LogContext.setIPAddress(req.getRemoteAddr());
                 LogContext.setAction(Actions.CREATE_ORDER_LIST_CARS);
 
-                getCars(req, res);
+                listAvailableCars(req, res);
                 break;
             case "circuits":
             case "circuits/":
                 LogContext.setIPAddress(req.getRemoteAddr());
                 LogContext.setAction(Actions.CREATE_ORDER_LIST_SUITABLE_CIRCUIT);
 
-                getCircuits(req, res);
+                listSuitableCircuits(req, res);
                 break;
             case "complete-order":
             case "complete-order/":
@@ -55,53 +55,9 @@ public class OrderServlet  extends AbstractDatabaseServlet {
             case "recap":
             case "recap/":
                 LogContext.setIPAddress(req.getRemoteAddr());
-                LogContext.setAction(Actions.SHOW_ORDER);
+                LogContext.setAction(Actions.INSERT_ORDER);
 
-                User user = (User) req.getSession().getAttribute("account");
-
-                Message m = null;
-                Order order = null;
-                String account = "";
-                java.sql.Date date;
-                String carBrand;
-                String carModel;
-                String circuitName;
-                Timestamp createdAt;
-                int nLaps;
-                int lapPrice;
-
-                try {
-                    account = user.getEmail();
-                    SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-                    java.util.Date d = df.parse(req.getParameter("date"));
-                    date = new java.sql.Date(d.getTime());
-                    carBrand = req.getParameter("carBrand");
-                    carModel = req.getParameter("carModel");
-                    circuitName = req.getParameter("circuitName");
-                    createdAt = new Timestamp(System.currentTimeMillis());
-                    nLaps = Integer.parseInt(req.getParameter("nLaps"));
-                    lapPrice = Integer.parseInt(req.getParameter("lapPrice"));
-
-                    order = new Order(account, date, carBrand, carModel, circuitName, createdAt, nLaps, nLaps * lapPrice);
-                } catch (Exception e) {
-                    LOGGER.error("Invalid request: {}", e.getMessage());
-                }
-
-                try {
-                    LogContext.setIPAddress(req.getRemoteAddr());
-                    LogContext.setAction(Actions.INSERT_ORDER);
-                    new InsertOrderDAO(getConnection(), order).access().getOutputParam();
-                } catch (SQLException e) {
-                    m = new Message("Unable to insert the new order.", "E5A1", e.getMessage());
-                    req.setAttribute("message", m);
-
-                    LOGGER.error("Unable to insert the new order.", e);
-                }
-
-                req.setAttribute("newOrder", order);
-                LOGGER.info("Redirect to recap-order.jsp");
-
-                req.getRequestDispatcher("/jsp/recap-order.jsp").forward(req, res);
+                showRecap(req, res);
                 break;
         }
         // case op = cars => fai quello che c'è qua sotto
@@ -116,7 +72,7 @@ public class OrderServlet  extends AbstractDatabaseServlet {
     }
 
 
-    private void getCars(HttpServletRequest req, HttpServletResponse res) {
+    private void listAvailableCars(HttpServletRequest req, HttpServletResponse res) {
         List<Car> cars = null;
         Message m = null;
         final boolean available = true;
@@ -138,13 +94,14 @@ public class OrderServlet  extends AbstractDatabaseServlet {
         }
 
         try {
-            LOGGER.info("message: {}", m);
             req.setAttribute("message",m);
             req.setAttribute("carsList", cars);
+
             req.getRequestDispatcher("/jsp/create-order.jsp").forward(req, res);
         } catch(Exception e) {
-            m = new Message("Unable to load the list of cars.");
-            LOGGER.error(new StringFormattedMessage("Unable to load the list of cars."));
+            m = new Message("Error while loading the list of cars.");
+            LOGGER.error(new StringFormattedMessage("Error while loading the list of cars."));
+
             req.setAttribute("message",m);
         } finally {
             LogContext.removeIPAddress();
@@ -153,13 +110,20 @@ public class OrderServlet  extends AbstractDatabaseServlet {
     }
 
 
-    private void getCircuits(HttpServletRequest req, HttpServletResponse res) {
+    private void listSuitableCircuits(HttpServletRequest req, HttpServletResponse res) {
         String carBrand = req.getParameter("carBrand");
         String carModel = req.getParameter("carModel");
         String carType = req.getParameter("carType");
 
         List<Circuit> circuits = null;
         Message m = null;
+
+        if (carBrand == "" || carModel == "" || carType == "") {
+            LOGGER.error("Invalid request: missing required attributes.");
+            m = new Message("Cannot create the order: wrong or missing attributes.", "E4A9", null);
+            res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            return;
+        }
 
         try {
             circuits = new ListCircuitByCarTypeDAO(getConnection(), carType).access().getOutputParam();
@@ -203,6 +167,59 @@ public class OrderServlet  extends AbstractDatabaseServlet {
             req.getRequestDispatcher("/jsp/create-order.jsp").forward(req, res);
         } catch(Exception e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating latest page: {}", e));
+        } finally {
+            LogContext.removeIPAddress();
+            LogContext.removeAction();
+        }
+    }
+
+    private void showRecap(HttpServletRequest req, HttpServletResponse res) {
+        User user = (User) req.getSession().getAttribute("account");
+
+        Message m = null;
+        Order order = null;
+        String account = "";
+        java.sql.Date date;
+        String carBrand;
+        String carModel;
+        String circuitName;
+        Timestamp createdAt;
+        int nLaps;
+        int lapPrice;
+
+        try {
+            account = user.getEmail();
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+            java.util.Date d = df.parse(req.getParameter("date"));
+            date = new java.sql.Date(d.getTime());
+            carBrand = req.getParameter("carBrand");
+            carModel = req.getParameter("carModel");
+            circuitName = req.getParameter("circuitName");
+            createdAt = new Timestamp(System.currentTimeMillis());
+            nLaps = Integer.parseInt(req.getParameter("nLaps"));
+            lapPrice = Integer.parseInt(req.getParameter("lapPrice"));
+
+            order = new Order(account, date, carBrand, carModel, circuitName, createdAt, nLaps, nLaps * lapPrice);
+        } catch (Exception e) {
+            LOGGER.error("Invalid request: %s", e.getMessage());
+        }
+
+        try {
+            new InsertOrderDAO(getConnection(), order).access().getOutputParam();
+        } catch (SQLException e) {
+            m = new Message("Unable to insert the new order.", "E5A1", e.getMessage());
+            req.setAttribute("message", m);
+
+            LOGGER.error("Unable to insert the new order.", e);
+        }
+
+        try {
+            req.setAttribute("newOrder", order);
+            LOGGER.info("Redirect to recap-order.jsp");
+
+            req.getRequestDispatcher("/jsp/recap-order.jsp").forward(req, res);
+        } catch(Exception e) {
+            LOGGER.error(new StringFormattedMessage("Unable to send response when creating the recap order page: %s", e.getMessage()));
         } finally {
             LogContext.removeIPAddress();
             LogContext.removeAction();

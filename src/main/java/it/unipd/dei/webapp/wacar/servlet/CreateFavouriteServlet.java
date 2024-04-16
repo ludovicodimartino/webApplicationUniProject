@@ -50,16 +50,18 @@ public class CreateFavouriteServlet extends AbstractDatabaseServlet {
 
             favourite = new Favourite(circuitName, carBrand, carModel, user.getEmail(), createdAt);
         } catch (Exception e) {
-            LOGGER.error("Invalid request: {}", e.getMessage());
+            LOGGER.error("Invalid request: ", e.getMessage());
         }
 
         try {
             new InsertFavouriteDAO(getConnection(), favourite).access().getOutputParam();
         } catch (SQLException e) {
-            m = new Message("Unable to insert the new order.", "E5A1", e.getMessage());
-            req.setAttribute("message", m);
+            if (e.getSQLState().equals("23505")) {
+                m = new Message("You already have a favourite with the same choices.", "E5A1", e.getMessage());
+                req.setAttribute("message", m);
+            }
 
-            LOGGER.error("Unable to insert the new favourite: " + e.getMessage());
+            LOGGER.error("Unable to insert the new favourite: %s" + e.getMessage());
         }
 
         LogContext.setAction(Actions.SHOW_FAVOURITE);

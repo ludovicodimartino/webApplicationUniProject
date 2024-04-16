@@ -49,13 +49,12 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
             pstmt.setInt(7, order.getPrice());
             pstmt.setString(8, order.getAccount());
 
-            LOGGER.info("car brand: " + order.getCarBrand());
-            LOGGER.info("car model: " + order.getCarModel());
-            LOGGER.info("circuit: " + order.getCircuit());
             pstmt.execute();
-            LOGGER.info("Order inserted: " + order);
+
+            LOGGER.info("New oder of user %s has been inserted correctly.", order.getAccount());
+
+            con.commit();
         } catch (SQLException e) {
-            LOGGER.error(e.getMessage());
             con.rollback();
             throw e;
         } finally {

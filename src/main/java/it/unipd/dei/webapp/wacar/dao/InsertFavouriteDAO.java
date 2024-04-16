@@ -38,9 +38,13 @@ public class InsertFavouriteDAO extends AbstractDAO<Car> {
             pstmt.setString(5, favourite.getAccount());
 
             pstmt.execute();
-            LOGGER.info("Favourite with car %s %s and circuit = %s inserted.", favourite.getCarBrand(), favourite.getCarModel(), favourite.getCircuit());
+
+            LOGGER.info("New favourite for user %s has been inserted.", favourite.getAccount());
+
+            con.commit();
         } catch (SQLException e) {
-            LOGGER.error("Cannot add new favourite: " + e.getMessage());
+            con.rollback();
+            throw e;
         } finally {
             if (pstmt != null) {
                 pstmt.close();
