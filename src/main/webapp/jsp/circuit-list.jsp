@@ -39,9 +39,6 @@
                     <c:choose>
                         <c:when test="${circuit.hasPhoto()}">
                         <td>
-                            <c:out value="${circuit.imageMediaType}"/>
-                        </td>
-                        <td>
                             <img src="<c:url value="/loadCircuitImage"><c:param name="name" value="${circuit.name}"/><c:param name="type" value="${circuit.type}"/></c:url>" alt="circuit image"/>
                         </td>
                         </c:when>

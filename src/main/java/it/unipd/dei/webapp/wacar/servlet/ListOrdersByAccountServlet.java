@@ -13,7 +13,9 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Servlet to handle the listing of the orders of a specific user.
@@ -55,6 +57,32 @@ public class ListOrdersByAccountServlet extends AbstractDatabaseServlet{
             LogContext.removeResource();
         }
 
+        assert orders != null;
+        if (!orders.isEmpty()) {
+            Date currentDate = new Date();
+
+            boolean[] isDifferenceGreaterThan3DaysArray = new boolean[orders.size()];
+
+            // Iterate over each object in the ArrayList
+            for (int i = 0; i < orders.size(); i++) {
+                // Get the order date from the object
+                Date orderDate = orders.get(i).getDate();
+
+                // Calculate the difference in days between the order date and the current date
+                long differenceMillis = orderDate.getTime() - currentDate.getTime();
+
+                long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
+
+                // Check if the difference is greater than 3 days
+                isDifferenceGreaterThan3DaysArray[i] = differenceDays > 3;
+
+                // Debugging: Print out differenceDays and other relevant information
+                LOGGER.info("Difference in days for order " + i + ": " + differenceDays);
+                LOGGER.info("Is difference greater than 3 days? " + isDifferenceGreaterThan3DaysArray[i]);
+            }
+            // Set the array as an attribute to be passed to the JSP file
+            req.setAttribute("modifyAvailable", isDifferenceGreaterThan3DaysArray);
+        }
         req.setAttribute("orders", orders);
         req.setAttribute("message", m);
 

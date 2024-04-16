@@ -38,9 +38,6 @@
                     <c:choose>
                         <c:when test="${car.hasPhoto()}">
                             <td>
-                                <c:out value="${car.imageMediaType}"/>
-                            </td>
-                            <td>
                                 <img src="<c:url value="/loadCarImage"><c:param name="model" value="${car.model}"/><c:param name="brand" value="${car.brand}"/></c:url>" alt="car image"/>
                             </td>
                         </c:when>

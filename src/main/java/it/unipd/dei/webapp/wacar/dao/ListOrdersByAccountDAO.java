@@ -64,7 +64,6 @@ public class ListOrdersByAccountDAO extends AbstractDAO<List<Order>> {
             if(pstmt != null)
                 pstmt.close();
         }
-
         this.outputParam = orders;
     }
 }
