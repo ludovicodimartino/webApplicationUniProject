@@ -10,6 +10,7 @@ import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
+import it.unipd.dei.webapp.wacar.resource.User;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,6 +27,11 @@ import jakarta.servlet.http.HttpServletResponse;
 public class CircuitListServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
+        User user = (User) req.getSession().getAttribute("account");
+        if (user != null) {
+            req.setAttribute("account", user);
+            LogContext.setUser(user.getName());
+        }
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
         LogContext.setAction(Actions.GET_ALL_CIRCUITS);
@@ -48,6 +54,7 @@ public class CircuitListServlet extends AbstractDatabaseServlet {
             LogContext.removeIPAddress();
             LogContext.removeAction();
             LogContext.removeUser();
+            LogContext.removeResource();
         }
 
         // Set the list of cars and the message as request attributes
