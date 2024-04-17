@@ -12,7 +12,7 @@ import java.io.IOException;
 
 public class HomeFilter extends AbstractFilter{
 
-    final static Logger LOGGER = LogManager.getLogger(UserFilter.class);
+    final static Logger LOGGER = LogManager.getLogger(HomeFilter.class);
 
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {

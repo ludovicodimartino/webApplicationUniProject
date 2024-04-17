@@ -13,9 +13,9 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 On the Signup page, users can input their credentials to gain access to the order page, user information page, as well as a list of past orders.
 The required information includes email, password, name, surname, and address. The password must meet certain criteria, including a minimum of 8 characters, at least one number, and at least one uppercase letter. 
 Upon clicking "Signup" the user's credentials are added to the database, and they are redirected to the homepage.
-If the provided credentials do not meet the required criteria an error message is displayed.
+If the provided credentials do not meet the required criteria an error message is displayed to the user.
 The login process mirrors the signup process, but only requires the user to input their email and password. Upon clicking "Login" a search is conducted in the database. 
-If the provided email exists and the user's password matches the encrypted password stored in the database, the login operation is executed.
+If the provided email exists and the user's password matches the encrypted password stored in the database, the login operation is executed, otherwise the user is informed that email or password are incorrect.
 
 \subsection{Homepage}
 
@@ -23,7 +23,7 @@ If the provided email exists and the user's password matches the encrypted passw
 
 \includegraphics[]{homepage.pdf}
 
-The homepage serves as the initial landing point for users upon opening WaCar. Its content dynamically adapts to the session state: when users are not logged in, 
+The homepage serves as the initial landing point for users upon opening WaCar. Its content dynamically adapts to the session state: when user is not logged in, 
 they encounter two cards displaying options to explore available cars and circuits. Additionally, login and signup buttons are provided.
 If the user is logged in, in addition to the previously mentioned cards, ordering cards will also appear, enabling them to create new orders, as well as the user page.
 

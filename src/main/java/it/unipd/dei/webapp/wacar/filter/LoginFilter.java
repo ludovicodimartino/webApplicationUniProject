@@ -1,5 +1,7 @@
 package it.unipd.dei.webapp.wacar.filter;
 
+import it.unipd.dei.webapp.wacar.resource.User;
+import it.unipd.dei.webapp.wacar.servlet.LogContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +22,7 @@ import java.io.IOException;
  */
 public class LoginFilter extends AbstractFilter {
 
-    final static Logger LOGGER = LogManager.getLogger(UserFilter.class);
+    final static Logger LOGGER = LogManager.getLogger(LoginFilter.class);
 
 
 
@@ -28,15 +30,19 @@ public class LoginFilter extends AbstractFilter {
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         HttpSession session = req.getSession(false);
+        LogContext.setAction("LoginFilter");
         String loginURI = req.getContextPath() + "/user/login/";
 
-        boolean loggedIn = session != null && session.getAttribute("role") != null;
+        boolean loggedIn = session != null && session.getAttribute("account") != null;
 
 
 
         if (loggedIn) {
+            User user = (User) session.getAttribute("account");
+
             LOGGER.info("Session: {}",session);
-            LOGGER.info("Role: {}",session.getAttribute("role"));
+            LOGGER.info("Role: {}",user.getType());
+            LogContext.setUser(user.getEmail());
             res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
             res.setHeader("Pragma", "no-cache"); // HTTP 1.0.
             chain.doFilter(req, res); // User is logged in, just continue request.

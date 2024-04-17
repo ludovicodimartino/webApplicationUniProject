@@ -17,9 +17,13 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.SQLException;
 
-//TODO: meccanismo di risposta
-//TODO: sistema action loggers
-
+/**
+ * Servlet to manage user login and registration
+ *
+ * @author Filippo Galli (filippo.galli@studenti.unipd.it)
+ * @version 1.00
+ * @since 1.00
+ */
 @WebServlet(name = "UserServlet", value = "/user/*")
 public class UserServlet extends AbstractDatabaseServlet {
 
@@ -178,10 +182,9 @@ public class UserServlet extends AbstractDatabaseServlet {
                 //matches
                 if (user == null){
                     //if not, tell it to the user
-                    //TODO: cambia errore generico con altro
-                    ErrorCode ec = ErrorCode.INTERNAL_ERROR;
+                    ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
                     res.setStatus(ec.getHTTPCode());
-                    m = new Message("The user does not exist","E200","Missing user");
+                    m = new Message("The user does not exist",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                     LOGGER.error("problems with user: {}", m.getMessage());
                     req.setAttribute("message", m);
                     req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
@@ -332,21 +335,30 @@ public class UserServlet extends AbstractDatabaseServlet {
                     surname == null || surname.equals("")) {
 
                 fieldEmpty = true;
-                m = new Message("Some fields are empty", "E200", "Missing fields");
+                ErrorCode ec = ErrorCode.EMPTY_INPUT_FIELDS;
+                m = new Message("Some fields are empty", Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                 LOGGER.error("problems with fields: {}", m.getMessage());
-
+                req.setAttribute("message", m);
+                req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
             }
             // check password is compliant
             else if (!password.matches(regex_psw)) {
-                m = new Message("This password is not compliant", "E200", "Password not compliant");
+                ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
+                m = new Message("This password is not compliant",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
 
                 LOGGER.error("problems with fields: {}", m.getMessage());
+                req.setAttribute("message", m);
+                req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
 
             }
             // check email is compliant
             else if (!email.matches(regex_email)) {
-                m = new Message("This is not an email", "E200", "Email not compliant");
+                ErrorCode ec = ErrorCode.MAIL_NOT_COMPLIANT;
+
+                m = new Message("This is not an email",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                 LOGGER.error("problems with fields: {}", m.getMessage());
+                req.setAttribute("message", m);
+                req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
 
             }
 
@@ -362,7 +374,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                 ErrorCode ec = ErrorCode.MAIL_ALREADY_USED;
                 res.setStatus(ec.getHTTPCode());
-                m = new Message("This user already exists", "E200", "User already existing");
+                m = new Message("This user already exists", Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
                 req.setAttribute("message", m);
                 req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
 
@@ -386,10 +398,6 @@ public class UserServlet extends AbstractDatabaseServlet {
                 loginOperations(req, res, true);
 
 
-            }
-            else{
-                m = new Message("At least one field  is empty", "E200", "Deadline expired");
-                LOGGER.error("problems with fields: {}", m.getMessage());
             }
 
         } catch (SQLException | ServletException e) {

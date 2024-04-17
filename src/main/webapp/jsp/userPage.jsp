@@ -18,7 +18,7 @@
             <li>email: ${sessionScope.account.email}</li>
             <li>address: ${sessionScope.account.address}</li>
         </ul>
-        <form action="/jsp/recap-order.jsp" method="get">
+        <form action="/wacar/user/listOrdersByAccount" method="get">
             <button type="submit">Order list</button>
         </form>
         <form action="/jsp/recap-favourite.jsp" method="get">
