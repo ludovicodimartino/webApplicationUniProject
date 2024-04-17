@@ -12,10 +12,11 @@ import java.util.List;
 public class ListFavouriteDAO extends AbstractDAO{
     private static final String LIST_FAVOURITE = "SELECT * FROM assessment.favourite where email='?';";
     private final String email;
+
     /**
      *
-     * @param con Used to access the database
-     * @param favourite
+     * @param con
+     * @param user
      */
     public ListFavouriteDAO(final Connection con, final User user) {
         super(con);
