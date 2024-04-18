@@ -73,6 +73,10 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     LogContext.setAction(Actions.GET_EDIT_CAR_PAGE);
                     editCarPage(req, res);
                     break;
+                case "editCircuit/":
+                    LogContext.setAction(Actions.GET_EDIT_CAR_PAGE);
+                    editCircuitPage(req, res);
+                    break;
                 case "": // URL /wacar/admin
                     //redirect to admin page (that is the user-info page)
                     break;
@@ -172,15 +176,39 @@ public class AdminServlet extends AbstractDatabaseServlet {
         String brand = req.getParameter("brand");
         String model = req.getParameter("model");
 
-        try{
+        try {
             Car car = new GetCarDAO(getConnection(), brand, model).access().getOutputParam();
             List<Type> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
             req.setAttribute("car", car);
             req.setAttribute("carTypeList", carTypeList);
             req.getRequestDispatcher("/jsp/edit-car.jsp").forward(req, res);
 
-        } catch (SQLException e){
+        } catch (SQLException e) {
             LOGGER.error("Cannot read car: unexpected error while accessing the database.", e);
+        }
+    }
+
+    /**
+     * Access the database to load the requested circuit.
+     * The car is identified by the GET parameter name.
+     * Send the page to the client.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     */
+    private void editCircuitPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String name = req.getParameter("name");
+        try {
+            Circuit circuit = new GetCircuitDAO(getConnection(), name).access().getOutputParam();
+            List<Type> circuiTypeList = new GetCircuitTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("circuit", circuit);
+            req.setAttribute("circuitTypeList", circuiTypeList);
+            req.getRequestDispatcher("/jsp/edit-circuit.jsp").forward(req, res);
+
+        } catch (SQLException e) {
+            LOGGER.error("Cannot read circuit: unexpected error while accessing the database.", e);
         }
     }
 
@@ -220,7 +248,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
                 case "insertCircuit/":
                     LogContext.setAction(Actions.INSERT_CIRCUIT);
-                    insertCircuitOperations(req, res);
+                    insertCircuitOperations(req, res, false);
                     break;
 
                 case "insertMapping/":
@@ -236,6 +264,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
                 case "editCar/":
                     LogContext.setAction(Actions.EDIT_CAR);
                     insertCarOperations(req, res, true);
+                    break;
+
+                case "editCircuit/":
+                    LogContext.setAction(Actions.EDIT_CAR);
+                    insertCircuitOperations(req, res, true);
                     break;
 
                 default:
@@ -255,8 +288,8 @@ public class AdminServlet extends AbstractDatabaseServlet {
     /**
      * All the operations needed to insert or edit a car in the database.
      *
-     * @param req the {@code HttpServletRequest} incoming request
-     * @param res the {@code HttpServletResponse} response object
+     * @param req    the {@code HttpServletRequest} incoming request
+     * @param res    the {@code HttpServletResponse} response object
      * @param update Set it to true if the operation is an update, false otherwise
      * @throws IOException      if any error happens during the response writing operation
      * @throws ServletException if any error occurs while executing the servlet.
@@ -334,10 +367,10 @@ public class AdminServlet extends AbstractDatabaseServlet {
                         break;
 
                     case "image":
-                        imageMediaType = p.getContentType();
 
                         // parse the image if it is a car insert or a car update with a new image
-                        if(!update || Objects.equals(imageMediaType, "image/png") || Objects.equals(imageMediaType, "image/jpeg") || Objects.equals(imageMediaType, "image/jpg")){
+                        if (!update || Objects.equals(p.getContentType(), "image/png") || Objects.equals(p.getContentType(), "image/jpeg") || Objects.equals(p.getContentType(), "image/jpg")) {
+                            imageMediaType = p.getContentType();
                             parseImageMediaType(imageMediaType);
                             try (InputStream is = p.getInputStream()) {
                                 image = is.readAllBytes();
@@ -352,7 +385,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
             car = new Car(brand, model, description, maxSpeed, horsepower, acceleration, availability, type, image, imageMediaType);
 
             // insert the car in the database
-            if(update){
+            if (update) {
                 new UpdateCarDAO(getConnection(), car).access();
                 m = new Message(String.format("Car object %s %s successfully updated.", brand, model));
                 LOGGER.info(new StringFormattedMessage("Car object %s %s successfully updated.", brand, model));
@@ -424,7 +457,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
      * @throws IOException      if any error happens during the response writing operation
      * @throws ServletException if any error occurs while executing the servlet.
      */
-    private void insertCircuitOperations(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    private void insertCircuitOperations(HttpServletRequest req, HttpServletResponse res, final boolean update) throws IOException, ServletException {
 
         // request parameters
         String name = null;
@@ -497,24 +530,35 @@ public class AdminServlet extends AbstractDatabaseServlet {
                         break;
 
                     case "image":
-                        imageMediaType = p.getContentType();
-                        parseImageMediaType(imageMediaType);
-                        try (InputStream is = p.getInputStream()) {
-                            image = is.readAllBytes();
+
+                        // parse the image if it is a car insert or a car update with a new image
+                        if (!update || Objects.equals(p.getContentType(), "image/png") || Objects.equals(p.getContentType(), "image/jpeg") || Objects.equals(p.getContentType(), "image/jpg")) {
+                            imageMediaType = p.getContentType();
+                            parseImageMediaType(imageMediaType);
+                            try (InputStream is = p.getInputStream()) {
+                                image = is.readAllBytes();
+                            }
                         }
+
                         break;
                 }
             }
 
-            // Create a new car object
+            // Create a new circuit object
             circuit = new Circuit(name, type, length, cornersNumber, address, description, lapPrice, availability, image, imageMediaType);
 
-            // insert the car in the database
-            new InsertCircuitDAO(getConnection(), circuit).access().getOutputParam();
+            if (update) {
+                //update the circuit in the database
+                new UpdateCircuitDAO(getConnection(), circuit).access();
+                m = new Message(String.format("Circuit object %s successfully updated.", name));
+                LOGGER.info(new StringFormattedMessage("Circuit object %s successfully updated.", name));
+            } else {
+                // insert the circuit in the database
+                new InsertCircuitDAO(getConnection(), circuit).access();
+                m = new Message(String.format("Circuit object %s successfully created.", name));
+                LOGGER.info(new StringFormattedMessage("Circuit object %s successfully created.", name));
+            }
 
-            m = new Message(String.format("Circuit object %s successfully created.", name));
-
-            LOGGER.info(new StringFormattedMessage("Circuit object %s successfully created.", name));
 
         } catch (NumberFormatException e) {
             m = new Message(
@@ -642,10 +686,9 @@ public class AdminServlet extends AbstractDatabaseServlet {
      *
      * @param req the {@code HttpServletRequest} incoming request
      * @param res the {@code HttpServletResponse} response object
-     * @throws IOException      if any error happens during the response writing operation
-     * @throws ServletException if any error occurs while executing the servlet.
+     * @throws IOException if any error happens during the response writing operation
      */
-    private void deleteMappingOperations(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException{
+    private void deleteMappingOperations(HttpServletRequest req, HttpServletResponse res) throws IOException {
         // request parameters
         String carType = null;
         String circuitType = null;
