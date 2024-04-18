@@ -21,7 +21,11 @@
         <li>brand: <c:out value="${car.brand}"/></li>
         <li>model: <c:out value="${car.model}"/></li>
         <li>description: <c:out value="${car.description}"/></li>
-
+        <li>type: <c:out value="${car.type}"/></li>
+        <li>available: <c:out value="${car.available}"/></li>
+        <li>horsepower: <c:out value="${car.horsepower}"/> cv</li>
+        <li>maxSpeed: <c:out value="${car.maxSpeed}"/> km/h</li>
+        <li>0-100: <c:out value="${car.acceleration}"/> s</li>
 
                 <li>image:
                     <ul>

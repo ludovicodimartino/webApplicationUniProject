@@ -22,9 +22,9 @@
         <li>address: <c:out value="${circuit.address}"/></li>
         <li>type: <c:out value="${circuit.type}"/></li>
         <li>description: <c:out value="${circuit.description}"/></li>
-        <li>length: <c:out value="${circuit.length}"/></li>
+        <li>length: <c:out value="${circuit.length}"/> m</li>
         <li>corners number: <c:out value="${circuit.cornersNumber}"/></li>
-        <li>lap price: <c:out value="${circuit.lapPrice}"/></li>
+        <li>lap price: <c:out value="${circuit.lapPrice}"/> €</li>
         <li>available: <c:out value="${circuit.available}"/></li>
         <li>image:
             <ul>

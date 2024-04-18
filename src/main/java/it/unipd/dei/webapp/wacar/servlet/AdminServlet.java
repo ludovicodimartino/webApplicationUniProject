@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import jakarta.activation.MimeTypeParseException;
 import jakarta.servlet.ServletException;
@@ -67,6 +68,10 @@ public class AdminServlet extends AbstractDatabaseServlet {
                 case "insertMapping/":
                     LogContext.setAction(Actions.GET_MAPPING_PAGE);
                     carCircuitSuitabilityPage(req, res);
+                    break;
+                case "editCar/":
+                    LogContext.setAction(Actions.GET_EDIT_CAR_PAGE);
+                    editCarPage(req, res);
                     break;
                 case "": // URL /wacar/admin
                     //redirect to admin page (that is the user-info page)
@@ -154,6 +159,32 @@ public class AdminServlet extends AbstractDatabaseServlet {
     }
 
     /**
+     * Access the database to load the requested car.
+     * The car is identified by two parameters: model and brand.
+     * Send the page to the client.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     */
+    private void editCarPage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        String brand = req.getParameter("brand");
+        String model = req.getParameter("model");
+
+        try{
+            Car car = new GetCarDAO(getConnection(), brand, model).access().getOutputParam();
+            List<Type> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("car", car);
+            req.setAttribute("carTypeList", carTypeList);
+            req.getRequestDispatcher("/jsp/edit-car.jsp").forward(req, res);
+
+        } catch (SQLException e){
+            LOGGER.error("Cannot read car: unexpected error while accessing the database.", e);
+        }
+    }
+
+    /**
      * Handles the HTTP POST request of the admin, that are:
      * <pre>
      *  - insertCar
@@ -175,6 +206,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
         //take the request uri
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
+        LogContext.setUser(((User) (req.getSession()).getAttribute("account")).getEmail());
 
         String op = req.getRequestURI();
 
@@ -183,7 +215,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
             switch (op) {
                 case "insertCar/":
                     LogContext.setAction(Actions.INSERT_CAR);
-                    insertCarOperations(req, res);
+                    insertCarOperations(req, res, false);
                     break;
 
                 case "insertCircuit/":
@@ -201,6 +233,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     deleteMappingOperations(req, res);
                     break;
 
+                case "editCar/":
+                    LogContext.setAction(Actions.EDIT_CAR);
+                    insertCarOperations(req, res, true);
+                    break;
+
                 default:
                     Message m = new Message("An error occurred default", "E200", "Operation Unknown");
                     LOGGER.info("stacktrace {}:", m.getMessage());
@@ -216,14 +253,15 @@ public class AdminServlet extends AbstractDatabaseServlet {
     }
 
     /**
-     * All the operations needed to insert a car in the database.
+     * All the operations needed to insert or edit a car in the database.
      *
      * @param req the {@code HttpServletRequest} incoming request
      * @param res the {@code HttpServletResponse} response object
+     * @param update Set it to true if the operation is an update, false otherwise
      * @throws IOException      if any error happens during the response writing operation
      * @throws ServletException if any error occurs while executing the servlet.
      */
-    private void insertCarOperations(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
+    private void insertCarOperations(HttpServletRequest req, HttpServletResponse res, final boolean update) throws IOException, ServletException {
 
         // request parameters
         String model = null;
@@ -297,9 +335,13 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
                     case "image":
                         imageMediaType = p.getContentType();
-                        parseImageMediaType(imageMediaType);
-                        try (InputStream is = p.getInputStream()) {
-                            image = is.readAllBytes();
+
+                        // parse the image if it is a car insert or a car update with a new image
+                        if(!update || Objects.equals(imageMediaType, "image/png") || Objects.equals(imageMediaType, "image/jpeg") || Objects.equals(imageMediaType, "image/jpg")){
+                            parseImageMediaType(imageMediaType);
+                            try (InputStream is = p.getInputStream()) {
+                                image = is.readAllBytes();
+                            }
                         }
 
                         break;
@@ -310,11 +352,15 @@ public class AdminServlet extends AbstractDatabaseServlet {
             car = new Car(brand, model, description, maxSpeed, horsepower, acceleration, availability, type, image, imageMediaType);
 
             // insert the car in the database
-            new InsertCarDAO(getConnection(), car).access().getOutputParam();
-
-            m = new Message(String.format("Car object %s %s successfully created.", brand, model));
-
-            LOGGER.info(new StringFormattedMessage("Car object %s %s successfully created.", brand, model));
+            if(update){
+                new UpdateCarDAO(getConnection(), car).access();
+                m = new Message(String.format("Car object %s %s successfully updated.", brand, model));
+                LOGGER.info(new StringFormattedMessage("Car object %s %s successfully updated.", brand, model));
+            } else {
+                new InsertCarDAO(getConnection(), car).access();
+                m = new Message(String.format("Car object %s %s successfully created.", brand, model));
+                LOGGER.info(new StringFormattedMessage("Car object %s %s successfully created.", brand, model));
+            }
 
         } catch (NumberFormatException e) {
             m = new Message(
@@ -648,7 +694,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
         try {
             // forwards the control to the JSP
             req.setAttribute("message", m);
-            carCircuitSuitabilityPage(req, res);
+            res.sendRedirect(req.getContextPath() + "/admin/insertMapping/");
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when deleting the mapping (%s, %s).", carType, circuitType), e);
             throw e;
@@ -674,10 +720,9 @@ public class AdminServlet extends AbstractDatabaseServlet {
                 break;
 
             default:
-                LOGGER.error(String.format("Unsupported MIME media type %s for circuit image. ", imageMediaType));
-
+                LOGGER.error(String.format("Unsupported MIME media type %s for the image. ", imageMediaType));
                 throw new MimeTypeParseException(
-                        String.format("Unsupported MIME media type %s for circuit image. ",
+                        String.format("Unsupported MIME media type %s for the image. ",
                                 imageMediaType));
         }
     }

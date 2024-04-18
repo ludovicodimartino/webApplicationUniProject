@@ -91,6 +91,15 @@ public class Actions {
 	 */
 	public static final String DELETE_MAPPING = "DELETE_MAPPING";
 
+	/**
+	 * Edit a car.
+	 */
+	public static final String EDIT_CAR = "EDIT_CAR";
+
+	/**
+	 * Get the edit car page.
+	 */
+	public static final String GET_EDIT_CAR_PAGE = "GET_EDIT_CAR_PAGE";
 
 	/**
 	 * Getting the page to insert/visualize and delete car-circuit mappings.
