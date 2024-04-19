@@ -93,6 +93,7 @@
                         <div>
                             <div>
                                 <div class="card">
+                                    <img src="<c:url value="/loadCircuitImage"><c:param name="name" value="${circuit.name}"/></c:url>"/>
                                     <h1><c:out value="${circuit.name}"/></h1>
                                     <h5><c:out value="${circuit.type}"/></h5>
                                     <a href="../complete-order/?carBrand=${carBrand}&carModel=${carModel}&circuitName=${circuit.name}&circuitLapPrice=${circuit.lapPrice}" class="btn link" type="button">

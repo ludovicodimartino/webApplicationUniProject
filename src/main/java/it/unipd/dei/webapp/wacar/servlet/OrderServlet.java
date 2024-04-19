@@ -207,10 +207,11 @@ public class OrderServlet  extends AbstractDatabaseServlet {
         try {
             new InsertOrderDAO(getConnection(), order).access().getOutputParam();
         } catch (SQLException e) {
-            m = new Message("Unable to insert the new order.", "E5A1", e.getMessage());
+            String errorMsg = e.getMessage().substring(e.getMessage().indexOf(":") + 2, e.getMessage().indexOf(" Where:"));
+            m = new Message(errorMsg, "E5A5", e.getMessage());
             req.setAttribute("message", m);
 
-            LOGGER.error("Unable to insert the new order.", e);
+            LOGGER.error("Unable to insert the new order: %s", errorMsg);
         }
 
         try {

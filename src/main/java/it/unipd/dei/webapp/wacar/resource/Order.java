@@ -11,6 +11,8 @@ import java.sql.Date;
  * @since 1.00
  */
 public class    Order {
+    private final int id;
+
     /**
      * The account that made the order
      */
@@ -51,7 +53,8 @@ public class    Order {
      */
     private final int price;
 
-    public Order(String account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
+    public Order(int id, String account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
+        this.id = id;
         this.account = account;
         this.date = date;
         this.carBrand =carBrand;
@@ -61,6 +64,20 @@ public class    Order {
         this.nLaps = nLaps;
         this.price = price;
     }
+
+    public Order(String account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
+        this.id = -1;
+        this.account = account;
+        this.date = date;
+        this.carBrand =carBrand;
+        this.carModel = carModel;
+        this.circuit = circuit;
+        this.createdAt = createdAt;
+        this.nLaps = nLaps;
+        this.price = price;
+    }
+
+    public int getId() { return id; }
 
     public String getAccount() {
         return account;

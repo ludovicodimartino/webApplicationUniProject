@@ -102,8 +102,22 @@ IF (
 	SELECT a."type"
 	FROM assessment."account" as a
 	WHERE a."email" = NEW.account
-	) <> 'USER' THEN
+	) = 'ADMIN' THEN
 	RAISE EXCEPTION 'Admin cannot create an order';
+END IF;
+IF ((SELECT COUNT(*)
+	FROM (
+		SELECT COUNT(o."circuit") as result
+		FROM assessment."order" AS o
+		WHERE o."account" = NEW."account" AND o."date" = NEW."date"
+		GROUP BY o."circuit"
+	)) >= 1 AND NEW."circuit" <> (
+		SELECT o."circuit"
+		FROM assessment."order" AS o
+		WHERE o."account" = NEW."account" AND o."date" = NEW."date"
+		GROUP BY o."circuit"
+	)) THEN
+	RAISE EXCEPTION 'You cannot have two orders on the same date but in different circuits';
 END IF;
 IF (
    SELECT COUNT(*) as result
@@ -240,6 +254,7 @@ ALTER TABLE assessment.favourite OWNER TO wacaruser;
 --
 
 CREATE TABLE assessment."order" (
+    id integer NOT NULL,
     account text NOT NULL,
     date date NOT NULL,
     "carBrand" character varying(100) NOT NULL,
@@ -253,6 +268,21 @@ CREATE TABLE assessment."order" (
 
 ALTER TABLE assessment."order" OWNER TO wacaruser;
 
+
+--
+-- Name: order_id_seq; Type: SEQUENCE; Schema: assessment; Owner: wacaruser
+--
+
+ALTER TABLE assessment."order" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
+    SEQUENCE NAME assessment.order_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    MAXVALUE 1000000000
+    CACHE 1
+);
+
+
 --
 -- Data for Name: account; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
@@ -265,7 +295,7 @@ COPY assessment.account (email, name, surname, address, password, type) FROM std
 -- Data for Name: car; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
 
-COPY assessment.car (brand, model, type, horsepower, "0-100", "maxSpeed", description, available, image) FROM stdin;
+COPY assessment.car (brand, model, type, horsepower, "0-100", "maxSpeed", description, available, image, imageMediaType) FROM stdin;
 \.
 
 
@@ -289,7 +319,7 @@ COPY assessment."carType" (name) FROM stdin;
 -- Data for Name: circuit; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
 
-COPY assessment.circuit (name, type, length, "cornersNumber", address, description, "lapPrice", available, image) FROM stdin;
+COPY assessment.circuit (name, type, length, "cornersNumber", address, description, "lapPrice", available, image, imageMediaType) FROM stdin;
 \.
 
 
@@ -310,10 +340,17 @@ COPY assessment.favourite (circuit, "carBrand", "carModel", "createdAt", account
 
 
 --
+-- Name: order_id_seq; Type: SEQUENCE SET; Schema: assessment; Owner: wacaruser
+--
+
+SELECT pg_catalog.setval('assessment.order_id_seq', 1, false);
+
+
+--
 -- Data for Name: order; Type: TABLE DATA; Schema: assessment; Owner: wacaruser
 --
 
-COPY assessment."order" (date, "carBrand", "carModel", circuit, "createdAt", "nLaps", price, account) FROM stdin;
+COPY assessment."order" (id, date, "carBrand", "carModel", circuit, "createdAt", "nLaps", price, account) FROM stdin;
 \.
 
 
@@ -378,7 +415,7 @@ ALTER TABLE ONLY assessment.favourite
 --
 
 ALTER TABLE ONLY assessment."order"
-    ADD CONSTRAINT order_pkey PRIMARY KEY (account, date);
+    ADD CONSTRAINT order_pkey PRIMARY KEY (id);
 
 
 --
