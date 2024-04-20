@@ -2,6 +2,11 @@ package it.unipd.dei.webapp.wacar.resource;
 
 import org.json.JSONObject;
 
+/**
+ * User class represents a user entity in the database.
+ * This class encapsulates user information such as ID, email, password, name, surname, address, and account type.
+ * It provides constructors for various scenarios including user creation, login, and retrieval.
+ */
 public class User {
 
     private int id;
@@ -25,7 +30,6 @@ public class User {
     }
 
 
-    // used when the professor gets the list of students
     public User(int id, String email, String name, String surname){
         this.id = id;
         this.email = email;

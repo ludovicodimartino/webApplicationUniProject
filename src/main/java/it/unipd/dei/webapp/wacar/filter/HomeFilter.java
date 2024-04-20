@@ -10,6 +10,13 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
+/**
+ * HomeFilter class redirects requests for HTML resources to the home page.
+ *
+ * This filter intercepts incoming requests and redirects them to the home page ("/home").
+ * It is used to prevent direct access to HTML resources and ensure that users always start
+ * from the home page.
+ */
 public class HomeFilter extends AbstractFilter{
 
     final static Logger LOGGER = LogManager.getLogger(HomeFilter.class);

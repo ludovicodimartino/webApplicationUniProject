@@ -12,20 +12,28 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-/*
+/**
  * LoginFilter class is responsible for controlling access to pages that require user authentication.
- * It intercepts incoming requests and checks whether the user is authenticated by verifying the presence
- * of a valid session and the attribute indicating that the user has been successfully authenticated.
  * If the user is authenticated, the filter allows the request to pass through to the requested resource
  * without modifying or saving the session. If the user is not authenticated, the filter redirects
- * the user to the login page to perform authentication.
+ * the user to the login page in order to perform authentication.
  */
 public class LoginFilter extends AbstractFilter {
 
     final static Logger LOGGER = LogManager.getLogger(LoginFilter.class);
 
 
-
+    /**
+     * Performs the filtering of requests to control access based on user authentication.
+     * If the user is authenticated, the request is allowed to pass through to the requested resource.
+     * If the user is not authenticated, the filter redirects the user to the login page.
+     *
+     * @param req    HTTP servlet request
+     * @param res    HTTP servlet response
+     * @param chain  FilterChain for invoking the next filter in the chain
+     * @throws IOException      if an I/O error occurs
+     * @throws ServletException if a servlet-specific error occurs
+     */
     @Override
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 

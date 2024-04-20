@@ -20,6 +20,10 @@ import java.sql.SQLException;
 /**
  * Servlet to manage user login and registration
  *
+ * This servlet handles user login, registration, and logout operations.
+ * It provides functionality for processing GET and POST requests related
+ * to user authentication and registration.
+ *
  * @author Filippo Galli (filippo.galli@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
@@ -65,6 +69,10 @@ public class UserServlet extends AbstractDatabaseServlet {
             case "logout/":
                 // logout and return to homepage
                 logoutOperations(request, response);
+                break;
+            case "updateAccount/":
+                LogContext.setAction("UPDATE ACCOUNT");
+                request.getRequestDispatcher("/jsp/updateAccount.jsp").forward(request, response);
                 break;
             case "create-order/cars":
                 request.getRequestDispatcher("/create-order/cars").forward(request, response);
@@ -132,7 +140,14 @@ public class UserServlet extends AbstractDatabaseServlet {
         }
     }
 
-
+    /**
+     * Performs logout operations for the user.
+     *
+     * @param request  HTTP servlet request
+     * @param response HTTP servlet response
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     public void logoutOperations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
@@ -140,7 +155,7 @@ public class UserServlet extends AbstractDatabaseServlet {
         if (user!=null) {
             LOGGER.info("Session found {} ",session);
 
-            LOGGER.info("the STUDENT {} logged out",user.getEmail());
+            LOGGER.info("the USER {} logged out",user.getEmail());
 
             request.getSession().invalidate();
         }
@@ -151,9 +166,15 @@ public class UserServlet extends AbstractDatabaseServlet {
     }
 
 
-
-
-
+    /**
+     * Performs login operations for the user.
+     *
+     * @param req    HTTP servlet request
+     * @param res    HTTP servlet response
+     * @param isValid indicates whether the login attempt is valid
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs
+     */
     public void loginOperations(HttpServletRequest req, HttpServletResponse res, boolean isValid) throws ServletException, IOException {
 
         User user = null;
@@ -308,6 +329,13 @@ public class UserServlet extends AbstractDatabaseServlet {
     }
 
 
+    /**
+     * Performs registration operations for a new user.
+     *
+     * @param req HTTP servlet request
+     * @param res HTTP servlet response
+     * @throws IOException if an I/O error occurs
+     */
     public void registrationOperations(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
         User user = null;
@@ -388,7 +416,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 User user_to_reg = new User(email, password, name, surname, address);
                 //pass it to the dao to register it
                 new UserRegisterDAO(getConnection(), user_to_reg).access().getOutputParam();
-                LOGGER.info("REGISTERED STUDENT {}", email);
+                LOGGER.info("REGISTERED USER {}", email);
 
                 //if the registration ended correctly, forward the user to the
                 //login service: note that, now the login service will login the user
