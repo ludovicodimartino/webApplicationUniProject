@@ -1,7 +1,7 @@
 package it.unipd.dei.webapp.wacar.filter;
 
 import it.unipd.dei.webapp.wacar.resource.User;
-import it.unipd.dei.webapp.wacar.servlet.LogContext;
+import it.unipd.dei.webapp.wacar.resource.LogContext;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

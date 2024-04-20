@@ -3,10 +3,10 @@ package it.unipd.dei.webapp.wacar.servlet;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Car;
 import it.unipd.dei.webapp.wacar.resource.Message;
+import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.dao.ListCarDAO;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 

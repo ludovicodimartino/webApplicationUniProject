@@ -10,7 +10,7 @@ import java.sql.SQLException;
 /**
  * Searches the circuits where a type of car can race.
  *
- * @author Manuel Rigobello (manuel.rigobello@studentiSearches the circuits in which the type of the car can race into..unipd.it)
+ * @author Manuel Rigobello (manuel.rigobello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */

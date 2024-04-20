@@ -88,6 +88,9 @@ ALTER FUNCTION assessment.check_circuit_function() OWNER TO wacaruser;
 CREATE FUNCTION assessment.check_order_function() RETURNS trigger
     LANGUAGE plpgsql
     AS $$BEGIN
+IF (NEW."date" < CURRENT_DATE) THEN
+	RAISE EXCEPTION 'User cannot turn back time.';
+END IF;
 IF (NEW."nLaps") < 0 THEN
 	RAISE EXCEPTION 'Number of laps cannot be negative';
 END IF;

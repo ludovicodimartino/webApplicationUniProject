@@ -1,4 +1,4 @@
-package it.unipd.dei.webapp.wacar.servlet;
+package it.unipd.dei.webapp.wacar.resource;
 
 import org.apache.logging.log4j.ThreadContext;
 
