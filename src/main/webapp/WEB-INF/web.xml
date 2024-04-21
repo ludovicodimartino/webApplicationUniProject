@@ -30,6 +30,7 @@
         <filter-name>HomeFilter</filter-name>
         <url-pattern>/</url-pattern>
         <url-pattern>/html/*</url-pattern>
+        <url-pattern>/jsp/*</url-pattern>
     </filter-mapping>
     <filter>
         <filter-name>AdminFilter</filter-name>
