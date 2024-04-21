@@ -1,5 +1,6 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+import it.unipd.dei.webapp.wacar.dao.GetOrderByIdDAO;
 import it.unipd.dei.webapp.wacar.dao.ListCarByAvailabilityDAO;
 import it.unipd.dei.webapp.wacar.dao.ListCircuitByCarTypeDAO;
 import it.unipd.dei.webapp.wacar.dao.InsertOrderDAO;
@@ -25,6 +26,11 @@ import java.util.List;
  */
 public class OrderServlet  extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        Message m = null;
+        Integer orderId = null;
+
+        LOGGER.info("Request for order %d:", orderId);
+
         // Take op
         String op = req.getRequestURI();
         op = op.substring(op.lastIndexOf("create-order") + 13);
@@ -60,10 +66,6 @@ public class OrderServlet  extends AbstractDatabaseServlet {
                 showRecap(req, res);
                 break;
         }
-        // case op = cars => fai quello che c'è qua sotto
-        // case op = circuits => fai quello che c'è dentro la servlet ordercircuit
-        // case op = complete-order => mostra ultimo form con data e numero di giri
-        // case op = add-order => aggiungi ordine in tabella e fai redirect a home ()
     }
 
     @Override
