@@ -19,10 +19,7 @@
     <!-- Pages that need user to be logged -->
     <filter-mapping>
         <filter-name>LoginFilter</filter-name>
-        <url-pattern>/order/</url-pattern>
-        <url-pattern>/user/create-order/*</url-pattern>
-        <url-pattern>/user/</url-pattern>
-        <url-pattern>/altro</url-pattern>
+        <url-pattern>/user/*</url-pattern>
     </filter-mapping>
 
     <filter>
@@ -52,10 +49,10 @@
 
     <servlet-mapping>
         <servlet-name>UserServlet</servlet-name>
-        <url-pattern>/user/login/</url-pattern>
-        <url-pattern>/user/signup/</url-pattern>
-        <url-pattern>/user/logout/</url-pattern>
-        <url-pattern>/user/</url-pattern>
+        <url-pattern>/login/</url-pattern>
+        <url-pattern>/signup/</url-pattern>
+        <url-pattern>/logout/</url-pattern>
+        <url-pattern>/user/user-info</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
@@ -133,6 +130,7 @@
     <servlet-mapping>
         <servlet-name>RestManagerServlet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
+        <url-pattern>/user/rest/*</url-pattern>
     </servlet-mapping>
 
     <resource-ref>

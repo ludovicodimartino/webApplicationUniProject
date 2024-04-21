@@ -20,7 +20,7 @@
     </c:when>
     <c:otherwise></c:otherwise>
 </c:choose>
-<form method="POST" action="/wacar/user/signup/">
+<form method="POST" action="/wacar/signup/">
     <label for="email">Enter your email:</label>
     <input name="email" id="email" type="email" required placeholder="Insert here your email"/><br/><br/><br/>
     <label for="name">Enter your name:</label>

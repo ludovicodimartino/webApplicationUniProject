@@ -19,7 +19,7 @@ public class AdminFilter extends AbstractFilter {
     public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
 
         HttpSession session = req.getSession(false);
-        String unauthorizedURI = req.getContextPath() + "/user/login/";
+        String unauthorizedURI = req.getContextPath() + "/login/";
         boolean loggedIn = session != null && session.getAttribute("role") != null && session.getAttribute("role").equals("ADMIN");
 
         if (loggedIn) {

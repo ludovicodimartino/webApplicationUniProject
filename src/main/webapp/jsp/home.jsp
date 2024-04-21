@@ -89,8 +89,8 @@
                         <a href="/wacar/user/listOrdersByAccount"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
                     <div class="card">
-                        <a href="/wacar/user/">User page</a>
-                        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
+                        <a href="/wacar/user/user-info">User page</a>
+                        <a href="/wacar/user/user-info"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
                 </c:when>
                 <c:when test="${sessionScope.account.type eq 'ADMIN'}">
@@ -104,23 +104,23 @@
                         <a href="/wacar/admin/insertMapping/">Map a car to a Circuit</a>
                     </div>
                     <div class="card">
-                        <a href="/wacar/admin/">Admin page</a>
-                        <a href="/wacar/user/"><img src="icon.png" alt="res_icon" width="50"></a>
+                        <a href="/wacar/admin/admin-info/">Admin page</a>
+                        <a href="/wacar/admin/admin-info/"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
                 </c:when>
             </c:choose>
             <!-- Logout -->
-            <form method="GET" action="/wacar/user/logout/">
+            <form method="GET" action="/wacar/logout/">
                 <button type="submit">Logout</button>
             </form>
         </c:when>
         <c:otherwise>
             <!-- Signup -->
-            <form method="GET" action="/wacar/user/signup/">
+            <form method="GET" action="/wacar/signup/">
                 <button type="submit">Signup</button>
             </form>
             <!-- Login -->
-            <form method="GET" action="/wacar/user/login/">
+            <form method="GET" action="/wacar/login/">
                 <button type="submit">Login</button>
             </form>
         </c:otherwise>

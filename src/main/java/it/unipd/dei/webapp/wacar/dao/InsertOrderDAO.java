@@ -15,9 +15,9 @@ import java.sql.SQLException;
  * @since 1.00
  */
 public class InsertOrderDAO extends AbstractDAO<Order> {
-    private static final String WITHOUT_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String WITHOUT_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id;";
     private static final String WITH_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
-
+    private static final String ORDER_DELETE_STATEMENT = "DELETE FROM assessment.\"order\" WHERE id = ?;";
     private final Order order;
 
     public InsertOrderDAO(final Connection con, final Order order) {
@@ -37,7 +37,7 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
         con.setAutoCommit(false); // For an eventual rollback
 
         try {
-            if (order.getId() == -1) {
+            if (order.getId() <= 0) {
                 pstmt = con.prepareStatement(WITHOUT_ID_ORDER_INSERT_STATEMENT); // Id is set by default by PostgreSQL
 
                 pstmt.setDate(1, order.getDate());
@@ -51,8 +51,14 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
 
                 pstmt.execute();
             } else {
-                pstmt = con.prepareStatement(WITH_ID_ORDER_INSERT_STATEMENT);
+                pstmt = con.prepareStatement(ORDER_DELETE_STATEMENT);
+                pstmt.setInt(1, order.getId());
+                // User has modified one of their order so, before inserting the new one, the old order is deleted
+                if (pstmt.executeUpdate() > 0) { // Delete old order
+                    LOGGER.info("Order with id %d has been removed correctly. Now the new order can be added.", order.getId());
+                }
 
+                pstmt = con.prepareStatement(WITH_ID_ORDER_INSERT_STATEMENT);
                 pstmt.setInt(1, order.getId());
                 pstmt.setDate(2, order.getDate());
                 pstmt.setString(3, order.getCarBrand());
@@ -66,7 +72,7 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
                 pstmt.execute();
             }
 
-            LOGGER.info("New oder of user %s has been inserted correctly.", order.getAccount());
+            LOGGER.info("New oder with id = %d has been inserted correctly.", order.getAccount());
 
             con.commit();
         } catch (SQLException e) {

@@ -9,7 +9,14 @@
 <body>
 <c:choose>
     <c:when test="${not empty sessionScope.account}">
-        <h1>USER PAGE - SUCCESS</h1>
+        <c:choose>
+            <c:when test = "${sessionScope.account.type == 'USER'}">
+                <h1>USER PAGE - SUCCESS</h1>
+            </c:when>
+            <c:otherwise>
+                <h1>ADMIN PAGE - SUCCESS</h1>
+            </c:otherwise>
+        </c:choose>
         <hr/>
         <p>Message</p>
         <ul>
@@ -18,12 +25,14 @@
             <li>email: ${sessionScope.account.email}</li>
             <li>address: ${sessionScope.account.address}</li>
         </ul>
-        <form action="/wacar/user/listOrdersByAccount" method="get">
-            <button type="submit">Order list</button>
-        </form>
-        <form action="/jsp/recap-favourite.jsp" method="get">
-            <button type="submit">Favourite list</button>
-        </form>
+        <c:if test = "${account.type == 'USER'}">
+            <form action="/wacar/user/listOrdersByAccount" method="get">
+                <button type="submit">Order list</button>
+            </form>
+            <form action="/jsp/recap-favourite.jsp" method="get">
+                <button type="submit">Favourite list</button>
+            </form>
+        </c:if>
     </c:when>
     <c:otherwise>
         <h1>LOGIN USER - ERROR</h1>

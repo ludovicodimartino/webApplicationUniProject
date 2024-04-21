@@ -1,6 +1,7 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.dao.*;
+import it.unipd.dei.webapp.wacar.filter.LoginFilter;
 import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class UserServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("account");
+        User user = (User) session.getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
         boolean isUserLogged = user!=null;
         if (isUserLogged) {
             LogContext.setUser(user.getEmail());
@@ -49,7 +50,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
 
         String op = request.getRequestURI();
-        op = op.substring(op.lastIndexOf("user") + 5);
+        op = op.substring(op.lastIndexOf("wacar") + 6);
 
         LOGGER.info("op GET {}",op);
 
@@ -74,10 +75,11 @@ public class UserServlet extends AbstractDatabaseServlet {
                 LogContext.setAction("UPDATE ACCOUNT");
                 request.getRequestDispatcher("/jsp/updateAccount.jsp").forward(request, response);
                 break;
-            case "create-order/cars":
-                request.getRequestDispatcher("/create-order/cars").forward(request, response);
+            case "user/create-order/cars":
+                LogContext.setAction("CREATE_ORDER");
+                request.getRequestDispatcher("user/create-order/cars").forward(request, response);
                 break;
-            case "":
+            case "user/user-info":
 
                 LogContext.setAction("USER INFO");
                 if (isUserLogged) {
@@ -111,7 +113,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
         //remove everything prior to /user/ (included) and use the remainder as
         //indicator for the required operation
-        op = op.substring(op.lastIndexOf("user") + 5);
+        op = op.substring(op.lastIndexOf("wacar") + 6);
         LOGGER.info("op POST {}",op);
 
         switch (op){
@@ -151,7 +153,7 @@ public class UserServlet extends AbstractDatabaseServlet {
     public void logoutOperations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         HttpSession session = request.getSession();
-        User user = (User) session.getAttribute("account");
+        User user = (User) session.getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
         if (user!=null) {
             LOGGER.info("Session found {} ",session);
 
@@ -217,8 +219,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                     // activate a session to keep the user data
                     HttpSession session = req.getSession();
-                    session.setAttribute("account", user);
-                    session.setAttribute("role", user.getType());
+                    session.setAttribute(LoginFilter.ACCOUNT_ATTRIBUTE, user);
                     LogContext.setUser(email);
 
                     // login credentials were correct: we redirect the user to the homepage

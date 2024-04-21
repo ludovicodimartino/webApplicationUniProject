@@ -45,16 +45,18 @@ public class AdminServlet extends AbstractDatabaseServlet {
      */
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         String op = req.getRequestURI();
+        User user = (User) (req.getSession()).getAttribute("account");
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(op);
-        LogContext.setUser(((User) (req.getSession()).getAttribute("account")).getEmail());
+        LogContext.setUser(user.getEmail());
 
         try {
             if (op.lastIndexOf("admin") == op.length() - 5) { // Math url wacar/admin
                 op = "";
             } else { // Math url wacar/**/admin**
-                op = op.substring(op.lastIndexOf("admin") + 6);
+                op = op.substring(op.lastIndexOf("admin/") + 6);
             }
+            LOGGER.info("op: " + op);
 
             switch (op) {
                 case "insertCar/":
@@ -77,8 +79,16 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     LogContext.setAction(Actions.GET_EDIT_CAR_PAGE);
                     editCircuitPage(req, res);
                     break;
-                case "": // URL /wacar/admin
-                    //redirect to admin page (that is the user-info page)
+                case "admin-info/": // URL /wacar/admin/admin-info
+                    LogContext.setAction(Actions.ADMIN_INFO);
+                    if (user != null) {
+                        Message m = new Message("Login success");
+                        req.getRequestDispatcher("/jsp/userPage.jsp").forward(req, res);
+                    }
+                    else {
+                        Message m = new Message("Login FAILED");
+                        LOGGER.error("stacktrace {}:", m.getMessage());
+                    }
                     break;
                 default:
                     Message m = new Message("An error occurred default", "E200", "Operation Unknown");

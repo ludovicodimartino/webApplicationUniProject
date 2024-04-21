@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import it.unipd.dei.webapp.wacar.resource.User;
+import it.unipd.dei.webapp.wacar.resource.LogContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;

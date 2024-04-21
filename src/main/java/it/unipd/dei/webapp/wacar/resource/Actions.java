@@ -10,6 +10,16 @@ package it.unipd.dei.webapp.wacar.resource;
  * @since 1.00
  */
 public class Actions {
+	/**
+	 * Insertion of a new car.
+	 */
+	public static final String ADMIN_INFO = "ADMIN_INFO";
+
+	/**
+	 * Insertion of a new car.
+	 */
+	public static final String USER_INFO = "USER_INFO";
+
     /**
      * Insertion of a new car.
      */
@@ -115,6 +125,11 @@ public class Actions {
 	 * Getting the orders of a specific user.
 	 */
 	public static final String GET_ORDERS_BY_ACCOUNT = "GET_ORDERS_BY_ACCOUNT";
+
+	/**
+	 * Getting the orders of a specific id.
+	 */
+	public static final String GET_ORDERS_BY_ID = "GET_ORDERS_BY_ID";
 
 	/**
      * This class can be neither instantiated nor sub-classed.
