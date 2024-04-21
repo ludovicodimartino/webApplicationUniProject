@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
+import it.unipd.dei.webapp.wacar.utils.CarOrCircuitType;
 import jakarta.activation.MimeTypeParseException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -31,6 +32,7 @@ import org.apache.logging.log4j.message.StringFormattedMessage;
 @WebServlet(name = "AdminServlet", value = "/admin/*")
 @MultipartConfig
 public class AdminServlet extends AbstractDatabaseServlet {
+
     /**
      * Handles the HTTP GET request of the admin, that are:
      * <pre>
@@ -79,6 +81,14 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     LogContext.setAction(Actions.GET_EDIT_CAR_PAGE);
                     editCircuitPage(req, res);
                     break;
+                case "insertCarType/":
+                    LogContext.setAction(Actions.GET_INSERT_CAR_TYPE_PAGE);
+                    insertCarTypePage(req, res);
+                    break;
+                case "insertCircuitType/":
+                    LogContext.setAction(Actions.GET_INSERT_CIRCUIT_TYPE_PAGE);
+                    insertCircuitTypePage(req, res);
+                    break;
                 case "admin-info/": // URL /wacar/admin/admin-info
                     LogContext.setAction(Actions.ADMIN_INFO);
                     if (user != null) {
@@ -87,7 +97,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     }
                     else {
                         Message m = new Message("Login FAILED");
-                        LOGGER.error("stacktrace {}:", m.getMessage());
+                        LOGGER.error("Login Failed. Stacktrace {}:", m.getMessage());
                     }
                     break;
                 default:
@@ -223,6 +233,43 @@ public class AdminServlet extends AbstractDatabaseServlet {
     }
 
     /**
+     * Access the database to load the car types.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     */
+    private void insertCarTypePage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            List<Type> carTypeList = new GetCarTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("carTypesList", carTypeList);
+            req.getRequestDispatcher("/jsp/insert-car-type.jsp").forward(req, res);
+        } catch (SQLException e) {
+            LOGGER.error("Cannot read car types: unexpected error while accessing the database.", e);
+        }
+    }
+
+    /**
+     * Access the database to load the circuit types.
+     *
+     * @param req the {@code HttpServletRequest} incoming request
+     * @param res the {@code HttpServletResponse} response object
+     * @throws IOException      if any error happens during the response writing operation
+     * @throws ServletException if any problem occurs while executing the servlet.
+     */
+    private void insertCircuitTypePage(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        try {
+            List<Type> circuitTypeList = new GetCircuitTypesDAO(getConnection()).access().getOutputParam();
+            req.setAttribute("circuitTypesList", circuitTypeList);
+            req.getRequestDispatcher("/jsp/insert-circuit-type.jsp").forward(req, res);
+        } catch (SQLException e) {
+            LOGGER.error("Cannot read circuit types: unexpected error while accessing the database.", e);
+        }
+    }
+
+
+    /**
      * Handles the HTTP POST request of the admin, that are:
      * <pre>
      *  - insertCar
@@ -279,6 +326,16 @@ public class AdminServlet extends AbstractDatabaseServlet {
                 case "editCircuit/":
                     LogContext.setAction(Actions.EDIT_CAR);
                     insertCircuitOperations(req, res, true);
+                    break;
+
+                case "insertCarType/":
+                    LogContext.setAction(Actions.INSERT_CAR_TYPE);
+                    insertTypeOperations(req, res, CarOrCircuitType.CAR_TYPE);
+                    break;
+
+                case "insertCircuitType/":
+                    LogContext.setAction(Actions.INSERT_CIRCUIT_TYPE);
+                    insertTypeOperations(req, res, CarOrCircuitType.CIRCUIT_TYPE);
                     break;
 
                 default:
@@ -750,6 +807,81 @@ public class AdminServlet extends AbstractDatabaseServlet {
             res.sendRedirect(req.getContextPath() + "/admin/insertMapping/");
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when deleting the mapping (%s, %s).", carType, circuitType), e);
+            throw e;
+        } finally {
+            LogContext.removeIPAddress();
+            LogContext.removeAction();
+            LogContext.removeResource();
+        }
+    }
+
+    /**
+     * All the operations needed to insert a new type in the database.
+     *
+     * @param req the {@code HttpServletRequest} incoming request.
+     * @param res the {@code HttpServletResponse} response object.
+     * @param carOrCircuit whether it is a car type or a circuit type.
+     * @throws IOException      if any error happens during the response writing operation.
+     * @throws ServletException if any error occurs while executing the servlet.
+     */
+    private void insertTypeOperations(HttpServletRequest req, HttpServletResponse res, final CarOrCircuitType carOrCircuit) throws IOException, ServletException {
+
+        // request parameters
+        String name = null;
+
+        // model
+        Type type;
+        Message m;
+
+        try {
+            name = req.getParameter("name");
+
+            // Create a new type object
+            type = new Type(name);
+
+            // create the type in the database
+            switch (carOrCircuit){
+                case CAR_TYPE:
+                    new InsertCarTypeDAO(getConnection(), type).access();
+                    break;
+                case CIRCUIT_TYPE:
+                    new InsertCircuitTypeDAO(getConnection(), type).access();
+                    break;
+                default:
+                    throw new IllegalArgumentException(String.format("Type %s not suited for the insert type operations.", carOrCircuit.getName()));
+            }
+
+            m = new Message(String.format("%s %s successfully inserted.", carOrCircuit.getName(), name));
+            LOGGER.info(new StringFormattedMessage("%s %s successfully inserted.", carOrCircuit.getName(), name));
+
+        } catch (SQLException e) {
+            if ("23505".equals(e.getSQLState())) {
+                m = new Message(String.format("Cannot create the %s object: %s %s already exists.", carOrCircuit.getName(), carOrCircuit.getName(), name), "E300",
+                        e.getMessage());
+                LOGGER.error(
+                        new StringFormattedMessage("Cannot create the %s object: %s %s already exists.", carOrCircuit.getName(), carOrCircuit.getName(), name),
+                        e);
+            } else if ("23502".equals(e.getSQLState())) {
+                m = new Message("Cannot create the type object: the type name cannot be null.", "E500",
+                        e.getMessage());
+                LOGGER.error(
+                        "Cannot create the type object: the type name cannot be null.",
+                        e);
+            } else {
+                m = new Message("Cannot create the type object: unexpected error while accessing the database.", "E200",
+                        e.getMessage());
+
+                LOGGER.error("Cannot create the type object: unexpected error while accessing the database.", e);
+            }
+        }
+
+        try {
+            // stores the message as a request attribute
+            req.setAttribute("message", m);
+            if(carOrCircuit == CarOrCircuitType.CAR_TYPE) insertCarTypePage(req,res);
+            else insertCircuitTypePage(req, res);
+        } catch (IOException e) {
+            LOGGER.error(new StringFormattedMessage("Unable to send response when creating the %s object %s.", carOrCircuit.getName(), name), e);
             throw e;
         } finally {
             LogContext.removeIPAddress();

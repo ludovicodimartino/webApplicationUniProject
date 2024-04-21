@@ -43,12 +43,12 @@
 
     <label for="type">Type:</label><br>
 
-    <%--    Display the car types--%>
+    <%--    Display the circuit types--%>
     <jsp:useBean id="circuitList" scope="request" type="java.util.List"/>
     <c:choose>
         <c:when test="${empty circuitList}">
-            <p>You don't have car types in the database. Please, create one <a
-                    href="${pageContext.request.contextPath}/admin/insertCircuitType">here</a>.</p>
+            <p>You don't have circuit types in the database. Please, create one <a
+                    href="${pageContext.request.contextPath}/admin/insertCircuitType/">here</a>.</p>
             <input type="submit" value="Submit" disabled>
         </c:when>
         <c:otherwise>
@@ -56,7 +56,9 @@
                 <c:forEach items="${circuitList}" var="circuit" varStatus="loop">
                     <option value="${circuit.name}"><c:out value="${circuit.name}"/></option>
                 </c:forEach>
-            </select><br><br>
+            </select>
+            <p>You don't find the circuit type you are looking for? Create one <a
+                    href="${pageContext.request.contextPath}/admin/insertCircuitType/">here</a>.</p><br><br>
             <input type="submit" value="Submit">
         </c:otherwise>
     </c:choose>

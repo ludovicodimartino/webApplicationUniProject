@@ -37,7 +37,7 @@
     </select><br><br>
 
     <label for="image">Choose the car image:</label><br>
-    <input type="file" id="image" name="image" accept="image/png, image/jpeg" /><br><br>
+    <input type="file" id="image" name="image" accept="image/png, image/jpeg"/><br><br>
 
 
     <label for="type">Type:</label><br>
@@ -47,7 +47,7 @@
     <c:choose>
         <c:when test="${empty carList}">
             <p>You don't have car types in the database. Please, create one <a
-                    href="${pageContext.request.contextPath}/admin/insertCarType">here</a>.</p>
+                    href="${pageContext.request.contextPath}/admin/insertCarType/">here</a>.</p>
             <input type="submit" value="Submit" disabled>
         </c:when>
         <c:otherwise>
@@ -55,7 +55,9 @@
                 <c:forEach items="${carList}" var="car" varStatus="loop">
                     <option value="${car.name}"><c:out value="${car.name}"/></option>
                 </c:forEach>
-            </select><br><br>
+            </select>
+            <p>You don't find the car type you are looking for? Create one <a
+                    href="${pageContext.request.contextPath}/admin/insertCarType/">here</a>.</p><br><br>
             <input type="submit" value="Submit">
         </c:otherwise>
     </c:choose>

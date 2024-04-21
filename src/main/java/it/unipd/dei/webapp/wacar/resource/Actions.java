@@ -11,12 +11,12 @@ package it.unipd.dei.webapp.wacar.resource;
  */
 public class Actions {
 	/**
-	 * Insertion of a new car.
+	 * Get the information of an admin.
 	 */
 	public static final String ADMIN_INFO = "ADMIN_INFO";
 
 	/**
-	 * Insertion of a new car.
+	 * Get the information of a user.
 	 */
 	public static final String USER_INFO = "USER_INFO";
 
@@ -30,16 +30,35 @@ public class Actions {
      */
     public static final String INSERT_CIRCUIT = "INSERT_CIRCUIT";
 
+	/**
+	 * Insertion of a new circuit type.
+	 */
+	public static final String INSERT_CIRCUIT_TYPE = "INSERT_CIRCUIT_TYPE";
+
+	/**
+	 * Insertion of a new car type.
+	 */
+	public static final String INSERT_CAR_TYPE = "INSERT_CAR_TYPE";
+
     /**
      * Get the page for the insertion of a new car.
      */
     public static final String GET_INSERT_CAR_PAGE = "GET_INSERT_CAR_PAGE";
 
-
 	/**
 	 * Get the page for the insertion of a new circuit.
 	 */
 	public static final String GET_INSERT_CIRCUIT_PAGE = "GET_INSERT_CIRCUIT_PAGE";
+
+	/**
+	 * Get the page for the insertion of a new circuit type.
+	 */
+	public static final String GET_INSERT_CIRCUIT_TYPE_PAGE = "GET_INSERT_CIRCUIT_TYPE_PAGE";
+
+	/**
+	 * Get the page for the insertion of a new car type.
+	 */
+	public static final String GET_INSERT_CAR_TYPE_PAGE = "GET_INSERT_CAR_TYPE_PAGE";
 
 	/**
 	 * The search of circuit where a type of car can race.
