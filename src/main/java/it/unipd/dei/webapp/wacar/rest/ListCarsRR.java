@@ -21,7 +21,7 @@ import java.util.List;
  * @version 1.00
  * @since 1.00
  */
-public class ListCircuitsRR extends AbstractRR {
+public class ListCarsRR extends AbstractRR {
 
     /**
      * Creates a new REST resource for listing {@code Circuit}(s).
@@ -30,8 +30,8 @@ public class ListCircuitsRR extends AbstractRR {
      * @param res the HTTP response.
      * @param con the connection to the database.
      */
-    public ListCircuitsRR(final HttpServletRequest req, HttpServletResponse res, Connection con) {
-        super(Actions.GET_ALL_CARS, req, res, con);
+    public ListCarsRR(final HttpServletRequest req, HttpServletResponse res, Connection con) {
+        super(Actions.GET_ALL_CIRCUITS, req, res, con);
     }
 
     /**
@@ -42,22 +42,22 @@ public class ListCircuitsRR extends AbstractRR {
     @Override
     protected void doServe() throws IOException {
         Message m = null;
-        List<Circuit> circuits = null;
+        List<Circuit> cars = null;
         try {
 
             // creates a new DAO for accessing the database and lists the circuits
-            circuits = new ListCircuitDAO(con).access().getOutputParam();
+            cars = new ListCircuitDAO(con).access().getOutputParam();
 
-            if (circuits != null) {
-                LOGGER.info("Circuit(s) successfully listed.");
-                LOGGER.info(circuits.getFirst().getName());
+            if (cars != null) {
+                LOGGER.info("Car(s) successfully listed.");
+                LOGGER.info(cars.getFirst().getName());
                 res.setStatus(HttpServletResponse.SC_OK);
                 //List<Circuit> tmp_circuits = new ArrayList<>();
-                new ResourceList<>(circuits).toJSON(res.getOutputStream());
+                new ResourceList<>(cars).toJSON(res.getOutputStream());
             } else {
-                LOGGER.error("Fatal error while listing circuits(s).");
+                LOGGER.error("Fatal error while listing car(s).");
                 m = new Message(
-                        "Cannot list circuit(s): unexpected error.",
+                        "Cannot list car(s): unexpected error.",
                         "E5A1",
                         null);
 
@@ -66,10 +66,10 @@ public class ListCircuitsRR extends AbstractRR {
             }
         } catch (SQLException ex) {
             LOGGER.error(
-                    "Cannot list circuit(s): unexpected database error.", ex);
+                    "Cannot list car(s): unexpected database error.", ex);
 
             m = new Message(
-                    "Cannot list circuit(s): unexpected database error.",
+                    "Cannot list car(s): unexpected database error.",
                     "E5A1",
                     ex.getMessage());
 
@@ -78,4 +78,3 @@ public class ListCircuitsRR extends AbstractRR {
         }
     }
 }
-

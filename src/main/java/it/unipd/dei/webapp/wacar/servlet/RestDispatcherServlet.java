@@ -23,6 +23,7 @@ import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.rest.GetOrderByIdRR;
+import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -190,12 +191,12 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		Message m = null;
 
 		// the requested resource was not a list of cars
-		if (path.lastIndexOf("rest/list-car") <= 0) {
+		if (path.lastIndexOf("rest/cars") <= 0) {
 			return false;
 		}
 
 		// strip everything until after the /create-order
-		path = path.substring(path.lastIndexOf("list-car") + 4);
+		path = path.substring(path.lastIndexOf("cars") + 4);
 
 		// the request URI is: /
 		// if method GET, list the available cars
@@ -203,7 +204,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 
 			switch (method) {
 				case "GET":
-//					new ListCarRR(req, res, getConnection()).serve(); // TODO
+					new ListCarsRR(req, res, getConnection()).serve();
 					break;
 				default:
 					LOGGER.warn("Unsupported operation for URI /: %s.", method);
