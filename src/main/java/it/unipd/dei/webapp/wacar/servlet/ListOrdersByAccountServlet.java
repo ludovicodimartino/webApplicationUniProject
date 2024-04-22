@@ -5,6 +5,7 @@ import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.User;
+import it.unipd.dei.webapp.wacar.resource.LogContext;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;

@@ -5,6 +5,7 @@ import it.unipd.dei.webapp.wacar.resource.Circuit;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  * @since 1.00
  */
 public class ListCircuitDAO extends AbstractDAO<List<Circuit>> {
-    private static final String STATEMENT = "Select * from assessment.circuit";
+    private static final String STATEMENT = "Select * FROM assessment.circuit";
 
     /**
      * Creates a new DAO object.
@@ -31,7 +32,7 @@ public class ListCircuitDAO extends AbstractDAO<List<Circuit>> {
      * Performs the access to the data source by executing the query and returning the results
      */
     @Override
-    protected void doAccess() throws Exception {
+    protected void doAccess() throws SQLException {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
@@ -64,6 +65,7 @@ public class ListCircuitDAO extends AbstractDAO<List<Circuit>> {
             if (pstmt != null)
                 pstmt.close();
         }
-        this.outputParam = circuits;
+
+        outputParam = circuits;
     }
 }

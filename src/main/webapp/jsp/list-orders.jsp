@@ -22,6 +22,7 @@
 <h2>List of Orders</h2>
 <table border="1">
     <tr>
+        <th>Id</th>
         <th>Date</th>
         <th>Car Brand</th>
         <th>Car Model</th>
@@ -34,18 +35,19 @@
     <c:if test="${not empty orders}">
         <c:forEach var="order" items="${orders}" varStatus="loop">
             <tr>
+                <td><c:out value="${order.id}"/></td>
                 <td><c:out value="${order.date}"/></td>
                 <td><c:out value="${order.carBrand}"/></td>
                 <td><c:out value="${order.carModel}"/></td>
                 <td><c:out value="${order.circuit}"/></td>
-                <td><c:out value="${order.getCreatedAt()}"/></td>
+                <td><c:out value="${order.createdAt}"/></td>
                 <td><c:out value="${order.NLaps}"/></td>
                 <td><c:out value="${order.price}"/></td>
                 <td>
                     <c:choose>
                         <c:when test="${modifyAvailable[loop.index]}">
-                            <a href="#" target="_blank">
-                                <button>Modify</button>
+                            <a href="/wacar/user/rest/order/id/${order.id}" type="button">
+                                Modify
                             </a>
                         </c:when>
                         <c:otherwise>

@@ -23,6 +23,7 @@ import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.rest.GetOrderByIdRR;
+import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -53,13 +54,13 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 
 		try {
 
-			// if the requested resource was an Employee, delegate its processing and return
-			if (processListCar(req, res) || processOrder(req, res)) { // TODO: || processListCircuit(req, res)
+			// if the requested resource was a Circuit a Car or an Order, delegate its processing and return
+			if (processListCar(req, res) || processOrder(req, res) || processListCircuits(req, res)) {
 				return;
 			}
 
 			// if none of the above process methods succeeds, it means an unknown resource has been requested
-			LOGGER.warn("Unknown resource requested: %s.", req.getRequestURI());
+			LOGGER.warn("Unknown resource requested: {}", req.getRequestURI());
 
 			final Message m = new Message("Unknown resource requested.", "E4A6",
 					String.format("Requested resource is %s.", req.getRequestURI()));
@@ -84,7 +85,94 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		}
 	}
 
+	/**
+	 * Checks whether the request if for a {@link it.unipd.dei.webapp.wacar.resource.Circuit}(s) resource(s) and, in case, processes it.
+	 *
+	 * @param req the HTTP request.
+	 * @param res the HTTP response.
+	 * @return {@code true} if the request was for a {@code Circuit}; {@code false} otherwise.
+	 * @throws Exception if any error occurs.
+	 */
+	private boolean processListCircuits(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+		LOGGER.info("process list circuit");
 
+		final String method = req.getMethod();
+
+		String path = req.getRequestURI();
+		Message m = null;
+
+		// Requested resource was not a list of circuits
+		if (path.lastIndexOf("rest/circuit") <= 0) {
+			return false;
+		}
+
+		// strip everything until after the /circuit
+		path = path.substring(path.lastIndexOf("circuit") + 7);
+
+		if (path.isEmpty() || path.equals("/")) {
+
+			switch (method) {
+				case "GET":
+					new ListCircuitsRR(req, res, getConnection()).serve();
+					break;
+				case "POST":
+					break;
+				default:
+					LOGGER.warn("Unsupported operation for URI /circuit: {}", method);
+
+					m = new Message(
+							"Unsupported operation for URI /circuit.",
+							"E4A5",
+							String.format("Requested operation %s.", method));
+					res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+					m.toJSON(res.getOutputStream());
+					break;
+			}
+		}
+		/*
+
+		else if (path.contains("available")) {
+
+			path = path.substring(path.lastIndexOf("available") + 9);
+
+			if (path.length() == 0 || path.equals("/")) {
+				//the uri is rest/category/available
+				LOGGER.warn("Wrong format for URI /categories/available/{sagra}. Requested URI: %s.", req.getRequestURI());
+
+				m = new Message("Wrong format for URI /categories/available/{sagra}.", "E4A7",
+						String.format("Requested URI: %s.", req.getRequestURI()));
+				res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				m.toJSON(res.getOutputStream());
+			} else {
+				//the uri is rest/category/available/{sagra}
+				switch (method) {
+					case "GET":
+						new ListCategoriesAvailableRR(req, res, getConnection()).serve();
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /categories/available/{sagra}: %s.", method);
+
+						m = new Message("Unsupported operation for URI /categories/available/{sagra}.", "E4A5",
+								String.format("Requested operation %s.", method));
+						res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+						m.toJSON(res.getOutputStream());
+						break;
+				}
+
+			}
+		} else {
+			LOGGER.warn("Wrong format for URI /categories: too many arguments. Requested URI: %s.", req.getRequestURI());
+
+			m = new Message("Wrong format for URI /categories: too many arguments.", "E4A7",
+					String.format("Requested URI: %s.", req.getRequestURI()));
+			res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			m.toJSON(res.getOutputStream());
+		}
+
+		*/
+
+		return true;
+	}
 	/**
 	 * Checks whether the request if for a list of {@link Car}s and, in case, processes it.
 	 *

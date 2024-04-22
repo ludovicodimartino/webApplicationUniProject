@@ -48,6 +48,7 @@ public class ListOrdersByAccountDAO extends AbstractDAO<List<Order>> {
 
             while (rs.next()) {
                 orders.add(new Order(
+                        rs.getInt("id"),
                         rs.getString("account"),
                         rs.getDate("date"),
                         rs.getString("carBrand"),
@@ -67,3 +68,4 @@ public class ListOrdersByAccountDAO extends AbstractDAO<List<Order>> {
         this.outputParam = orders;
     }
 }
+
