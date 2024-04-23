@@ -12,37 +12,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Update your Account</title>
-
 </head>
-<body>
+    <body>
+        <h2>Update Your Account</h2>
 
-</body>
-</html>
+        <form action="UpdateAccountServlet" method="post">
 
+            <label for="password">Password:</label><br>
+            <input type="password" id="password" name="password" value="${user.password}"><br><br>
 
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>Delete Favorite</title>
-</head>
-<body>
-<h1>Delete Favorite</h1>
-<%-- Assuming you have the necessary information in your session or request attributes --%>
-<%
-    String circuitName = (String) request.getAttribute("circuitName");
-    String carModel = (String) request.getAttribute("carModel");
-    String carBrand = (String) request.getAttribute("carBrand");
-%>
+            <label for="address">Address:</label><br>
+            <input type="text" id="address" name="address" value="${user.address}"><br><br>
 
-<form action="DeleteFavouriteServlet" method="GET">
-    <input type="hidden" name="circuitName" value="<%= circuitName %>">
-    <input type="hidden" name="carModel" value="<%= carModel %>">
-    <input type="hidden" name="carBrand" value="<%= carBrand %>">
-    <input type="submit" value="Delete Favorite">
-</form>
-
-</body>
+            <input type="submit" value="Update Account">
+        </form>
+    </body>
 </html>
