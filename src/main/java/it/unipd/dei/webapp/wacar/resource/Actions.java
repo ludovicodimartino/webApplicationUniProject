@@ -101,6 +101,11 @@ public class Actions {
 	public static final String SHOW_FAVOURITE = "SHOW_FAVOURITE";
 
 	/**
+	 * List all favourites of the user
+	 */
+	public static final String LIST_FAVOURITES = "LIST_FAVOURITES";
+
+	/**
 	 * Delete the selected favourite
 	 */
 	public static final String DELETE_FAVOURITE = "DELETE_FAVOURITE";

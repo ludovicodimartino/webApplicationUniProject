@@ -1,6 +1,5 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.dao.InsertFavouriteDAO;
 import it.unipd.dei.webapp.wacar.dao.UpdateAccountDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
 import jakarta.servlet.ServletException;
@@ -11,10 +10,16 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 public class UpdateAccountServlet extends AbstractDatabaseServlet{
+    /**
+     * Handles the HTTP post request to update the account of the user
+     *
+     * @param request the {@code HttpServletRequest} incoming request from the client
+     * @param response the {@code HttpServletResponse} response object from the server
+     * @throws ServletException if any problem occurs while executing the servlet.
+     * @throws IOException if any error occurs in the client/server communication.
+     */
  @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
@@ -38,7 +43,7 @@ public class UpdateAccountServlet extends AbstractDatabaseServlet{
             // Create a User object with the updated information
             updatedUser = new User(user.getEmail(), password, address);
         }catch (Exception e) {
-            LOGGER.error("Invalid request: ", e.getMessage());
+            LOGGER.error("Invalid request");
         }
      try {
          new UpdateAccountDAO(getConnection(), updatedUser).access().getOutputParam();
