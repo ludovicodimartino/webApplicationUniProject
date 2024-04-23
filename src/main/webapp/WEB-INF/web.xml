@@ -55,6 +55,10 @@
         <url-pattern>/logout/</url-pattern>
         <url-pattern>/user/user-info</url-pattern>
     </servlet-mapping>
+    <servlet>
+        <servlet-name>AdminServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.AdminServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>AdminServlet</servlet-name>
         <url-pattern>/admin/*</url-pattern>
