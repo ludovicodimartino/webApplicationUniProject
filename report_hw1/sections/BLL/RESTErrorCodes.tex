@@ -1,0 +1,28 @@
+\subsection{REST Error Codes}
+
+%If needed, add few lines of text, describing the error codes table
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{6cm}|} % Specify column format with left-aligned text
+\hline
+\textbf{Error Code} & \textbf{HTTP Status Code} & \textbf{Description} \\\hline
+E4A1 & 400 (Bad Request) & Output media type not specified. \\\hline
+E4A2 & 406 (Not Acceptable) & Unsupported output media type \\\hline
+E4A3 & 400 (Bad Request) & Input media type not specified. \\\hline
+E4A4 & 415 (Unsupported Media Type) & Unsupported input media type. \\\hline
+E4A5 & 405 (Method Not Allowed) & Unsupported operation. \\\hline
+E4A6 & 404 (Not Found) & Unknown resource requested. \\\hline
+E4A7 & 400 (Bad Request) & Wrong URI format. \\\hline
+E4A8 & 400 (Bad Request) & Wrong resource provided. \\\hline
+E4A9 & 400 (Bad Request) & Wrongly formatted resource provided. \\\hline
+E4B1 & 400 (Bad Request) & One or more input fields are empty or missing. \\\hline
+E4B2 & 400 (Bad Request) & One or more input fields are wrong. \\\hline
+E4B3 & 401 (Unauthorized) & Authorization needed. \\\hline
+E5A1 & 500 (Internal Server Error) & Unexpected error while processing a resource. \\\hline
+E5A2 & 409 (Conflict) & Resource already exists. \\\hline
+E5A3 & 404 (Not Found) & Resource not found. \\\hline
+E5A4 & 409 (Conflict) & Cannot modify a resource because other resources depend
+on it. \\\hline
+E5A5 & 500 (Internal Server Error) & Cannot create resource. \\\hline
+\caption{REST Error Codes}
+\label{tab:RESTErrorCodes}
+\end{longtable}
