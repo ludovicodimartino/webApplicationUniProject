@@ -27,6 +27,13 @@ public class Favourite{
         this.createdAt = createdAt;
     }
 
+    public Favourite(String circuit, String carBrand, String carModel, String account){
+        this.circuit = circuit;
+        this.carBrand = carBrand;
+        this.carModel = carModel;
+        this.account = account;
+    }
+
     public final String getCircuit() {
         return circuit;
     }

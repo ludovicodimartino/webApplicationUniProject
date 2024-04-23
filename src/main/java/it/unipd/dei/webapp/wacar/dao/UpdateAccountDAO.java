@@ -7,11 +7,16 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 public class UpdateAccountDAO extends AbstractDAO{
-    private static final String STATEMENT_REGISTRATION = "UPDATE assessment.account SET email= 'admin', password = 'Admin123', name = 'admin', surname = 'admin', address = 'admin1@example.com' WHERE id = '2';";
+    private static final String UPDATE_STATEMENT = "UPDATE assessment.account SET password = ?, address = ? WHERE email = ?;";
     private final User user;
 
     public UpdateAccountDAO(final Connection con, final User user) {
         super(con);
+        if(user == null)
+        {
+            LOGGER.error("The user cannot be null.");
+            throw new NullPointerException("The user suitability cannot be null.");
+        }
         this.user = user;
     }
 
@@ -22,14 +27,10 @@ public class UpdateAccountDAO extends AbstractDAO{
         // the results of the search
 
         try {
-            stmnt = con.prepareStatement(STATEMENT_REGISTRATION);
-            stmnt.setString(1, user.getEmail());
-            stmnt.setString(2, user.getPassword());
-            stmnt.setString(3, user.getName());
-            stmnt.setString(4, user.getSurname());
-            stmnt.setString(5, user.getAddress());
-
-
+            stmnt = con.prepareStatement(UPDATE_STATEMENT);
+            stmnt.setString(1, user.getPassword());
+            stmnt.setString(2, user.getAddress());
+            stmnt.setString(3, user.getEmail());
             stmnt.execute();
             LOGGER.info("User updated {}.", user.getEmail());
 

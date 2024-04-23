@@ -38,6 +38,13 @@ public class User {
 
     }
 
+    //this is used in update account
+    public User(String email, String name, String surname){
+        this.email = email;
+        this.name = name;
+        this.surname = surname;
+
+    }
 
 
     // this is used in registration
@@ -69,8 +76,6 @@ public class User {
         this.address =address;
         this.accountType = accountType;
     }
-
-
 
 
 

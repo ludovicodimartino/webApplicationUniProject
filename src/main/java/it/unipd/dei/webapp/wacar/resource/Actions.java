@@ -20,6 +20,11 @@ public class Actions {
 	 */
 	public static final String USER_INFO = "USER_INFO";
 
+	/**
+	 * Update user informations
+	 */
+	public static final String UPDATE_ACCOUNT= "UPDATE_ACCOUNT";
+
     /**
      * Insertion of a new car.
      */
@@ -94,6 +99,11 @@ public class Actions {
 	 * Show the new favourite
 	 */
 	public static final String SHOW_FAVOURITE = "SHOW_FAVOURITE";
+
+	/**
+	 * Delete the selected favourite
+	 */
+	public static final String DELETE_FAVOURITE = "DELETE_FAVOURITE";
 
 	/**
 	 * Loading of a car image
