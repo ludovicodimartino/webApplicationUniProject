@@ -65,6 +65,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.UpdateAccountServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>UpdateAccountServlet</servlet-name>
+        <url-pattern>/user/update-account</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>CarListServlet</servlet-name>
         <servlet-class>it.unipd.dei.webapp.wacar.servlet.CarListServlet</servlet-class>
     </servlet>
@@ -98,6 +107,24 @@
     <servlet-mapping>
         <servlet-name>CreateFavouriteServlet</servlet-name>
         <url-pattern>/user/create-favourite/recap</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>ListFavouriteServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.ListFavouriteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ListFavouriteServlet</servlet-name>
+        <url-pattern>/user/list-favourite</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>DeleteFavouriteServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.DeleteFavouriteServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteFavouriteServlet</servlet-name>
+        <url-pattern>/user/deleteFavourite</url-pattern>
     </servlet-mapping>
 
     <servlet>
