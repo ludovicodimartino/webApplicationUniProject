@@ -1,3 +1,9 @@
+<!--
+    Author: Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
+    Version: 1.00
+    Since: 1.00
+-->
+
 <%@ page contentType="text/html;charset=utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -104,21 +110,25 @@
         <tr>
             <td rowspan="<c:out value="${fn:length(cCSuit.value)}"/>"><c:out value="${cCSuit.key}"/></td>
             <td><c:out value="${cCSuit.value[0]}"/></td>
-            <td><form name="f1" action="${pageContext.request.contextPath}/admin/deleteMapping/" method="POST">
-                <input type="hidden" name="carType" value="${cCSuit.key}" />
-                <input type="hidden" name="circuitType" value="${cCSuit.value[0]}" />
-                <input id="edit0" type="submit" name="delete" value="delete" class="removeBtn">
-            </form></td>
+            <td>
+                <form name="f1" action="${pageContext.request.contextPath}/admin/deleteMapping/" method="POST">
+                    <input type="hidden" name="carType" value="${cCSuit.key}"/>
+                    <input type="hidden" name="circuitType" value="${cCSuit.value[0]}"/>
+                    <input id="edit0" type="submit" name="delete" value="delete" class="removeBtn">
+                </form>
+            </td>
         </tr>
         <c:forEach items="${cCSuit.value}" var="circuitType" varStatus="loop">
             <c:if test="${loop.index > 0}">
                 <tr>
                     <td><c:out value="${circuitType}"/></td>
-                    <td><form name="f1" action="${pageContext.request.contextPath}/admin/deleteMapping/" method="POST">
-                        <input type="hidden" name="carType" value="${cCSuit.key}" />
-                        <input type="hidden" name="circuitType" value="${circuitType}" />
-                        <input id="${loop.index}" type="submit" name="delete" value="delete" class="removeBtn">
-                    </form></td>
+                    <td>
+                        <form name="f1" action="${pageContext.request.contextPath}/admin/deleteMapping/" method="POST">
+                            <input type="hidden" name="carType" value="${cCSuit.key}"/>
+                            <input type="hidden" name="circuitType" value="${circuitType}"/>
+                            <input id="${loop.index}" type="submit" name="delete" value="delete" class="removeBtn">
+                        </form>
+                    </td>
                 </tr>
             </c:if>
         </c:forEach>

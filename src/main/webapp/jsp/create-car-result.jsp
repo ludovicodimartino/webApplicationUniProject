@@ -1,3 +1,9 @@
+<!--
+    Author: Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
+    Version: 1.00
+    Since: 1.00
+-->
+
 <%@ page contentType="text/html;charset=utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
