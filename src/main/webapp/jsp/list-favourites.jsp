@@ -28,7 +28,7 @@
 
 <%-- Display any messages --%>
 <c:if test="${not empty message}">
-    <p>${message.content}</p>
+    <c:out value="${message.content}"/>
 </c:if>
 
 <%-- Display the list of favorites --%>
@@ -47,11 +47,11 @@
         </tr>
         <c:forEach var="favorite" items="${favouritesList}">
             <tr>
-                <td>${favorite.circuit}</td>
-                <td>${favorite.carBrand}</td>
-                <td>${favorite.carModel}</td>
-                <td>${favorite.account}</td>
-                <td><fmt:formatDate value="${favorite.createdAt}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
+                <td><c:out value="${favorite.circuit}"/></td>
+                <td><c:out value="${favorite.carBrand}"/></td>
+                <td><c:out value="${favorite.carModel}"/></td>
+                <td><c:out value="${favorite.account}"/></td>
+                <td><c:out value="${favorite.createdAt}"/></td>
                 <td>
                     <button onclick="confirmDelete('${favorite.circuit}', '${favorite.carBrand}', '${favorite.carModel}')">Delete</button>
                 </td>
@@ -61,7 +61,7 @@
 </c:if>
 
 <%-- Hidden form for delete action --%>
-    <form id="deleteForm" action="deleteFavourite" method="post" style="display: none;">
+    <form id="deleteForm" action="/wacar/user/deleteFavourite" method="post" style="display: none;">
     <input type="hidden" name="circuitName" id="circuitName" value="" />
     <input type="hidden" name="carBrand" id="carBrand" value="" />
     <input type="hidden" name="carModel" id="carModel" value="" />
