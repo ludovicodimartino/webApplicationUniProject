@@ -1,5 +1,6 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+import it.unipd.dei.webapp.wacar.filter.LoginFilter;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Car;
 import it.unipd.dei.webapp.wacar.resource.Message;
@@ -17,24 +18,40 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Servlet to list all the cars.
+ * Servlet implementation class ListCarServlet.
+ * This servlet is responsible for handling requests related to listing cars.
  *
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */
-@WebServlet(name = "CarListServlet", value = "/car_list/")
-public class CarListServlet extends AbstractDatabaseServlet {
+@WebServlet(name = "ListCarServlet", value = "/car_list/")
+public class ListCarServlet extends AbstractDatabaseServlet {
+    /**
+     * Handles HTTP GET requests for listing cars.
+     * Retrieves the list of cars from the database and forwards the request to the JSP page for rendering.
+     *
+     * @param req the HttpServletRequest object containing the request information
+     * @param res the HttpServletResponse object for sending response to the client
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs while processing the request
+     */
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        User user = (User) req.getSession().getAttribute("account");
-        if (user != null) {
-            req.setAttribute("account", user);
-            LogContext.setUser(user.getName());
-        }
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
         LogContext.setAction(Actions.GET_ALL_CARS);
+
+        String op = req.getRequestURI();
+        LOGGER.info("op GET {}", op);
+
+        User user = (User) req.getSession().getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
+        if (user != null) {
+            req.setAttribute("accountType", user.getType());
+            LogContext.setUser(user.getEmail());
+        } else {
+            LogContext.setUser("NOT_LOGGED");
+        }
 
         List<Car> cars = null;
         Message m = null;
@@ -61,7 +78,7 @@ public class CarListServlet extends AbstractDatabaseServlet {
         req.setAttribute("message", m);
 
         // Forward the request to the JSP page
-        req.getRequestDispatcher("/jsp/ListCar.jsp").forward(req, res);
+        req.getRequestDispatcher("/jsp/list-car.jsp").forward(req, res);
     }
 }
 

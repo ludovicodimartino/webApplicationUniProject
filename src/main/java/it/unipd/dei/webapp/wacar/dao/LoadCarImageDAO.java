@@ -1,6 +1,8 @@
 package it.unipd.dei.webapp.wacar.dao;
 
 import it.unipd.dei.webapp.wacar.resource.Car;
+import it.unipd.dei.webapp.wacar.resource.LogContext;
+import it.unipd.dei.webapp.wacar.resource.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

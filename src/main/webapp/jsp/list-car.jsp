@@ -1,6 +1,6 @@
 <%@ page import="it.unipd.dei.webapp.wacar.resource.Car" %>
 <%@ page import="java.util.List" %>
-<!-- displayCircuits.jsp -->
+<!-- displayCars.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
@@ -8,16 +8,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>List of Circuits</title>
+    <title>List of Cars</title>
     <style>
-        .circuit-container {
+        .car-container {
             cursor: pointer;
-            display: inline-block; /* Display divs in a row */
-            vertical-align: top; /* Align divs to the top */
+            display: inline-block;
+            vertical-align: top;
             margin: 20px;
         }
 
-        .circuit-card {
+        .car-card {
             border-radius: 10px;
             width: 350px;
             background-color: lightgrey;
@@ -29,7 +29,7 @@
             transition: all 0.3s ease;
         }
 
-        .circuit-card img {
+        .car-card img {
             height: 70%;
             width: 100%;
             object-fit: cover;
@@ -37,13 +37,13 @@
             border-radius: 10px;
         }
 
-        .circuit-card h1 {
+        .car-card h1 {
             font-size: 20px;
             margin-top: auto;
             margin-bottom: 5px;
         }
 
-        .circuit-card h5 {
+        .car-card h5 {
             font-size: 15px;
             color: grey;
             margin-top: 3px;
@@ -59,15 +59,15 @@
             z-index: 1;
         }
 
-        .circuit-container:hover .circuit-card {
+        .car-container:hover .car-card {
             transform: scale(1.1);
         }
 
-        .circuit-container:hover .additional-info {
+        .car-container:hover .additional-info {
             display: block;
         }
 
-        .circuit-container:hover {
+        .car-container:hover {
             height: auto; /* Expand the height to fit the additional-info */
         }
 
@@ -90,26 +90,25 @@
         .navbar a:hover {
             color: lightgrey; /* Change text color on hover */
         }
-
     </style>
 </head>
 <body>
 <c:choose>
-    <c:when test="${not empty sessionScope.account}">
+    <c:when test="${not empty accountType}">
         <c:choose>
-            <c:when test="${sessionScope.account.type eq 'USER'}">
+            <c:when test="${accountType eq 'USER'}">
                 <div class="navbar">
                     <a href="/wacar/">Home</a>
-                    <a href="/wacar/car_list/">Car List</a>
+                    <a href="/wacar/circuit_list/">Circuit List</a>
                     <a href="/wacar/user/listOrdersByAccount">Orders</a>
                     <a href="/wacar/user/">Account</a>
                     <!-- Add more links as needed -->
                 </div>
             </c:when>
-            <c:when test="${sessionScope.account.type eq 'ADMIN'}">
+            <c:when test="${accountType eq 'ADMIN'}">
                 <div class="navbar">
                     <a href="/wacar/">Home</a>
-                    <a href="/wacar/car_list/">Car List</a>
+                    <a href="/wacar/circuit_list/">Circuit List</a>
                     <a href="/wacar/admin/insertCar/">Insert new Car</a>
                     <a href="/wacar/admin/insertCircuit/">Insert new Circuit</a>
                     <a href="/wacar/admin/insertMapping/">Insert new Mapping</a>
@@ -118,47 +117,56 @@
             </c:when>
         </c:choose>
     </c:when>
-    <c:when test="${empty sessionScope.account}">
+    <c:when test="${empty accountType}">
         <div class="navbar">
             <a href="/wacar/">Home</a>
-            <a href="/wacar/car_list/">Car List</a>
+            <a href="/wacar/circuit_list/">Circuit List</a>
             <!-- Add more links as needed -->
         </div>
     </c:when>
 </c:choose>
-<c:if test="${not empty circuits}">
-    <c:forEach var="circuit" items="${circuits}">
-        <div class="circuit-container">
-            <div class="circuit-card">
-                <img src="<c:url value='/loadCircuitImage'><c:param name='name' value='${circuit.name}'/></c:url>"
-                     alt="circuit image"/>
-                <h1><c:out value="${circuit.name}"/></h1>
-                <h5><c:out value="${circuit.type}"/></h5>
+<c:if test="${not empty cars}">
+    <c:forEach var="car" items="${cars}">
+        <div class="car-container">
+            <div class="car-card">
+                <img src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" alt="car image"/>
+                <h1><c:out value="${car.brand} ${car.model}"/></h1>
+                <h5><c:out value="${car.type}"/></h5>
+                <c:choose>
+                    <c:when test="${accountType eq 'ADMIN'}">
+                        <tr>
+                            <td>
+                                <a href="/wacar/admin/editCar/?brand=${car.brand}&model=${car.model}" class="btn link" type="button">
+                                    Modify
+                                </a>
+                            </td>
+                        </tr>
+                    </c:when>
+                    <c:otherwise>
+                        <!-- Handle other cases if needed -->
+                    </c:otherwise>
+                </c:choose>
                 <div class="additional-info">
                     <table>
                         <tr>
-                            <td>Address:</td>
-                            <td><c:out value="${circuit.address}"/></td>
+                            <td>Max Speed:</td>
+                            <td><c:out value="${car.maxSpeed}"/></td>
                         </tr>
                         <tr>
-                            <td>Length:</td>
-                            <td><c:out value="${circuit.length}"/></td>
+                            <td>Horsepower:</td>
+                            <td><c:out value="${car.horsepower}"/></td>
                         </tr>
                         <tr>
-                            <td>Corners:</td>
-                            <td><c:out value="${circuit.cornersNumber}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Description:</td>
-                            <td><c:out value="${circuit.description}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Price per lap:</td>
-                            <td><c:out value="${circuit.lapPrice}"/></td>
+                            <td>Acceleration:</td>
+                            <td><c:out value="${car.acceleration}"/></td>
                         </tr>
                         <tr>
                             <td>Available:</td>
-                            <td><c:out value="${circuit.available}"/></td>
+                            <td><c:out value="${car.available}"/></td>
+                        </tr>
+                        <tr>
+                            <td>Description:</td>
+                            <td><c:out value="${car.description}"/></td>
                         </tr>
                     </table>
                 </div>
@@ -166,5 +174,8 @@
         </div>
     </c:forEach>
 </c:if>
+
 </body>
 </html>
+
+

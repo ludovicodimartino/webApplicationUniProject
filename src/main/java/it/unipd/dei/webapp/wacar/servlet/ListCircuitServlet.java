@@ -1,12 +1,12 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.dao.ListCircuitDAO;
+import it.unipd.dei.webapp.wacar.filter.LoginFilter;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Circuit;
 import it.unipd.dei.webapp.wacar.resource.Message;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -24,18 +24,24 @@ import jakarta.servlet.http.HttpServletResponse;
  * @version 1.00
  * @since 1.00
  */
-@WebServlet(name = "CircuitListServlet", value = "/circuit_list/")
-public class CircuitListServlet extends AbstractDatabaseServlet {
+@WebServlet(name = "ListCircuitServlet", value = "/circuit_list/")
+public class ListCircuitServlet extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
-        User user = (User) req.getSession().getAttribute("account");
-        if (user != null) {
-            req.setAttribute("account", user);
-            LogContext.setUser(user.getName());
-        }
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
         LogContext.setAction(Actions.GET_ALL_CIRCUITS);
+
+        String op = req.getRequestURI();
+        LOGGER.info("op GET {}", op);
+
+        User user = (User) req.getSession().getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
+        if (user != null) {
+            req.setAttribute("accountType", user.getType());
+            LogContext.setUser(user.getEmail());
+        } else {
+            LogContext.setUser("NOT_LOGGED");
+        }
 
         List<Circuit> circuits = null;
         Message m = null;
@@ -63,6 +69,6 @@ public class CircuitListServlet extends AbstractDatabaseServlet {
         req.setAttribute("message", m);
 
         // Forward the request to the JSP page
-        req.getRequestDispatcher("/jsp/circuit-list.jsp").forward(req, res);
+        req.getRequestDispatcher("/jsp/list-circuit.jsp").forward(req, res);
     }
 }

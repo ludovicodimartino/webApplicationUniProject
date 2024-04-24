@@ -1,6 +1,6 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.dao.ListOrdersByAccountDAO;
+import it.unipd.dei.webapp.wacar.dao.ListOrdersByEmailDAO;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.Order;
@@ -26,8 +26,8 @@ import java.util.concurrent.TimeUnit;
  * @since 1.00
  */
 
-@WebServlet(name = "ListOrdersByAccountServlet")
-public class ListOrdersByAccountServlet extends AbstractDatabaseServlet{
+@WebServlet(name = "ListOrdersByEmailServlet")
+public class ListOrdersByEmailServlet extends AbstractDatabaseServlet{
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
@@ -45,7 +45,7 @@ public class ListOrdersByAccountServlet extends AbstractDatabaseServlet{
         List<Order> orders = null;
 
         try {
-            orders = new ListOrdersByAccountDAO(getConnection(), user).access().getOutputParam();
+            orders = new ListOrdersByEmailDAO(getConnection(), user.getEmail()).access().getOutputParam();
 
             m = new Message("Orders for user successfully retrieved");
             LOGGER.info("Orders for user successfully retrieved");

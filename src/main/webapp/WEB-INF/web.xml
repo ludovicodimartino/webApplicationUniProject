@@ -74,20 +74,20 @@
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>CarListServlet</servlet-name>
-        <servlet-class>it.unipd.dei.webapp.wacar.servlet.CarListServlet</servlet-class>
+        <servlet-name>ListCarServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.ListCarServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CarListServlet</servlet-name>
+        <servlet-name>ListCarServlet</servlet-name>
         <url-pattern>/car_list/</url-pattern>
     </servlet-mapping>
 
     <servlet>
-        <servlet-name>CircuitListServlet</servlet-name>
-        <servlet-class>it.unipd.dei.webapp.wacar.servlet.CircuitListServlet</servlet-class>
+        <servlet-name>ListCircuitServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.ListCircuitServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>CircuitListServlet</servlet-name>
+        <servlet-name>ListCircuitServlet</servlet-name>
         <url-pattern>/circuit_list/</url-pattern>
     </servlet-mapping>
 
@@ -147,7 +147,7 @@
 
     <servlet>
         <servlet-name>ListOrderdsByAccountServlet</servlet-name>
-        <servlet-class>it.unipd.dei.webapp.wacar.servlet.ListOrdersByAccountServlet</servlet-class>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.ListOrdersByEmailServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ListOrderdsByAccountServlet</servlet-name>
@@ -158,7 +158,6 @@
         <servlet-name>RestManagerServlet</servlet-name>
         <servlet-class>it.unipd.dei.webapp.wacar.servlet.RestDispatcherServlet</servlet-class>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>RestManagerServlet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
