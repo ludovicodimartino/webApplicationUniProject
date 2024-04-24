@@ -28,8 +28,7 @@ import java.io.OutputStream;
  * @version 1.00
  * @since 1.00
  *
- * @param <T>
- *            the type of the actual class extending {@code AbstractResource}.
+ * @param <T> the type of the actual class extending {@code AbstractResource}.
  */
 public final class ResourceList<T extends Resource> extends AbstractResource {
 
@@ -53,6 +52,13 @@ public final class ResourceList<T extends Resource> extends AbstractResource {
         this.list = list;
     }
 
+    /**
+     * Writes the JSON representation of the list of resources to the provided output stream.
+     * This method is responsible for serializing the list of resources into JSON format.
+     *
+     * @param out The output stream to which the JSON data will be written.
+     * @throws IOException If an error occurs while writing JSON data.
+     */
     @Override
     protected void writeJSON(final OutputStream out) throws IOException {
 

@@ -74,6 +74,20 @@ public class Circuit extends AbstractResource {
      */
     private final String imageMediaType;
 
+    /**
+     * Constructs a Circuit object with the specified attributes.
+     *
+     * @param name            The name of the circuit.
+     * @param type            The type or category of the circuit (e.g., road, karting).
+     * @param length          The length of the circuit in meters.
+     * @param cornersNumber   The number of corners on the circuit.
+     * @param address         The address/location of the circuit.
+     * @param description     The description of the circuit.
+     * @param lapPrice        The price of one lap on the circuit.
+     * @param available       True if the circuit is available for use; otherwise, false.
+     * @param image           The image data of the circuit.
+     * @param imageMediaType The media type of the image (e.g., "image/jpeg", "image/png").
+     */
     public Circuit(String name, String type, int length, int cornersNumber, String address, String description, int lapPrice, boolean available, final byte[] image, final String imageMediaType) {
         this.name = name;
         this.type = type;
@@ -87,6 +101,20 @@ public class Circuit extends AbstractResource {
         this.imageMediaType = imageMediaType;
     }
 
+
+    /**
+     * Constructs a Circuit object with the specified attributes (assuming the circuit is available by default).
+     *
+     * @param name            The name of the circuit.
+     * @param type            The type or category of the circuit (e.g., road, karting).
+     * @param length          The length of the circuit in meters.
+     * @param cornersNumber   The number of corners on the circuit.
+     * @param address         The address/location of the circuit.
+     * @param description     The description of the circuit.
+     * @param lapPrice        The price of one lap on the circuit.
+     * @param image           The image data of the circuit.
+     * @param imageMediaType The media type of the image (e.g., "image/jpeg", "image/png").
+     */
     public Circuit(String name, String type, int length, int cornersNumber, String address, String description, int lapPrice, final byte[] image, final String imageMediaType) {
         this.name = name;
         this.type = type;
@@ -99,46 +127,102 @@ public class Circuit extends AbstractResource {
         this.imageMediaType = imageMediaType;
     }
 
+    /**
+     * Retrieves the name of the circuit.
+     *
+     * @return The name of the circuit.
+     */
     public final String getName() {
         return name;
     }
 
+    /**
+     * Retrieves the type or category of the circuit.
+     *
+     * @return The type or category of the circuit.
+     */
     public final String getType() {
         return type;
     }
 
+    /**
+     * Retrieves the length of the circuit in meters.
+     *
+     * @return The length of the circuit.
+     */
     public final int getLength() {
         return length;
     }
 
+    /**
+     * Retrieves the number of corners on the circuit.
+     *
+     * @return The number of corners on the circuit.
+     */
     public final int getCornersNumber() {
         return cornersNumber;
     }
 
+    /**
+     * Retrieves the address/location of the circuit.
+     *
+     * @return The address/location of the circuit.
+     */
     public final String getAddress() {
         return address;
     }
 
+    /**
+     * Retrieves the description of the circuit.
+     *
+     * @return The description of the circuit.
+     */
     public final String getDescription() {
         return description;
     }
 
+    /**
+     * Retrieves the price of one lap on the circuit.
+     *
+     * @return The price of one lap on the circuit.
+     */
     public final int getLapPrice() {
         return lapPrice;
     }
 
+    /**
+     * Retrieves the availability status of the circuit.
+     *
+     * @return {@code true} if the circuit is available; {@code false} otherwise.
+     */
     public final boolean getAvailable() {
         return available;
     }
 
+    /**
+     * Retrieves the image data of the circuit.
+     *
+     * @return The image data of the circuit.
+     */
     public byte[] getImage() {
         return image;
     }
 
+    /**
+     * Retrieves the media type of the circuit image.
+     *
+     * @return The media type of the circuit image (e.g., "image/jpeg", "image/png").
+     */
     public String getImageMediaType() {
         return imageMediaType;
     }
 
+    /**
+     * Returns a string representation of the circuit object.
+     *
+     * @return A string containing the name, type, length, corners number, address,
+     *         description, lap price, and availability of the circuit.
+     */
     @Override
     public String toString() {
         return "Circuit{" +
@@ -153,6 +237,12 @@ public class Circuit extends AbstractResource {
                 '}';
     }
 
+    /**
+     * Returns a string representation of the circuit object.
+     *
+     * @return A string containing the name, type, length, corners number, address,
+     *         description, lap price, and availability of the circuit.
+     */
     @Override
     protected void writeJSON(OutputStream out) throws Exception {
 
@@ -186,6 +276,8 @@ public class Circuit extends AbstractResource {
         }
         */
 
+        jg.writeStringField("imageMediaType", imageMediaType);
+
         jg.writeEndObject();
 
         jg.writeEndObject();
@@ -193,6 +285,13 @@ public class Circuit extends AbstractResource {
         jg.flush();
     }
 
+    /**
+     * Constructs a Circuit object from JSON data read from the provided input stream.
+     *
+     * @param in The input stream containing the JSON data representing the circuit object.
+     * @return A new Circuit object constructed from the JSON data.
+     * @throws IOException if there's an error reading from the input stream or parsing the JSON data.
+     */
     public static Circuit fromJSON(final InputStream in) throws IOException {
 
         String jname = null;
@@ -268,13 +367,18 @@ public class Circuit extends AbstractResource {
             throw e;
         }
 
-        byte[] decodedPhoto= null;
-        if(!Objects.equals(jimage, "") && jimage != null) decodedPhoto= Base64.getDecoder().decode(jimage);
+        byte[] decodedImage = null;
+        if(!Objects.equals(jimage, "") && jimage != null) decodedImage = Base64.getDecoder().decode(jimage);
         if(Objects.equals(jimagemediatype, "")) jimagemediatype=null;
 
-        return new Circuit(jname, jtype, jlength, jcornersNumber, jaddress, jdescription, jlapPrice, javailable, decodedPhoto, jimagemediatype);
+        return new Circuit(jname, jtype, jlength, jcornersNumber, jaddress, jdescription, jlapPrice, javailable, decodedImage, jimagemediatype);
     }
 
+    /**
+     * Checks if the circuit has a photo available.
+     *
+     * @return {@code true} if the circuit has a photo; {@code false} otherwise.
+     */
     public final boolean hasPhoto() {
         return image != null && image.length > 0 && imageMediaType != null && !imageMediaType.isBlank();
     }

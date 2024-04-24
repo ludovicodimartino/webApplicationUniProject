@@ -3,8 +3,6 @@ package it.unipd.dei.webapp.wacar.resource;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonToken;
-import org.json.JSONObject;
-
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -12,10 +10,8 @@ import java.io.OutputStream;
 import java.util.Base64;
 import java.util.Objects;
 
-import static it.unipd.dei.webapp.wacar.resource.AbstractResource.JSON_FACTORY;
-
 /**
- * This class represents a car.
+ * Class to represent an object of type Car
  *
  * @author Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
@@ -73,6 +69,20 @@ public class Car extends AbstractResource{
      */
     private final String imageMediaType;
 
+    /**
+     * Constructs a new Car object with the specified attributes.
+     *
+     * @param brand           The brand of the car.
+     * @param model           The model of the car.
+     * @param description     The description of the car.
+     * @param maxSpeed        The maximum speed of the car in kilometers per hour.
+     * @param horsepower      The horsepower of the car.
+     * @param acceleration    The acceleration of the car (0-100 km/h time in seconds).
+     * @param available       True if the car is available for use; otherwise, false.
+     * @param type            The type or category of the car (e.g., sedan, SUV).
+     * @param image           The image data of the car.
+     * @param imageMediaType  The media type of the image (e.g., "image/jpeg", "image/png").
+     */
     public Car(final String brand, final String model, final String description, final int maxSpeed, final int horsepower, final float acceleration, final boolean available, final String type, final byte[] image, final String imageMediaType) {
         this.brand = brand;
         this.model = model;
@@ -86,59 +96,102 @@ public class Car extends AbstractResource{
         this.imageMediaType = imageMediaType;
     }
 
+    /**
+     * Retrieves the brand of the car.
+     *
+     * @return The brand of the car.
+     */
     public String getBrand() {
         return brand;
     }
 
+    /**
+     * Retrieves the model of the car.
+     *
+     * @return The model of the car.
+     */
     public String getModel() {
         return model;
     }
 
+    /**
+     * Retrieves the description of the car.
+     *
+     * @return The description of the car.
+     */
     public String getDescription() {
         return description;
     }
 
+    /**
+     * Retrieves the maximum speed of the car in kilometers per hour.
+     *
+     * @return The maximum speed of the car.
+     */
     public int getMaxSpeed() {
         return maxSpeed;
     }
 
+    /**
+     * Retrieves the horsepower of the car.
+     *
+     * @return The horsepower of the car.
+     */
     public int getHorsepower() {
         return horsepower;
     }
 
+    /**
+     * Retrieves the acceleration of the car (0-100 km/h time in seconds).
+     *
+     * @return The acceleration of the car.
+     */
     public float getAcceleration() {
         return acceleration;
     }
 
+    /**
+     * Checks if the car is available for use.
+     *
+     * @return True if the car is available; otherwise, false.
+     */
     public boolean isAvailable() {
         return available;
     }
 
+    /**
+     * Retrieves the type or category of the car.
+     *
+     * @return The type or category of the car.
+     */
     public String getType() {
         return type;
     }
 
+    /**
+     * Retrieves the image data of the car.
+     *
+     * @return The image data of the car.
+     */
     public byte[] getImage() {
         return image;
     }
 
+    /**
+     * Retrieves the media type of the car image.
+     *
+     * @return The media type of the car image (e.g., "image/jpeg", "image/png").
+     */
     public String getImageMediaType() {
         return imageMediaType;
     }
 
-    /*
-    public JSONObject toJSON() {
-        JSONObject uJson = new JSONObject();
-        uJson.put("brand", brand);
-        uJson.put("model", model);
-        uJson.put("description", description);
-        uJson.put("maxSpeed", maxSpeed);
-        uJson.put("horsepower", horsepower);
-        uJson.put("0-100", acceleration);
-        uJson.put("available", available);
-        return uJson;
-    }
-    */
+    /**
+     * Writes the car object's data in JSON format to the provided output stream.
+     *
+     * @param out The output stream to write the JSON data to.
+     * @throws Exception if there's an error during JSON writing.
+     */
     @Override
     protected void writeJSON(OutputStream out) throws Exception {
 
@@ -168,9 +221,11 @@ public class Car extends AbstractResource{
 
         /*
         if(this.hasPhoto()) {
-            jg.writeStringField("photo",  photoPath);
+            jg.writeStringField("image",  photoPath);
         }
         */
+
+        jg.writeStringField("imageMediaType", imageMediaType);
 
         jg.writeEndObject();
 
@@ -180,6 +235,12 @@ public class Car extends AbstractResource{
     }
 
 
+    /**
+     * Returns a string representation of the car object.
+     *
+     * @return A string containing the brand, model, description, maximum speed, horsepower,
+     *         acceleration, availability, and type of the car.
+     */
     @Override
     public String toString() {
         return "Car{" +
@@ -194,6 +255,13 @@ public class Car extends AbstractResource{
                 '}';
     }
 
+    /**
+     * Constructs a Car object from JSON data read from the provided input stream.
+     *
+     * @param in The input stream containing the JSON data representing the car object.
+     * @return A new Car object constructed from the JSON data.
+     * @throws IOException if there's an error reading from the input stream or parsing the JSON data.
+     */
     public static Car fromJSON(final InputStream in) throws IOException {
 
         String jbrand = null;
@@ -269,13 +337,17 @@ public class Car extends AbstractResource{
             throw e;
         }
 
-        byte[] decodedPhoto = null;
-        if (!Objects.equals(jimage, "") && jimage != null) decodedPhoto = Base64.getDecoder().decode(jimage);
+        byte[] decodedImage = null;
+        if (!Objects.equals(jimage, "") && jimage != null) decodedImage = Base64.getDecoder().decode(jimage);
         if (Objects.equals(jimagemediatype, "")) jimagemediatype = null;
 
-        return new Car(jbrand, jmodel, jdescription, jmaxSpeed, jhorsepower, jacceleration, javailable, jtype, decodedPhoto, jimagemediatype);
+        return new Car(jbrand, jmodel, jdescription, jmaxSpeed, jhorsepower, jacceleration, javailable, jtype, decodedImage, jimagemediatype);
     }
-
+    /**
+     * Checks if the car has a photo available.
+     *
+     * @return {@code true} if the car has a photo; {@code false} otherwise.
+     */
     public final boolean hasPhoto() {
         return image != null && image.length > 0 && imageMediaType != null && !imageMediaType.isBlank();
     }

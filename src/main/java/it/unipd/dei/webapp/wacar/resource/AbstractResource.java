@@ -54,6 +54,13 @@ public abstract class AbstractResource implements Resource {
 		LOGGER.debug("JSON factory successfully setup.");
 	}
 
+	/**
+	 * Converts the resource object to JSON format and writes it to the provided output stream.
+	 * This method is responsible for serializing the resource object into JSON format.
+	 *
+	 * @param out The output stream to which the JSON data will be written.
+	 * @throws IOException If an error occurs while writing JSON data, or if the output stream is null.
+	 */
 	@Override
 	public void toJSON(final OutputStream out) throws IOException {
 
@@ -68,8 +75,6 @@ public abstract class AbstractResource implements Resource {
 			LOGGER.error("Unable to serialize the resource to JSON.", e);
 			throw new IOException("Unable to serialize the resource to JSON.", e);
 		}
-
-		// delegate to writeJSON the task
 	}
 
 	/**

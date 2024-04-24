@@ -13,10 +13,20 @@ public class Type {
      */
     private final String name;
 
+    /**
+     * Constructs a Type object with the specified name.
+     *
+     * @param name The name of the type.
+     */
     public Type(String name) {
         this.name = name;
     }
 
+    /**
+     * Retrieves the name of the type.
+     *
+     * @return The name of the type.
+     */
     public String getName() {
         return name;
     }

@@ -119,6 +119,13 @@ public class Message extends AbstractResource {
         return isError;
     }
 
+    /**
+     * Writes the JSON representation of the message to the provided output stream.
+     * This method is responsible for serializing the message into JSON format.
+     *
+     * @param out The output stream to which the JSON data will be written.
+     * @throws IOException If an error occurs while writing JSON data.
+     */
     @Override
     protected void writeJSON(final OutputStream out) throws IOException {
 

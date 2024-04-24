@@ -181,8 +181,10 @@ public abstract class AbstractRR implements RestResource {
 			LOGGER.error(
 					"Unsupported output media type. Resources are represented only in application/json. Requested representation is %s.",
 					accept);
-			m = new Message("Unsupported output media type. Resources are represented only in application/json.",
-					"E4A2", String.format("Requested representation is %s.", accept));
+			m = new Message(
+					"Unsupported output media type. Resources are represented only in application/json.",
+					"E4A2",
+					String.format("Requested representation is %s.", accept));
 			res.setStatus(HttpServletResponse.SC_NOT_ACCEPTABLE);
 			m.toJSON(out);
 			return false;
