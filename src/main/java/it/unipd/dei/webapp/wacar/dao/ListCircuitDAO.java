@@ -10,26 +10,34 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This class is the data access object for listing the circuits in the database
+ * This class represents the data access object (DAO) for listing circuits in the database.
+ * It retrieves circuits from the database and provides methods to access the retrieved data.
  *
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */
 public class ListCircuitDAO extends AbstractDAO<List<Circuit>> {
+    // SQL statement to select all circuits
     private static final String STATEMENT = "Select * FROM assessment.circuit";
 
+
     /**
-     * Creates a new DAO object.
+     * Constructs a new ListCircuitDAO object with the given database connection.
      *
-     * @param con the connection to be used for accessing the database.
+     * @param con the connection to be used for accessing the database
      */
     public ListCircuitDAO(Connection con) {
         super(con);
     }
 
+
     /**
-     * Performs the access to the data source by executing the query and returning the results
+     * Performs the access to the data source by executing the SQL query to retrieve circuits from the database.
+     * Constructs Circuit objects from the retrieved data and populates a list with them.
+     * Sets the output parameter to the list of retrieved circuits.
+     *
+     * @throws SQLException if a database access error occurs
      */
     @Override
     protected void doAccess() throws SQLException {

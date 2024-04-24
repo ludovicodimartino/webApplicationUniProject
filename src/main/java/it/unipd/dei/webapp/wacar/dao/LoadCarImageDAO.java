@@ -9,6 +9,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class represents the data access object (DAO) for loading the image of a car from the database.
+ * It executes a query to retrieve the image and its media type based on the given car brand and model.
+ *
+ * @author [Author's Name]
+ * @version 1.0
+ * @since 1.0
+ */
 public class LoadCarImageDAO extends AbstractDAO<Car> {
     private static final String STATEMENT = "SELECT image, imageMediaType FROM assessment.car WHERE brand=? and model=?";
 

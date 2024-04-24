@@ -25,11 +25,15 @@ public class ListCarDAO extends AbstractDAO<List<Car>> {
      */
     public ListCarDAO(Connection con) {
         super(con);
-        // Possible controls over the returned Car object?
     }
 
     /**
-     * Performs the access to the data source by executing the query and returning the results
+     * Executes the SQL query to retrieve all cars from the database and populates a list of Car objects with the results.
+     * Each Car object is created using the data fetched from the ResultSet obtained by executing the PreparedStatement.
+     * The PreparedStatement is prepared using the SQL statement defined in the STATEMENT constant.
+     * Once all cars are retrieved and added to the list, the method sets the outputParam field to the list of cars.
+     *
+     * @throws Exception If an error occurs while accessing the database or processing the ResultSet.
      */
     @Override
     protected void doAccess() throws Exception {

@@ -1,6 +1,7 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.dao.ListOrdersByEmailDAO;
+import it.unipd.dei.webapp.wacar.filter.LoginFilter;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.Order;
@@ -18,17 +19,26 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
 /**
  * Servlet to handle the listing of the orders of a specific user.
+ * Retrieves orders for a user based on their email and forwards the data to a JSP page for rendering.
  *
- * @author Michele Scapinello (michele.scapinello@studenti.unidp.it)
+ * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
  * @since 1.00
  */
 
 @WebServlet(name = "ListOrdersByEmailServlet")
-public class ListOrdersByEmailServlet extends AbstractDatabaseServlet{
-
+public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
+    /**
+     * Handles GET requests to retrieve and list orders for a specific user.
+     *
+     * @param req the HttpServletRequest object representing the client's request
+     * @param res the HttpServletResponse object representing the response to be sent to the client
+     * @throws IOException      if an I/O error occurs while processing the request
+     * @throws ServletException if the servlet encounters difficulty while handling the request
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         LogContext.setIPAddress(req.getRemoteAddr());
@@ -39,7 +49,14 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet{
 
         LOGGER.info("op GET {}", op);
         HttpSession session = req.getSession();
-        User user = (User) session.getAttribute("account");
+
+        User user = (User) req.getSession().getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
+        if (user != null) {
+            req.setAttribute("accountType", user.getType());
+            LogContext.setUser(user.getEmail());
+        } else {
+            LogContext.setUser("NOT_LOGGED");
+        }
 
         Message m = null;
         List<Order> orders = null;

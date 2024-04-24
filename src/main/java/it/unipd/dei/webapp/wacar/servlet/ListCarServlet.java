@@ -19,7 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class ListCarServlet.
- * This servlet is responsible for handling requests related to listing cars.
+ * Retrieves cars from the database and passes them to a JSP page to display the list of cars.
  *
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00

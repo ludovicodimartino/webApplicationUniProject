@@ -17,8 +17,10 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+
 /**
- * Servlet to list all circuits
+ * Servlet implementation class ListCircuitServlet
+ * Retrieves circuits from the database and passes them to a JSP page to display the list of circuits.
  *
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
@@ -26,6 +28,15 @@ import jakarta.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ListCircuitServlet", value = "/circuit_list/")
 public class ListCircuitServlet extends AbstractDatabaseServlet {
+    /**
+     * Handles HTTP GET requests to list all circuits.
+     * Retrieves circuits from the database and forwards them to a JSP page for rendering.
+     *
+     * @param req the HttpServletRequest object representing the client's request
+     * @param res the HttpServletResponse object representing the response to be sent to the client
+     * @throws ServletException if the servlet encounters difficulty while handling the request
+     * @throws IOException      if an I/O error occurs while processing the request
+     */
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 
         LogContext.setIPAddress(req.getRemoteAddr());
