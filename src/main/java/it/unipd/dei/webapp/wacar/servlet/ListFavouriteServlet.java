@@ -1,7 +1,6 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.dao.ListFavouriteDAO;
-import it.unipd.dei.webapp.wacar.dao.ListOrdersByAccountDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -16,16 +15,31 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
- * Servlet to handle the list of favourites
+ * Servlet for handling HTTP GET requests to list a user's favorites.
+ * This servlet retrieves the list of favorites associated with the user
+ * from the database using a ListFavouriteDAO object. It then sets the
+ * retrieved list as a request attribute for a JSP page to display. If
+ * an error occurs during the retrieval process, an error message is set
+ * in the request attributes.
  *
- * @author
- * @version 1.00
- * @since 1.00
+ * @author Alessandro Leonardi (alessandro.leonardi@studenti.unipd.it)
  */
 
-@WebServlet(name = "ListOrdersByAccountServlet")
 public class ListFavouriteServlet extends AbstractDatabaseServlet{
 
+    /**
+     * Handles HTTP GET requests for listing a user's favorites.
+     * This method retrieves the list of favorites associated with the user
+     * from the database using a ListFavouriteDAO object. It then sets the
+     * retrieved list as a request attribute for a JSP page to display. If
+     * an error occurs during the retrieval process, an error message is set
+     * in the request attributes.
+     *
+     * @param req  The HttpServletRequest object containing the request parameters.
+     * @param res  The HttpServletResponse object for sending the response.
+     * @throws IOException      If an I/O error occurs while processing the request or response.
+     * @throws ServletException If the servlet encounters difficulty while handling the request.
+     */
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException, ServletException {
         LogContext.setIPAddress(req.getRemoteAddr());

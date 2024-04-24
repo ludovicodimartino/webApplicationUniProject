@@ -10,7 +10,17 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.List;
+
+/**
+ * Servlet for handling HTTP POST requests to update a user's account information.
+ * This servlet processes the incoming POST request to update the account details,
+ * such as password and address, for the logged-in user. It retrieves the updated
+ * information from the request parameters, creates a new User object with the updated
+ * data, and then uses a UpdateAccountDAO object to update the user's account in the
+ * database. If an error occurs during the update process, an error message is logged.
+ *
+ * @author Alessandro Leonardi (alessandro.leonardi@studenti.unipd.it)
+ */
 public class UpdateAccountServlet extends AbstractDatabaseServlet{
     /**
      * Handles the HTTP post request to update the account of the user

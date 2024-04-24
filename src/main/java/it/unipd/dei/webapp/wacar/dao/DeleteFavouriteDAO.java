@@ -9,16 +9,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+/**
+ * Data Access Object (DAO) for deleting a favorite from the database.
+ * This DAO class executes an SQL DELETE statement to remove a favorite
+ * entry from the 'favourite' table in the database. It takes a Favourite
+ * object as input and uses its attributes (circuit, account, car model,
+ * car brand) to identify and delete the corresponding favorite.
+ *
+ * @author Alessandro Leonardi (alessandro.leonardi@studenti.unipd.it)
+ */
 public class DeleteFavouriteDAO extends AbstractDAO{
     private static final String DELETE_FAVOURITE = "DELETE FROM assessment.favourite WHERE circuit = ?, account = ?, carModel = ?, carBrand = ?;";
     private String circuit;
     private String account;
     private String carModel;
     private final Favourite favourite;
+
     /**
+     * Constructs a DeleteFavouriteDAO object with the given Connection and Favourite.
      *
-     * @param con Used to access the database
-     * @param favourite
+     * @param con       The Connection object to the database.
+     * @param favourite The Favourite object representing the favorite to be deleted.
+     * @throws NullPointerException If the provided Favourite object is null.
      */
     public DeleteFavouriteDAO(final Connection con, Favourite favourite) {
         super(con);
