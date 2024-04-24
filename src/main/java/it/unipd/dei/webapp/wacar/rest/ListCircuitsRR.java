@@ -35,9 +35,12 @@ public class ListCircuitsRR extends AbstractRR {
     }
 
     /**
-     * Performs the actual logic needed to list the circuits.
+     * Performs the serving logic for listing circuits. Retrieves a list of circuits from the database
+     * using a Data Access Object (DAO) and sends the JSON representation of the list to the response output stream.
+     * If successful, sets the HTTP status code to SC_OK (200). If an error occurs during the database access,
+     * sets the HTTP status code to SC_INTERNAL_SERVER_ERROR (500) and sends an error message JSON response.
      *
-     * @throws IOException if any error occurs in the client/server communication.
+     * @throws IOException  If an error occurs while writing JSON data to the response output stream.
      */
     @Override
     protected void doServe() throws IOException {
