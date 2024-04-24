@@ -89,6 +89,10 @@
                         <a href="/wacar/user/listOrdersByAccount"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
                     <div class="card">
+                        <a href="/wacar/user/list-favourite">List Favourite</a>
+                        <a href="/wacar/user/list-favourite"><img src="icon.png" alt="res_icon" width="50"></a>
+                    </div>
+                    <div class="card">
                         <a href="/wacar/user/user-info">User page</a>
                         <a href="/wacar/user/user-info"><img src="icon.png" alt="res_icon" width="50"></a>
                     </div>
