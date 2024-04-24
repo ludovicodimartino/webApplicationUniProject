@@ -1,7 +1,6 @@
 package it.unipd.dei.webapp.wacar.dao;
 
 
-import it.unipd.dei.webapp.wacar.resource.Circuit;
 import it.unipd.dei.webapp.wacar.resource.Order;
 
 import java.sql.Connection;
@@ -16,12 +15,18 @@ import java.sql.SQLException;
  * @version 1.00
  * @since 1.00
  */
-public class GetOrderByIdDAO extends AbstractDAO<Order> {
-    private static final String ORDER_GET_STATEMENT = "SELECT * FROM assessment.\"order\" AS o WHERE o.\"id\" = ?;";
+public class GetOrderByIdAndUserEmailDAO extends AbstractDAO<Order> {
+    private static final String ORDER_GET_STATEMENT = "SELECT * FROM assessment.\"order\" AS o WHERE o.\"account\" = ? AND o.\"id\" = ?;";
     private final Integer orderId;
+    private final String email;
 
-    public GetOrderByIdDAO(final Connection con, final Integer orderId) {
+    public GetOrderByIdAndUserEmailDAO(final Connection con, final String email, final Integer orderId) {
         super(con);
+
+        if (email.isEmpty() || email.isBlank()) {
+            LOGGER.error("The email is not valid.");
+            throw new NullPointerException("The email is not valid.");
+        }
 
         if (orderId <= 0) {
             LOGGER.error("The order id is not valid.");
@@ -29,6 +34,7 @@ public class GetOrderByIdDAO extends AbstractDAO<Order> {
         }
 
         this.orderId = orderId;
+        this.email = email;
     }
 
     @Override
@@ -39,7 +45,8 @@ public class GetOrderByIdDAO extends AbstractDAO<Order> {
 
         try {
             pstmt = con.prepareStatement(ORDER_GET_STATEMENT);
-            pstmt.setInt(1, orderId);
+            pstmt.setString(1, email);
+            pstmt.setInt(2, orderId);
 
             rs = pstmt.executeQuery();
 
@@ -48,8 +55,8 @@ public class GetOrderByIdDAO extends AbstractDAO<Order> {
 
                 LOGGER.info("Oder with id = %d has been retrieve correctly.", orderId);
             } else {
-                LOGGER.warn("Order with id %d not found.", orderId);
-                throw new SQLException(String.format("Order with id %d not found..", orderId), "NOT_FOUND");
+                LOGGER.warn("Order with id %d of account %s not found.", orderId, email);
+                throw new SQLException(String.format("Order with id %d of account %s not found.", orderId, email), "NOT_FOUND");
             }
 
         } finally {

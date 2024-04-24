@@ -16,18 +16,15 @@
 
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.filter.LoginFilter;
 import it.unipd.dei.webapp.wacar.resource.Car;
-import it.unipd.dei.webapp.wacar.resource.User;
 import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
-import it.unipd.dei.webapp.wacar.rest.GetOrderByIdRR;
+import it.unipd.dei.webapp.wacar.rest.GetOrderByIdAndUserEmailRR;
 import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -281,15 +278,13 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 	 * @throws Exception if any error occurs.
 	 */
 	private boolean processOrder(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
-		LOGGER.info("Processing order");
-
 		final String method = req.getMethod();
 
 		String path = req.getRequestURI();
 		Message m = null;
 
 		// the requested resource was not a list of cars
-		if (path.lastIndexOf("rest/order") <= 0) {
+		if (path.lastIndexOf("user/order") <= 0) {
 			LOGGER.info("Return false");
 			return false;
 		}
@@ -315,33 +310,31 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 					break;
 			}
 		} else {
-			// the request URI is: /order/id/{orderId}
-			if (path.contains("id")) {
-				LOGGER.info("path /id");
-				path = path.substring(path.lastIndexOf("id") + 2);
+			// the request URI is: /order/{orderId}
+			path = path.substring(path.lastIndexOf("/") + 1);
+			LOGGER.info("path + " + path);
 
-				if (path.length() == 0 || path.equals("/")) {
-					LOGGER.warn("Wrong format for URI /order/id/{orderId}: no {orderId} specified. Requested URI: %s.", req.getRequestURI());
+			if (path.length() == 0 || path.equals("/")) {
+				LOGGER.warn("Wrong format for URI /order/{orderId}: no {orderId} specified. Requested URI: %s.", req.getRequestURI());
 
-					m = new Message("Wrong format for URI /order/id/{orderId}: no {orderId} specified.", "E4A7",
-							String.format("Requested URI: %s.", req.getRequestURI()));
-					res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-					m.toJSON(res.getOutputStream());
-				} else {
-					switch (method) {
-						case "GET":
-							new GetOrderByIdRR(req, res, getConnection()).serve();
+				m = new Message("Wrong format for URI /order/{orderId}: no {orderId} specified.", "E4A7",
+						String.format("Requested URI: %s.", req.getRequestURI()));
+				res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				m.toJSON(res.getOutputStream());
+			} else {
+				switch (method) {
+					case "GET":
+						new GetOrderByIdAndUserEmailRR(req, res, getConnection()).serve();
 
-							break;
-						default:
-							LOGGER.warn("Unsupported operation for URI /order/id/{orderId}: %s.", method);
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /order/{orderId}: %s.", method);
 
-							m = new Message("Unsupported operation for URI /order/id/{orderId}.", "E4A5",
-									String.format("Requested operation %s.", method));
-							res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-							m.toJSON(res.getOutputStream());
-							break;
-					}
+						m = new Message("Unsupported operation for URI /order/{orderId}.", "E4A5",
+								String.format("Requested operation %s.", method));
+						res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+						m.toJSON(res.getOutputStream());
+						break;
 				}
 			}
 		}

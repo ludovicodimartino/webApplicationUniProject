@@ -16,12 +16,12 @@
 
 package it.unipd.dei.webapp.wacar.rest;
 
-import it.unipd.dei.webapp.wacar.dao.GetOrderByIdDAO;
+import it.unipd.dei.webapp.wacar.dao.GetOrderByIdAndUserEmailDAO;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.Order;
-import it.unipd.dei.webapp.wacar.resource.Resource;
+import it.unipd.dei.webapp.wacar.resource.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -37,7 +37,7 @@ import java.sql.SQLException;
  * @version 1.00
  * @since 1.00
  */
-public final class GetOrderByIdRR extends AbstractRR {
+public final class GetOrderByIdAndUserEmailRR extends UserAbstractRR {
 
 	/**
 	 * Creates a new REST resource for searching {@code Order} by its id.
@@ -46,7 +46,7 @@ public final class GetOrderByIdRR extends AbstractRR {
 	 * @param res the HTTP response.
 	 * @param con the connection to the database.
 	 */
-	public GetOrderByIdRR(final HttpServletRequest req, final HttpServletResponse res, Connection con) {
+	public GetOrderByIdAndUserEmailRR(final HttpServletRequest req, final HttpServletResponse res, Connection con) {
 		super(Actions.GET_ORDERS_BY_ID, req, res, con);
 	}
 
@@ -56,18 +56,20 @@ public final class GetOrderByIdRR extends AbstractRR {
 
 		Order o = null;
 		Message m = null;
+		int orderId = -1;
 
 		try {
-			// parse the URI path to extract the salary
+			// parse the URI path to extract the order id
 			String path = req.getRequestURI();
-			path = path.substring(path.lastIndexOf("id") + 2);
+			path = path.substring(path.lastIndexOf("/") + 1);
 
-			final int orderId = Integer.parseInt(path.substring(1));
+			orderId = Integer.parseInt(path);
+			User user = (User) req.getSession().getAttribute("account");
 
 			LogContext.setResource(Integer.toString(orderId));
 
 			// creates a new DAO for accessing the database and searches the order by the id
-			o = new GetOrderByIdDAO(con, orderId).access().getOutputParam();
+			o = new GetOrderByIdAndUserEmailDAO(con, user.getEmail(), orderId).access().getOutputParam();
 
 			if (o != null) {
 				LOGGER.info("Order successfully searched by id %d.", orderId);
@@ -82,15 +84,15 @@ public final class GetOrderByIdRR extends AbstractRR {
 				m.toJSON(res.getOutputStream());
 			}
 		} catch (EOFException ex) {
-			LOGGER.warn("Cannot insert the order: no order JSON object found in the request.", ex);
+			LOGGER.warn("Cannot find the order: no order JSON object found in the request.", ex);
 
-			m = new Message("Cannot insert the order: no order JSON object found in the request.", "E4A8", ex.getMessage());
+			m = new Message("Cannot find the order: no order JSON object found in the request.", "E4A8", ex.getMessage());
 			res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			m.toJSON(res.getOutputStream());
 		} catch (SQLException ex) {
-			LOGGER.error("Cannot insert the order: unexpected database error.", ex);
+			LOGGER.error(String.format("Cannot find the order %d.", orderId), ex);
 
-			m = new Message("Cannot insert the order: unexpected database error.", "E5A1", ex.getMessage());
+			m = new Message("Cannot find the order %s: unexpected database error.", "E5A1", ex.getMessage());
 			res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 			m.toJSON(res.getOutputStream());
 		}

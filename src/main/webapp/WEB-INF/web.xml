@@ -162,7 +162,6 @@
     <servlet-mapping>
         <servlet-name>RestManagerServlet</servlet-name>
         <url-pattern>/rest/*</url-pattern>
-        <url-pattern>/user/rest/*</url-pattern>
     </servlet-mapping>
 
     <resource-ref>

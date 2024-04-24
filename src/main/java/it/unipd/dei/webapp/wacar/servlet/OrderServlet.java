@@ -1,6 +1,5 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.dao.GetOrderByIdDAO;
 import it.unipd.dei.webapp.wacar.dao.ListCarByAvailabilityDAO;
 import it.unipd.dei.webapp.wacar.dao.ListCircuitByCarTypeDAO;
 import it.unipd.dei.webapp.wacar.dao.InsertOrderDAO;
@@ -28,8 +27,6 @@ public class OrderServlet  extends AbstractDatabaseServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         Message m = null;
         Integer orderId = null;
-
-        LOGGER.info("Request for order %d:", orderId);
 
         // Take op
         String op = req.getRequestURI();

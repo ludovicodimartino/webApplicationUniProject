@@ -46,7 +46,7 @@
                 <td>
                     <c:choose>
                         <c:when test="${modifyAvailable[loop.index]}">
-                            <a href="/wacar/user/rest/order/id/${order.id}" type="button">
+                            <a href="/wacar/rest/user/order/${order.id}" type="button">
                                 Modify
                             </a>
                         </c:when>
