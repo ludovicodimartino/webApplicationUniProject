@@ -28,10 +28,11 @@
 
 <%-- Display any messages --%>
 <c:if test="${not empty message}">
-    <c:out value="${message.content}"/>
+    <p><c:out value="${message.content}"/></p>
 </c:if>
 
 <%-- Display the list of favorites --%>
+<p>
 <c:if test="${empty favouritesList}">
     <p>No favorites found.</p>
 </c:if>
