@@ -28,7 +28,7 @@
 
 <%-- Display any messages --%>
 <c:if test="${not empty message}">
-    <p><c:out value="${message.content}"/></p>
+    <p><c:out value="${message.getMessage()}"/></p>
 </c:if>
 
 <%-- Display the list of favorites --%>
