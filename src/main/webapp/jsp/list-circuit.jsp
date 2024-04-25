@@ -102,7 +102,7 @@
                     <a href="/wacar/">Home</a>
                     <a href="/wacar/car_list/">Car List</a>
                     <a href="/wacar/user/listOrdersByAccount">Orders</a>
-                    <a href="/wacar/user/">Account</a>
+                    <a href="/wacar/user/user-info">Account</a>
                     <!-- Add more links as needed -->
                 </div>
             </c:when>
@@ -113,7 +113,7 @@
                     <a href="/wacar/admin/insertCar/">Insert new Car</a>
                     <a href="/wacar/admin/insertCircuit/">Insert new Circuit</a>
                     <a href="/wacar/admin/insertMapping/">Insert new Mapping</a>
-                    <a href="/wacar/admin/">Account</a>
+                    <a href="/wacar/admin/admin-info">Account</a>
                 </div>
             </c:when>
         </c:choose>
