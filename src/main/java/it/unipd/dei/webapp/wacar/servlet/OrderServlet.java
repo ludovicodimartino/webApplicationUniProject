@@ -23,7 +23,16 @@ import java.util.List;
  * @version 1.00
  * @since 1.00
  */
-public class OrderServlet  extends AbstractDatabaseServlet {
+public class OrderServlet extends AbstractDatabaseServlet {
+    /**
+     * Handles HTTP GET requests for creating an order.
+     * Manages all the steps for creating an order and for showing the recap after its creation.
+     *
+     * @param req the HttpServletRequest object containing the request information
+     * @param res the HttpServletResponse object for sending response to the client
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs while processing the request
+     */
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         Message m = null;
         Integer orderId = null;
@@ -65,6 +74,15 @@ public class OrderServlet  extends AbstractDatabaseServlet {
         }
     }
 
+    /**
+     * Handles HTTP POST requests for creating an order.
+     * Manages all the steps for creating an order and for showing the recap after its creation.
+     *
+     * @param req the HttpServletRequest object containing the request information
+     * @param res the HttpServletResponse object for sending response to the client
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs while processing the request
+     */
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         doGet(req, res);

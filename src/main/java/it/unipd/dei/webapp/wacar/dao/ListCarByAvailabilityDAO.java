@@ -25,7 +25,8 @@ public class ListCarByAvailabilityDAO extends AbstractDAO<List<Car>> {
     /**
 	 * Creates a new object for searching available cars.
 	 *
-	 * @param con    the connection to the database.
+	 * @param con       the connection to the database.
+     * @param available {@code true} for retrieving available cars; {@code false} otherwise
 	 */
     public ListCarByAvailabilityDAO(final Connection con, final boolean available) {
         super(con);

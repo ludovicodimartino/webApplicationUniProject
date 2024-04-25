@@ -8,7 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 /**
- * Insert a new order in the database.
+ * Delete an order from the database.
  *
  * @author Manuel Rigobello (manuel.rigobello@studenti.unipd.it)
  * @version 1.00
@@ -19,6 +19,12 @@ public class DeleteOrderDAO extends AbstractDAO<Order> {
 
     private final int id;
 
+    /**
+     * Constructs a new DeleteOrderDAO object with the id of the order.
+     *
+     * @param con the connection to the database
+     * @param id  the id of the specific order
+     */
     public DeleteOrderDAO(final Connection con, final int id) {
         super(con);
 

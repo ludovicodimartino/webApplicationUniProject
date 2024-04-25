@@ -287,7 +287,8 @@ public abstract class AbstractRR implements RestResource {
         // if it is not HTTP Basic authentication, warn that there is no valid authentication method
         if (!auth.toUpperCase().startsWith("BASIC ")) {
             LOGGER.error("No valid authorization header sent by the client");
-            m = new Message("No authorization header sent by the client", "E4B3", "No authorization header sent by the client");
+            m = new Message("No authorization header sent by the client", "E4B3", null);
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             m.toJSON(res.getOutputStream());
 
             return false;
@@ -303,6 +304,10 @@ public abstract class AbstractRR implements RestResource {
         } catch (NamingException e) {
             ds = null;
             LOGGER.error("Unable to acquire the connection pool to the database.", e);
+
+            m = new Message("Cannot retrieve the order: unexpected error.", "E5A1", e.getMessage());
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            m.toJSON(res.getOutputStream());
 
             return false;
         }
@@ -326,13 +331,15 @@ public abstract class AbstractRR implements RestResource {
                     session.setAttribute("account", authUser);
                     session.setAttribute("Authorization", auth);
                 } else {
-                    m = new Message("No authorization header sent by the client", "E4B3", "No authorization header sent by the client");
+                    m = new Message("No authorization header sent by the client", "E4B3", null);
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     m.toJSON(res.getOutputStream());
 
                     return false;
                 }
             } else {
-                m = new Message("You are not authorized to perform this operation", "E4B3", "You are not authorized to perform this operation");
+                m = new Message("You are not authorized to perform this operation", "E4B3", null);
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 m.toJSON(res.getOutputStream());
 
                 return false;

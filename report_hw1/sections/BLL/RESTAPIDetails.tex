@@ -130,3 +130,77 @@ The following endpoint allows to list all the circuits (and returns a JSON).
     \end{verbatim}
     
 \end{itemize}
+
+\subsection*{Read order}
+
+The following endpoint allows to retrieve a specific order given the id (and returns a JSON).
+
+\begin{itemize}
+	\item URL: \texttt{/rest/user/order/\{orderId\}}
+	\item Method: \texttt{GET}
+	\item URL parameters:
+		\\\{orderId\} = the identifier number of the order to be retrieved.
+	\item Data parameters: \texttt{None}
+	\item Success Response: \\
+	\textbf{Code}: 200\\
+	\textbf{Content}: The JSON corresponding to the order:
+	\\\begin{verbatim}
+	{
+		"order":{
+				"id":1,
+				"account":"default@example.com",
+				"date":"2024-05-10",
+				"carBrand":"Pagani",
+				"carModel": "Zonda R",
+				"circuit": "Autodromo Enzo e Dino Ferrari",
+				"nLaps":3,
+				"price":90,
+				"createdAt":"2024-04-25 07:50:06.857"
+			}
+	}
+	\end{verbatim}
+
+	\item Error Response:\\
+	\textbf{Code}: 401 (internal code: E4B3)\\
+	\textbf{Content}: No authorization header sent by the client\\
+	\begin{verbatim}
+	{
+		"message": {
+			"message": "No authorization header sent by the client.",
+			"error-code": "E4B3"
+	}}
+	\end{verbatim}	
+	\item Error Response:\\
+	\textbf{Code}: 401 (internal code: E4B3)\\
+	\textbf{Content}: You are not authorized to perform this operation\\
+	\begin{verbatim}
+		{
+			"message": {
+				"message": "You are not authorized to perform this operation",
+				"error-code": "E4B3"
+		}}
+	\end{verbatim}	
+	\item Error Response:\\
+	\textbf{Code}: 500 (internal code: E5A1)\\
+	\textbf{Content}: The message containing the error (server error when retrieving the order)\\
+	\begin{verbatim}
+		{
+			"message": {
+				"message": "Cannot retrieve the order: unexpected error.",
+				"error-code": "E5A1",
+				”error-detail”: ”exception content”
+		}}
+	\end{verbatim}
+	\item Error Response:\\
+	\textbf{Code}: 500 (internal code: E5A1)\\
+	\textbf{Content}: The message containing the error (server error when retrieving the circuits)\\
+	\begin{verbatim}
+		{
+			"message": {
+				"message": "Unable to serve the REST request.",
+				"error-code": "E5A1",
+				”error-detail”: ”exception content”
+		}}
+	\end{verbatim}
+	
+\end{itemize}

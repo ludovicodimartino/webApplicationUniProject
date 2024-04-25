@@ -40,8 +40,6 @@ import java.sql.SQLException;
  */
 public final class InsertOrderRR extends AbstractRR {
 
-	final boolean available;
-
 	/**
 	 * Creates a new REST resource for listing {@code Employee}s.
 	 *
@@ -49,9 +47,8 @@ public final class InsertOrderRR extends AbstractRR {
 	 * @param res the HTTP response.
 	 * @param con the connection to the database.
 	 */
-	public InsertOrderRR(final HttpServletRequest req, final HttpServletResponse res, Connection con, boolean available) {
+	public InsertOrderRR(final HttpServletRequest req, final HttpServletResponse res, Connection con) {
 		super(Actions.INSERT_ORDER, req, res, con);
-		this.available = available;
 	}
 
 

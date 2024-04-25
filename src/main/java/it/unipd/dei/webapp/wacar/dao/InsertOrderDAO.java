@@ -20,6 +20,12 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
     private static final String ORDER_DELETE_STATEMENT = "DELETE FROM assessment.\"order\" WHERE id = ?;";
     private final Order order;
 
+    /**
+     * Creates a new InsertOrderDAO object for the insertion of a new order.
+     *
+     * @param con   the connection to the database.
+     * @param order the new order
+     */
     public InsertOrderDAO(final Connection con, final Order order) {
         super(con);
 

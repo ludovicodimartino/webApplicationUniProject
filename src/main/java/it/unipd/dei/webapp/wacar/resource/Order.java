@@ -64,6 +64,19 @@ public class Order extends AbstractResource {
      */
     private final int price;
 
+    /**
+     * Constructs a new Order object with the specified attributes.
+     *
+     * @param id        the id of the order
+     * @param account   the email of the specific account
+     * @param date      the date in which the experience will take place
+     * @param carBrand  the brand of the car
+     * @param carModel  the model of the car
+     * @param circuit   the circuit in which the specified account will drive
+     * @param createdAt the timestamp of when the order was created
+     * @param nLaps     the number of laps
+     * @param price     the price of the order
+     */
     public Order(int id, String account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
         this.id = id;
         this.account = account;
@@ -76,6 +89,18 @@ public class Order extends AbstractResource {
         this.price = price;
     }
 
+    /**
+     * Constructs a new Order object with the specified attributes.
+     *
+     * @param account   the email of the specific account.
+     * @param date      the date in which the experience will take place.
+     * @param carBrand  the brand of the car.
+     * @param carModel  the model of the car.
+     * @param circuit   the circuit in which the specified account will drive.
+     * @param createdAt the timestamp of when the order was created.
+     * @param nLaps     the number of laps.
+     * @param price     the price of the order.
+     */
     public Order(String account, Date date, String carBrand, String carModel, String circuit, Timestamp createdAt, int nLaps, int price) {
         this.id = -1;
         this.account = account;
@@ -88,36 +113,81 @@ public class Order extends AbstractResource {
         this.price = price;
     }
 
+    /**
+     * Returns the id number of the order.
+     *
+     * @return id number of the order.
+     */
     public int getId() { return id; }
 
+    /**
+     * Returns the account email that created the order.
+     *
+     * @return the account email that created the order.
+     */
     public String getAccount() {
         return account;
     }
 
+    /**
+     * Returns the date in which the experience will take place.
+     *
+     * @return the date in which the experience will take place.
+     */
     public Date getDate() {
         return date;
     }
 
+    /**
+     * Returns the car brand.
+     *
+     * @return the car brand.
+     */
     public String getCarBrand() {
         return carBrand;
     }
 
+    /**
+     * Returns the car model.
+     *
+     * @return the car model.
+     */
     public String getCarModel() {
         return carModel;
     }
 
+    /**
+     * Returns the circuit name.
+     *
+     * @return the circuit name.
+     */
     public String getCircuit() {
         return circuit;
     }
 
+    /**
+     * Returns timestamp of when the order was created.
+     *
+     * @return timestamp of when the order was created.
+     */
     public Timestamp getCreatedAt() {
         return createdAt;
     }
 
+    /**
+     * Returns the number of laps.
+     *
+     * @return the number of laps.
+     */
     public int getNLaps() {
         return nLaps;
     }
 
+    /**
+     * Returns the price of the order.
+     *
+     * @return the price of the order.
+     */
     public int getPrice() {
         return price;
     }
@@ -128,11 +198,11 @@ public class Order extends AbstractResource {
 
         final JsonGenerator jg = JSON_FACTORY.createGenerator(out);
 
-        jg.writeStartObject(); // {
+        jg.writeStartObject();
 
-        jg.writeFieldName("order"); // "employee":
+        jg.writeFieldName("order");
 
-        jg.writeStartObject(); // {
+        jg.writeStartObject();
 
         jg.writeNumberField("id", id);
 
@@ -152,9 +222,9 @@ public class Order extends AbstractResource {
 
         jg.writeStringField("createdAt", createdAt.toString());
 
-        jg.writeEndObject(); // }
+        jg.writeEndObject();
 
-        jg.writeEndObject(); // }
+        jg.writeEndObject();
 
         jg.flush();
     }

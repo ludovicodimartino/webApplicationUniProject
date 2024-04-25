@@ -10,19 +10,7 @@ A that only administrators can request the specified URI to the server.
 /rest/circuit & GET & Allows to list all the circuits \\\hline
 /rest/order & POST & Allows to process an order \\\hline
 /rest/list-car & GET & Allows to list all the cars \\\hline
-/user/signup/  & POST &  Allows to register a new student in WaCar & \\\hline
-/user/login/  & POST &  Allows to login a USER or ADMIN in WaCar with his credentials & \\\hline
-/user/logout/  & POST &  Allows to logout a session from WaCar, and the session is cleared & \\\hline
-/user/ & GET &  Returns the information about the user & U \\\hline
-/home/  & GET &  Returns the information to be added in the homepage according to the user's role & \\\hline
-/car\_list/  & GET &  Returns list of all cars in the database & \\\hline
-/circuit\_list/  & GET &  Returns list of all circuits in the database & \\\hline
-/admin/insertCar/ & POST &   & A\\\hline
-/create-order/cars/ & POST & Shows a list of availabe cars, and the user must select one of these options. & U\\\hline
-/create-order/circuits/ & POST & Shows the list of possible circuits where the user can race with the selected car & U\\\hline
-/create-order/complete-order/ & POST & Show the form in which the user inserts the date and the number of laps & U\\\hline
-/create-order/recap/ & POST & Shows the information of the selected items and the total price & U\\\hline
-/create-favourite/recap/ & POST & Shows the information of the new favourite item & U\\\hline
+/rest/user/order/{orderId} & GET & Allows to retrieve the order with the specified id & U \\\hline
 
 \caption{REST API Table}
 \label{tab:termGlossary}
