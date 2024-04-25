@@ -37,7 +37,7 @@ import java.sql.SQLException;
  * @version 1.00
  * @since 1.00
  */
-public final class GetOrderByIdAndUserEmailRR extends UserAbstractRR {
+public final class GetOrderByIdAndUserEmailRR extends AbstractRR {
 
 	/**
 	 * Creates a new REST resource for searching {@code Order} by its id.

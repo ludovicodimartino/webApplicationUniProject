@@ -20,6 +20,12 @@ public class GetOrderByIdAndUserEmailDAO extends AbstractDAO<Order> {
     private final Integer orderId;
     private final String email;
 
+    /**
+     * Constructs a new GetOrderByIdAndUserEmailDAO object with the given database connection, the user email and the order.
+     *
+     * @param con   the connection to the database
+     * @param email the email of the specific user
+     */
     public GetOrderByIdAndUserEmailDAO(final Connection con, final String email, final Integer orderId) {
         super(con);
 

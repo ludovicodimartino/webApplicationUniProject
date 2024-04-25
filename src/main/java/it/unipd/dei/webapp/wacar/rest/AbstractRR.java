@@ -16,18 +16,27 @@
 
 package it.unipd.dei.webapp.wacar.rest;
 
+import it.unipd.dei.webapp.wacar.dao.UserLoginDAO;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
+import it.unipd.dei.webapp.wacar.resource.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.message.StringFormatterMessageFactory;
 
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.sql.DataSource;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Base64;
 
 /**
  * Represents a generic REST resource.
@@ -43,6 +52,16 @@ public abstract class AbstractRR implements RestResource {
      */
     protected static final Logger LOGGER = LogManager.getLogger(AbstractRR.class,
             StringFormatterMessageFactory.INSTANCE);
+
+    /**
+     * The Base64 decoder
+     */
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
+
+    /**
+     * The connection pool to the database
+     */
+    private DataSource ds;
 
     /**
      * The JSON MIME media type
@@ -127,6 +146,13 @@ public abstract class AbstractRR implements RestResource {
     public void serve() throws IOException {
 
         try {
+            // check if there exists a valid authorization header
+            // if it exists, check if the user is of type "USER"
+            // otherwise, prevent to send the response
+            if (!checkIsLoggedIn(req, res)) {
+                return;
+            }
+
             // if the request method and/or the MIME media type are not allowed, return.
             // Appropriate error message sent by {@code checkMethodMediaType}
             if (!checkMethodMediaType(req, res)) {
@@ -237,4 +263,91 @@ public abstract class AbstractRR implements RestResource {
         return true;
     }
 
+    /**
+     * Checks that the user is logged in to perform the operation.
+     *
+     * @param req the HTTP request.
+     * @param res the HTTP response.
+     * @return {@code true} if the user type can access to the resource; {@code false} otherwise.
+     * @throws IOException if any error occurs in the client/server communication.
+     */
+    protected boolean checkIsLoggedIn(final HttpServletRequest req, final HttpServletResponse res) throws IOException {
+        Message m = null;
+        // get the authorization information
+        final String auth = req.getHeader("Authorization");
+
+        if (auth == null || auth.isBlank()) {
+            LOGGER.error("No authorization header sent by the client");
+            m = new Message("No authorization header sent by the client", "E4B3", "No authorization header sent by the client");
+            m.toJSON(res.getOutputStream());
+
+            return false; // user is not authenticated
+        }
+
+        // if it is not HTTP Basic authentication, warn that there is no valid authentication method
+        if (!auth.toUpperCase().startsWith("BASIC ")) {
+            LOGGER.error("No valid authorization header sent by the client");
+            m = new Message("No authorization header sent by the client", "E4B3", "No authorization header sent by the client");
+            m.toJSON(res.getOutputStream());
+
+            return false;
+        }
+
+        // perform Base64 decoding, pair = username:password
+        final String pair = new String(DECODER.decode(auth.substring(6)));
+        // the JNDI lookup context
+        InitialContext cxt;
+        try {
+            cxt = new InitialContext();
+            ds = (DataSource) cxt.lookup("java:/comp/env/jdbc/WaCar");
+        } catch (NamingException e) {
+            ds = null;
+            LOGGER.error("Unable to acquire the connection pool to the database.", e);
+
+            return false;
+        }
+
+        // userDetails[0] is the username; userDetails[1] is the password
+        final String[] userDetails = pair.split(":", 2);
+        final String password = DigestUtils.md5Hex(userDetails[1]).toUpperCase();
+        String endpoint = req.getRequestURI();
+        endpoint = endpoint.substring(endpoint.lastIndexOf("rest") + 4);
+        final boolean isUser = endpoint.startsWith("/user"); // true: is a user; false: is an admin
+        final User u = new User(userDetails[0], password);
+
+        try {
+            // if the user is successfully authenticated, create a Session and store the user there
+            User authUser = new UserLoginDAO(ds.getConnection(), u).access().getOutputParam();
+
+            if ((isUser && authUser.getType().equals("USER")) || (!isUser && authUser.getType().equals("ADMIN"))) {
+                if (authUser != null) {
+                    // create a  new session
+                    HttpSession session = req.getSession(true);
+                    session.setAttribute("account", authUser);
+                    session.setAttribute("Authorization", auth);
+                } else {
+                    m = new Message("No authorization header sent by the client", "E4B3", "No authorization header sent by the client");
+                    m.toJSON(res.getOutputStream());
+
+                    return false;
+                }
+            } else {
+                m = new Message("You are not authorized to perform this operation", "E4B3", "You are not authorized to perform this operation");
+                m.toJSON(res.getOutputStream());
+
+                return false;
+            }
+        } catch (SQLException e) {
+            LOGGER.error("Unable to serve the REST request.", e);
+
+            m = new Message("Unable to serve the REST request.", "E5A1",
+                    e.getMessage());
+            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            m.toJSON(res.getOutputStream());
+
+            return false;
+        }
+
+        return true;
+    }
 }
