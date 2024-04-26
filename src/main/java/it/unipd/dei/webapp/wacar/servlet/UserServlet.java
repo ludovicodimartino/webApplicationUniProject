@@ -32,7 +32,15 @@ import java.sql.SQLException;
 @WebServlet(name = "UserServlet", value = "/user/*")
 public class UserServlet extends AbstractDatabaseServlet {
 
-
+    /**
+     * Handles HTTP GET requests for user-related operations.
+     * Manages various user actions such as login, signup, logout, updating account information and creating orders.
+     *
+     * @param request the HttpServletRequest object containing the request information
+     * @param response the HttpServletResponse object for sending response to the client
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs while processing the request
+     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
@@ -85,7 +93,6 @@ public class UserServlet extends AbstractDatabaseServlet {
                 if (isUserLogged) {
                     Message m = new Message("Login success");
                     request.getRequestDispatcher("/jsp/userPage.jsp").forward(request, response);
-                    writePage(user,m,response);
                 }
                 else {
                     Message m = new Message("Login FAILED");
@@ -103,6 +110,15 @@ public class UserServlet extends AbstractDatabaseServlet {
 
     }
 
+    /**
+     * Handles HTTP GET requests for user-related operations.
+     * Manages various user actions such as login, signup and logout.
+     *
+     * @param req the HttpServletRequest object containing the request information
+     * @param res the HttpServletResponse object for sending response to the client
+     * @throws ServletException if a servlet-specific error occurs
+     * @throws IOException      if an I/O error occurs while processing the request
+     */
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
         //take the request uri
@@ -320,7 +336,6 @@ public class UserServlet extends AbstractDatabaseServlet {
         }
 
         finally{
-            writePage(user,m,res);
             LogContext.removeIPAddress();
             LogContext.removeAction();
             LogContext.removeResource();
@@ -432,70 +447,7 @@ public class UserServlet extends AbstractDatabaseServlet {
         }
     }
 
-    public void writePage(User s, Message m, HttpServletResponse res) throws IOException{
 
-        try{
-            if(m == null){
-                m = new Message("An error occurred - null","E200","Unknown error");
-            }
-            // set the MIME media type of the response
-            res.setContentType("text/html; charset=utf-8");
-
-            // get a stream to write the response
-            PrintWriter out = res.getWriter();
-
-            // write the HTML page
-            out.printf("<!DOCTYPE html>%n");
-
-            out.printf("<html lang=\"en\">%n");
-            out.printf("<head>%n");
-            out.printf("<meta charset=\"utf-8\">%n");
-            out.printf("<title>User</title>%n");
-            out.printf("</head>%n");
-
-            out.printf("<body>%n");
-
-
-            if (m.isError()) {
-                out.printf("<h1>LOGIN USER - ERROR</h1>%n");
-                out.printf("<hr/>%n");
-                out.printf("<ul>%n");
-                out.printf("<li>error code: %s</li>%n", m.getErrorCode());
-                out.printf("<li>message: %s</li>%n", m.getMessage());
-                out.printf("<li>details: %s</li>%n", m.getErrorDetails());
-                out.printf("</ul>%n");
-            } else {
-                out.printf("<h1>USER PAGE - SUCCESS</h1>%n");
-                out.printf("<hr/>%n");
-                out.printf("<p>%s</p>%n", m.getMessage());
-                out.printf("<ul>%n");
-                out.printf("<li>surname: %s</li>%n", s.getSurname());
-                out.printf("<li>name: %s</li>%n", s.getName());
-                out.printf("<li>email: %s</li>%n", s.getEmail());
-                out.printf("<li>address: %s</li>%n", s.getAddress());
-                out.printf("</ul>%n");
-            }
-
-            out.printf("</body>%n");
-
-            out.printf("</html>%n");
-
-            // flush the output stream buffer
-            out.flush();
-
-            // close the output stream
-            out.close();
-        } catch (IOException ex) {
-            LOGGER.error(new StringFormattedMessage("Unable to send response when logging user %d.", s.getEmail()), ex);
-            throw ex;
-        } finally {
-            LogContext.removeIPAddress();
-            LogContext.removeAction();
-            LogContext.removeResource();
-        }
-
-
-    }
 
 }
 
