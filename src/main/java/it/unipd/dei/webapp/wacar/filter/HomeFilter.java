@@ -1,10 +1,8 @@
 package it.unipd.dei.webapp.wacar.filter;
 
 import jakarta.servlet.FilterChain;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -31,10 +29,9 @@ public class HomeFilter extends AbstractFilter{
      * @param res    HTTP servlet response
      * @param chain  FilterChain for invoking the next filter in the chain
      * @throws IOException      if an I/O error occurs
-     * @throws ServletException if a servlet-specific error occurs
      */
     @Override
-    public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
+    public void doFilter(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException {
 
 
         LOGGER.info("Trying to access html resources. Redirecting to the home");

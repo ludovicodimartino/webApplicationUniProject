@@ -12,7 +12,6 @@ import java.io.IOException;
 
 /**
  * HomeServlet class serves as the controller for the home page of the application.
- *
  * This servlet handles GET requests to the "/home" URL pattern.
  * Depending on the user's role (if logged in), it logs the current role and forwards the request to the
  * appropriate view.

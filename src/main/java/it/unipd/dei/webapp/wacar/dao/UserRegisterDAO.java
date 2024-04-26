@@ -4,7 +4,7 @@ import it.unipd.dei.webapp.wacar.resource.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 
 /**
  * This class provides functionality for registering a user in the database.
@@ -38,12 +38,9 @@ public class UserRegisterDAO extends AbstractDAO<User>{
      */
     @Override
     protected void doAccess() throws Exception {
-        PreparedStatement stmnt = null;
-        ResultSet rs1 = null;
         // the results of the search
 
-        try {
-            stmnt = con.prepareStatement(STATEMENT_REGISTRATION);
+        try (PreparedStatement stmnt = con.prepareStatement(STATEMENT_REGISTRATION)) {
             stmnt.setString(1, user.getEmail());
             stmnt.setString(2, user.getPassword());
             stmnt.setString(3, user.getName());
@@ -53,13 +50,6 @@ public class UserRegisterDAO extends AbstractDAO<User>{
 
             stmnt.execute();
             LOGGER.info("User registered {}.", user.getEmail());
-
-
-        } finally {
-
-            if (stmnt != null) {
-                stmnt.close();
-            }
 
 
         }
