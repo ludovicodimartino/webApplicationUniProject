@@ -2,15 +2,17 @@
 
 %What pages will be present in your project? briefly indicate how your web site will be organized
 
-WaCar web application is subdivided into two main areas: the admin area and the registered user. The areas are accessible through the login page, where, by inserting a valid combination of email and password, one can access as an admin or a user, depending on the role. Below are listed the pages that are going to be developed in WaCar for the users. The latters have been developed via jsp.
+WaCar web application is subdivided into two main areas: the admin area and the registered user. The areas are accessible through the login page, where, by inserting a valid combination of email and password, people can access as an admin or a user, depending on the role associated with the email in the database. Below are listed the pages that are going to be developed in WaCar for the users.
 \begin{itemize}
-    \item Homepage: the initial page presented when connecting to the website. On this page login is not needed and not registered user can see the list or cars and circuit or eventually sign up to the website via the Sign up page;
+    \item Homepage: the initial page presented when connecting to the website. On this page login is not needed and not registered user can see the list or cars and circuit or eventually sign up to the website via the corrispondent page;
     \item Login: the page is used by registered admin/users to login
     \item Sign up: the page is used by new users to sign up to WaCar website;
     \item Car List: the page where the available brand and model of cars are listed;
     \item Circuit List: the page to see the circuits where one can race;
     \item Order List: the page is available only to logged users and allows them to check the order history and manage the them;
     \item Create new order: the page is available to logged users and allows them to create a new order;
+    \item List Favorite: the page is available only to logged users and allows them to check their favorite order list;
+    \item User Page: the page is available to logged users and allows them to see their informations;
 \end{itemize}
 
 As it concerns the Admin, the following page have been developed:
@@ -65,7 +67,7 @@ In the \texttt{Sign Up} page, Fig. \ref{fig:signup}, users input their informati
     \label{fig:adminhome}
 \end{figure}
 
-The homepage serves as the initial landing point for users upon opening WaCar. Its content dynamically adapts to the session state: when user is not logged in, Fig. \ref{fig:nologhome}, they are able to access two basic options that are \texttt{List of Cars} and \texttt{List of Circuits}. Additionally, \texttt{Login} and \texttt{Sign Up} buttons are provided.
+The homepage serves as the initial landing point for users upon entering WaCar. Its content dynamically adapts to the session state: when user is not logged in, Fig. \ref{fig:nologhome}, they are able to access two basic options that are \texttt{List of Cars} and \texttt{List of Circuits}. Additionally, \texttt{Login} and \texttt{Sign Up} buttons are provided.
 
 If the user is logged in, in addition to the previously mentioned functionalities, \texttt{List of Orders} option and \texttt{Favourite} option are added, Fig. \ref{fig:usehome}. The latter allows the user to manage its favourite objects (car, circuit and even pending orders added to favourite) while through \texttt{List of Orders} the user is able to view his orders history and manage the booked ones.
 

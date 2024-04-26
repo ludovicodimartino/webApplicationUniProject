@@ -5,6 +5,7 @@ import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Circuit;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.ResourceList;
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -55,16 +56,17 @@ public class ListCircuitsRR extends AbstractRR {
                 LOGGER.info("Circuit(s) successfully listed.");
                 LOGGER.info(circuits.getFirst().getName());
                 res.setStatus(HttpServletResponse.SC_OK);
-                //List<Circuit> tmp_circuits = new ArrayList<>();
+
                 new ResourceList<>(circuits).toJSON(res.getOutputStream());
             } else {
                 LOGGER.error("Fatal error while listing circuits(s).");
+
                 m = new Message(
-                        "Cannot list circuit(s): unexpected error.",
-                        "E5A1",
+                        ErrorCode.UNEXPECTED_ERROR.getErrorMessage(),
+                        ErrorCode.UNEXPECTED_ERROR.getErrorCode(),
                         null);
 
-                res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                res.setStatus(ErrorCode.UNEXPECTED_ERROR.getHTTPCode());
                 m.toJSON(res.getOutputStream());
             }
         } catch (SQLException ex) {
@@ -72,11 +74,11 @@ public class ListCircuitsRR extends AbstractRR {
                     "Cannot list circuit(s): unexpected database error.", ex);
 
             m = new Message(
-                    "Cannot list circuit(s): unexpected database error.",
-                    "E5A1",
+                    ErrorCode.UNEXPECTED_ERROR.getErrorMessage(),
+                    ErrorCode.UNEXPECTED_ERROR.getErrorCode(),
                     ex.getMessage());
 
-            res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            res.setStatus(ErrorCode.UNEXPECTED_ERROR.getHTTPCode());
             m.toJSON(res.getOutputStream());
         }
     }

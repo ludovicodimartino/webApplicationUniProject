@@ -7,6 +7,7 @@ import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.User;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -62,6 +63,7 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
         List<Order> orders = null;
 
         try {
+            assert user != null;
             orders = new ListOrdersByEmailDAO(getConnection(), user.getEmail()).access().getOutputParam();
 
             m = new Message("Orders for user successfully retrieved");

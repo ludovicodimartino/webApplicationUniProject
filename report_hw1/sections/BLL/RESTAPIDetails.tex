@@ -113,7 +113,7 @@ The following endpoint allows to list all the circuits (and returns a JSON).
     \begin{verbatim}
     {
         "message": {
-        "message": "Cannot list circuit(s) : unexpected error.",
+        "message": ""Unexpected error while processing a resource."",
         "error-code": "E5A1"
     }}
     \end{verbatim}
@@ -123,12 +123,47 @@ The following endpoint allows to list all the circuits (and returns a JSON).
     \begin{verbatim}
     {
         "message": {
-        "message": "Cannot list circuit(s) : unexpected database error.",
+        "message": ""Unexpected error while processing a resource."",
         "error-code": "E5A1"
-        ”error-detail”: ”exception content”
     }}
     \end{verbatim}
     
+\end{itemize}
+
+\subsection*{List cars}
+
+The following endpoint allows to list all the cars (and returns a JSON).
+
+\begin{itemize}
+    \item URL: \texttt{/rest/cars}
+    \item Method: \texttt{GET}
+    \item URL parameters: \texttt{None}
+    \item Data parameters: \texttt{None}
+    \item Success Response: \\
+    \textbf{Code}: 200\\
+    \textbf{Content}: The JSON corresponding to the list of cars
+    \texttt{INSERT JSON}
+    \item Error Response:\\
+    \textbf{Code}: 500 (internal code: E5A1)\\
+    \textbf{Content}: The message containing the error (server error when retrieving the cars)\\
+    \begin{verbatim}
+    {
+        "message": {
+        "message": ""Unexpected error while processing a resource."",
+        "error-code": "E5A1"
+    }}
+    \end{verbatim}
+    \item Error Response:\\
+    \textbf{Code}: 500 (internal code: E5A1)\\
+    \textbf{Content}: The message containing the error (server error when retrieving the cars)\\
+    \begin{verbatim}
+    {
+        "message": {
+        "message": ""Unexpected error while processing a resource."",
+        "error-code": "E5A1"
+    }}
+    \end{verbatim}
+
 \end{itemize}
 
 \subsection*{Read order}
