@@ -1,29 +1,26 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
-import it.unipd.dei.webapp.wacar.dao.*;
+import it.unipd.dei.webapp.wacar.dao.GetUserByEmailDAO;
+import it.unipd.dei.webapp.wacar.dao.UserLoginDAO;
+import it.unipd.dei.webapp.wacar.dao.UserRegisterDAO;
 import it.unipd.dei.webapp.wacar.filter.LoginFilter;
-import it.unipd.dei.webapp.wacar.resource.*;
-
-import java.io.IOException;
-import java.io.PrintWriter;
-
+import it.unipd.dei.webapp.wacar.resource.LogContext;
+import it.unipd.dei.webapp.wacar.resource.Message;
+import it.unipd.dei.webapp.wacar.resource.User;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpSession;
-import org.apache.logging.log4j.message.StringFormattedMessage;
 import org.apache.commons.codec.digest.DigestUtils;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * Servlet to manage user login and registration
- *
- * This servlet handles user login, registration, and logout operations.
- * It provides functionality for processing GET and POST requests related
- * to user authentication and registration.
+ * Servlet for managing user-related operations.
+ * This servlet handles various user actions such as login, signup, logout, updating account information and creating orders.
  *
  * @author Filippo Galli (filippo.galli@studenti.unipd.it)
  * @version 1.00
@@ -36,15 +33,15 @@ public class UserServlet extends AbstractDatabaseServlet {
      * Handles HTTP GET requests for user-related operations.
      * Manages various user actions such as login, signup, logout, updating account information and creating orders.
      *
-     * @param request the HttpServletRequest object containing the request information
-     * @param response the HttpServletResponse object for sending response to the client
+     * @param req the HttpServletRequest object containing the request information
+     * @param res the HttpServletResponse object for sending response to the client
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException      if an I/O error occurs while processing the request
      */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        LogContext.setIPAddress(request.getRemoteAddr());
-        HttpSession session = request.getSession();
+    protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+        LogContext.setIPAddress(req.getRemoteAddr());
+        HttpSession session = req.getSession();
         User user = (User) session.getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
         boolean isUserLogged = user!=null;
         if (isUserLogged) {
@@ -54,10 +51,10 @@ public class UserServlet extends AbstractDatabaseServlet {
             LogContext.setUser("User not logged");
         }
 
-        LogContext.setResource(request.getRequestURI());
+        LogContext.setResource(req.getRequestURI());
 
 
-        String op = request.getRequestURI();
+        String op = req.getRequestURI();
         op = op.substring(op.lastIndexOf("wacar") + 6);
 
         LOGGER.info("op GET {}",op);
@@ -66,33 +63,32 @@ public class UserServlet extends AbstractDatabaseServlet {
         switch (op){
 
             case "login/":
-                request.getSession().invalidate();
+                req.getSession().invalidate();
                 LogContext.setAction("LOGIN");
-                request.getRequestDispatcher("/jsp/login.jsp").forward(request, response);
+                req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
                 break;
             case "signup/":
-                request.getSession().invalidate();
+                req.getSession().invalidate();
                 LogContext.setAction("SIGNUP");
-                request.getRequestDispatcher("/jsp/signup.jsp").forward(request, response);
+                req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
                 break;
             case "logout/":
                 // logout and return to homepage
-                logoutOperations(request, response);
+                logoutOperations(req, res);
                 break;
             case "updateAccount/":
                 LogContext.setAction("UPDATE ACCOUNT");
-                request.getRequestDispatcher("/jsp/updateAccount.jsp").forward(request, response);
+                req.getRequestDispatcher("/jsp/updateAccount.jsp").forward(req, res);
                 break;
             case "user/create-order/cars":
                 LogContext.setAction("CREATE_ORDER");
-                request.getRequestDispatcher("user/create-order/cars").forward(request, response);
+                req.getRequestDispatcher("user/create-order/cars").forward(req, res);
                 break;
             case "user/user-info":
 
                 LogContext.setAction("USER INFO");
                 if (isUserLogged) {
-                    Message m = new Message("Login success");
-                    request.getRequestDispatcher("/jsp/userPage.jsp").forward(request, response);
+                    req.getRequestDispatcher("/jsp/userPage.jsp").forward(req, res);
                 }
                 else {
                     Message m = new Message("Login FAILED");
@@ -101,8 +97,9 @@ public class UserServlet extends AbstractDatabaseServlet {
                 break;
 
             default:
-                Message m = new Message("An error occurred default","E200","Operation Unknown");
-                LOGGER.error("stacktrace {}:", m.getMessage());
+                Message m = new Message("Insert an email",ErrorCode.RESOURCE_NOT_FOUND.getErrorCode(),ErrorCode.RESOURCE_NOT_FOUND.getErrorMessage());
+                req.setAttribute("message", m);
+                LOGGER.error("problems with fields: {}", m.getMessage());
         }
 
 
@@ -151,10 +148,9 @@ public class UserServlet extends AbstractDatabaseServlet {
 
 
             default:
-                Message m = new Message("An error occurred default","E200","Operation Unknown");
-                LOGGER.error("stacktrace {}:", m.getMessage());
-                // the requested operation is unknown
-//                writeError(res, ErrorCode.OPERATION_UNKNOWN);
+                Message m = new Message("Insert an email",ErrorCode.RESOURCE_NOT_FOUND.getErrorCode(),ErrorCode.RESOURCE_NOT_FOUND.getErrorMessage());
+                req.setAttribute("message", m);
+                LOGGER.error("problems with fields: {}", m.getMessage());
         }
     }
 
@@ -163,25 +159,22 @@ public class UserServlet extends AbstractDatabaseServlet {
      *
      * @param request  HTTP servlet request
      * @param response HTTP servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException      if an I/O error occurs
+     * @throws IOException if an I/O error occurs
      */
-    public void logoutOperations(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+    public void logoutOperations(HttpServletRequest request, HttpServletResponse response) throws IOException {
         HttpSession session = request.getSession();
         User user = (User) session.getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
-        if (user!=null) {
-            LOGGER.info("Session found {} ",session);
-
-            LOGGER.info("the USER {} logged out",user.getEmail());
-
+        if (user != null) {
+            LOGGER.info("Session found {} ", session);
+            LOGGER.info("the USER {} logged out", user.getEmail());
             request.getSession().invalidate();
-        }
-        else{
+        } else {
             LOGGER.info("User NULL");
         }
         response.sendRedirect(request.getContextPath() + "/");
     }
+
+
 
 
     /**
@@ -195,8 +188,8 @@ public class UserServlet extends AbstractDatabaseServlet {
      */
     public void loginOperations(HttpServletRequest req, HttpServletResponse res, boolean isValid) throws ServletException, IOException {
 
-        User user = null;
-        Message m = null;
+        User user;
+        Message m;
 
         String regex_psw = "^(?=.*[A-Z])(?=.*[0-9]).{8,}$";
         String regex_email  = "^[a-z0-9+_.-]+@[a-z0-9.-]+\\.[a-z]{2,}$";
@@ -229,6 +222,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 }
                 else{
                     m = new Message("Login success");
+                    req.setAttribute("message", m);
                     LOGGER.info("the user {} LOGGED IN", user.getEmail());
                     LOGGER.info("User account type: {}", user.getType());
 
@@ -245,14 +239,14 @@ public class UserServlet extends AbstractDatabaseServlet {
             }
             else
             {
-                if (email == null || email.equals("")) {
+                if (email == null || email.isEmpty()) {
                     //the email is null (was not set on the parameters) or an empty string
                     //notify this to the user
                     m = new Message("Insert an email",ErrorCode.EMAIL_MISSING.getErrorCode(),ErrorCode.EMAIL_MISSING.getErrorMessage());
                     req.setAttribute("message", m);
                     LOGGER.error("problems with fields: {}", m.getMessage());
 
-                } else if (password == null || password.equals("")) {
+                } else if (password == null || password.isEmpty()) {
                     //the password was empty
                     ErrorCode ec = ErrorCode.PASSWORD_MISSING;
                     m = new Message("Insert the password",ec.getErrorCode(),ec.getErrorMessage());
@@ -307,6 +301,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                     }
                     else{
                         m = new Message("Login success");
+                        req.setAttribute("message", m);
                         LOGGER.info("the user {} LOGGED IN", user.getEmail());
                         LOGGER.info("name {}", user.getName());
                         LOGGER.info("surname {}", user.getSurname());
@@ -328,10 +323,12 @@ public class UserServlet extends AbstractDatabaseServlet {
 
         } catch (SQLException e){
             m = new Message("An error occurred SQL","E200",e.getMessage());
+            req.setAttribute("message", m);
             LOGGER.error("stacktrace:", e);
         }
         catch (NumberFormatException e){
             m = new Message("An error occurred handling numbers","E200",e.getMessage());
+            req.setAttribute("message", m);
             LOGGER.error("stacktrace:", e);
         }
 
@@ -352,8 +349,7 @@ public class UserServlet extends AbstractDatabaseServlet {
      */
     public void registrationOperations(HttpServletRequest req, HttpServletResponse res) throws IOException {
 
-        User user = null;
-        Message m = null;
+        Message m;
         boolean fieldEmpty = false;
         try {
 
@@ -370,11 +366,11 @@ public class UserServlet extends AbstractDatabaseServlet {
             String regex_email = "^[a-z0-9+_.-]+@[a-z0-9.-]+\\.[a-z]{2,}$";
 
             //check that all registrations parameters have been set and are not null
-            if (email == null || email.equals("") ||
-                    password == null || password.equals("") ||
-                    name == null || name.equals("") ||
-                    address == null || address.equals("") ||
-                    surname == null || surname.equals("")) {
+            if (email == null || email.isEmpty() ||
+                    password == null || password.isEmpty() ||
+                    name == null || name.isEmpty() ||
+                    address == null || address.isEmpty() ||
+                    surname == null || surname.isEmpty()) {
 
                 fieldEmpty = true;
                 ErrorCode ec = ErrorCode.EMPTY_INPUT_FIELDS;

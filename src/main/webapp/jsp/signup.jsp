@@ -18,7 +18,6 @@
             </div>
         </div>
     </c:when>
-    <c:otherwise></c:otherwise>
 </c:choose>
 <form method="POST" action="/wacar/signup/">
     <label for="email">Enter your email:</label>
