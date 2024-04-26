@@ -23,6 +23,7 @@ import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.rest.GetOrderByIdAndUserEmailRR;
 import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
@@ -60,16 +61,22 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 			// if none of the above process methods succeeds, it means an unknown resource has been requested
 			LOGGER.warn("Unknown resource requested: {}", req.getRequestURI());
 
-			final Message m = new Message("Unknown resource requested.", "E4A6",
+			final Message m = new Message(
+					ErrorCode.UNKNOWN_RESOURCE.getErrorMessage(),
+					ErrorCode.UNKNOWN_RESOURCE.getErrorCode(),
 					String.format("Requested resource is %s.", req.getRequestURI()));
-			res.setStatus(HttpServletResponse.SC_NOT_FOUND);
+
+			res.setStatus(ErrorCode.UNKNOWN_RESOURCE.getHTTPCode());
 			res.setContentType(JSON_UTF_8_MEDIA_TYPE);
 			m.toJSON(out); // write itself to the output socket
 		} catch (Throwable t) {
 			LOGGER.error("Unexpected error while processing the REST resource.", t);
 
-			final Message m = new Message("Unexpected error.", "E5A1", t.getMessage());
-			res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			final Message m = new Message(
+					ErrorCode.UNEXPECTED_ERROR.getErrorMessage(),
+					ErrorCode.UNEXPECTED_ERROR.getErrorCode(),
+					t.getMessage());
+			res.setStatus(ErrorCode.UNEXPECTED_ERROR.getHTTPCode());
 			m.toJSON(out);
 		} finally {
 
@@ -119,56 +126,14 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 					LOGGER.warn("Unsupported operation for URI /circuit: {}", method);
 
 					m = new Message(
-							"Unsupported operation for URI /circuit.",
-							"E4A5",
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage(),
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
 							String.format("Requested operation %s.", method));
-					res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+					res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
 					m.toJSON(res.getOutputStream());
 					break;
 			}
 		}
-		/*
-
-		else if (path.contains("available")) {
-
-			path = path.substring(path.lastIndexOf("available") + 9);
-
-			if (path.length() == 0 || path.equals("/")) {
-				//the uri is rest/category/available
-				LOGGER.warn("Wrong format for URI /categories/available/{sagra}. Requested URI: %s.", req.getRequestURI());
-
-				m = new Message("Wrong format for URI /categories/available/{sagra}.", "E4A7",
-						String.format("Requested URI: %s.", req.getRequestURI()));
-				res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-				m.toJSON(res.getOutputStream());
-			} else {
-				//the uri is rest/category/available/{sagra}
-				switch (method) {
-					case "GET":
-						new ListCategoriesAvailableRR(req, res, getConnection()).serve();
-						break;
-					default:
-						LOGGER.warn("Unsupported operation for URI /categories/available/{sagra}: %s.", method);
-
-						m = new Message("Unsupported operation for URI /categories/available/{sagra}.", "E4A5",
-								String.format("Requested operation %s.", method));
-						res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
-						m.toJSON(res.getOutputStream());
-						break;
-				}
-
-			}
-		} else {
-			LOGGER.warn("Wrong format for URI /categories: too many arguments. Requested URI: %s.", req.getRequestURI());
-
-			m = new Message("Wrong format for URI /categories: too many arguments.", "E4A7",
-					String.format("Requested URI: %s.", req.getRequestURI()));
-			res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
-			m.toJSON(res.getOutputStream());
-		}
-
-		*/
-
 		return true;
 	}
 	/**
@@ -206,9 +171,10 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 				default:
 					LOGGER.warn("Unsupported operation for URI /: %s.", method);
 
-					m = new Message("Unsupported operation for URI /.", "E4A5",
+					m = new Message(ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage(),
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
 							String.format("Requested operation %s.", method));
-					res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+					res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
 					m.toJSON(res.getOutputStream());
 					break;
 			}
@@ -294,18 +260,19 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 
 		// the request URI is: /
 		// if method GET, list the available order of the logged in account
-		if (path.length() == 0 || path.equals("/")) {
+		if (path.isEmpty() || path.equals("/")) {
 			LOGGER.info("path /");
 			switch (method) {
 				case "GET":
-//					new ListCarRR(req, res, getConnection()).serve(); // TODO
+					new ListCarsRR(req, res, getConnection()).serve();
 					break;
 				default:
 					LOGGER.warn("Unsupported operation for URI /: %s.", method);
 
-					m = new Message("Unsupported operation for URI /.", "E4A5",
+					m = new Message(ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage(),
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
 							String.format("Requested operation %s.", method));
-					res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+					res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
 					m.toJSON(res.getOutputStream());
 					break;
 			}
@@ -314,12 +281,16 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 			path = path.substring(path.lastIndexOf("/") + 1);
 			LOGGER.info("path + " + path);
 
-			if (path.length() == 0 || path.equals("/")) {
-				LOGGER.warn("Wrong format for URI /order/{orderId}: no {orderId} specified. Requested URI: %s.", req.getRequestURI());
+			if (path.isEmpty() || path.equals("/")) {
+				LOGGER.warn(
+						"Wrong format for URI /order/{orderId}: no {orderId} specified. Requested URI: %s.",
+						req.getRequestURI());
 
-				m = new Message("Wrong format for URI /order/{orderId}: no {orderId} specified.", "E4A7",
+				m = new Message(
+						"Wrong format for URI /order/{orderId}: no {orderId} specified.",
+						ErrorCode.WRONG_URI_FORMAT.getErrorCode(),
 						String.format("Requested URI: %s.", req.getRequestURI()));
-				res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+				res.setStatus(ErrorCode.WRONG_URI_FORMAT.getHTTPCode());
 				m.toJSON(res.getOutputStream());
 			} else {
 				switch (method) {
@@ -330,15 +301,15 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 					default:
 						LOGGER.warn("Unsupported operation for URI /order/{orderId}: %s.", method);
 
-						m = new Message("Unsupported operation for URI /order/{orderId}.", "E4A5",
+						m = new Message("Unsupported operation for URI /order/{orderId}.",
+								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
 								String.format("Requested operation %s.", method));
-						res.setStatus(HttpServletResponse.SC_METHOD_NOT_ALLOWED);
+						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
 						m.toJSON(res.getOutputStream());
 						break;
 				}
 			}
 		}
-
 		return true;
 	}
 }

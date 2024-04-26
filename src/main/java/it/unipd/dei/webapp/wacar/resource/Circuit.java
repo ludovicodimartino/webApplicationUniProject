@@ -238,10 +238,10 @@ public class Circuit extends AbstractResource {
     }
 
     /**
-     * Returns a string representation of the circuit object.
+     * Writes the circuit data in JSON format to the provided output stream.
      *
-     * @return A string containing the name, type, length, corners number, address,
-     *         description, lap price, and availability of the circuit.
+     * @param out The output stream to which the JSON data will be written.
+     * @throws Exception If an error occurs while writing JSON data to the output stream.
      */
     @Override
     protected void writeJSON(OutputStream out) throws Exception {
