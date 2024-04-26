@@ -18,8 +18,16 @@ import java.util.List;
  */
 public class ListCarCircuitSuitabilityDAO extends AbstractDAO<List<CarCircuitSuitability>> {
 
+    /**
+     * The SQL statement to be executed.
+     */
     private static final String STATEMENT = "SELECT * FROM assessment.\"carCircuitSuitability\"";
 
+    /**
+     * Creates the DAO in order to get the car circuit suitabilities.
+     *
+     * @param con the connection to the database.
+     */
     public ListCarCircuitSuitabilityDAO(Connection con) {
         super(con);
     }

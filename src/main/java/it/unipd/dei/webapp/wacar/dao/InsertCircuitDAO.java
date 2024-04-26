@@ -1,5 +1,6 @@
 package it.unipd.dei.webapp.wacar.dao;
 
+import it.unipd.dei.webapp.wacar.resource.Car;
 import it.unipd.dei.webapp.wacar.resource.Circuit;
 
 import java.sql.Connection;
@@ -14,10 +15,23 @@ import java.sql.PreparedStatement;
  */
 public class InsertCircuitDAO extends AbstractDAO<Circuit> {
 
-    private static final String CAR_INSERT_STATEMENT = "INSERT INTO assessment.circuit (name, \"type\", length, \"cornersNumber\", address, description, \"lapPrice\", available, image, imageMediaType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    /**
+     * The SQL statement to be executed.
+     */
+    private static final String STATEMENT = "INSERT INTO assessment.circuit (name, \"type\", length, \"cornersNumber\", address, description, \"lapPrice\", available, image, imageMediaType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    /**
+     * The {@link Circuit} object to be inserted into the database.
+     */
     private final Circuit circuit;
 
+
+    /**
+     * Creates a new object for inserting a new circuit into the database.
+     *
+     * @param con the connection to the database.
+     * @param circuit the {@link Circuit} object to be inserted into the database.
+     */
     public InsertCircuitDAO(final Connection con, final Circuit circuit) {
         super(con);
 
@@ -32,7 +46,7 @@ public class InsertCircuitDAO extends AbstractDAO<Circuit> {
     @Override
     protected void doAccess() throws Exception {
 
-        try (PreparedStatement stmnt = con.prepareStatement(CAR_INSERT_STATEMENT)) {
+        try (PreparedStatement stmnt = con.prepareStatement(STATEMENT)) {
             stmnt.setString(1, circuit.getName());
             stmnt.setString(2, circuit.getType());
             stmnt.setInt(3, circuit.getLength());

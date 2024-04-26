@@ -13,9 +13,22 @@ import java.sql.PreparedStatement;
  * @since 1.00
  */
 public class InsertCarCircuitSuitabilityDAO extends AbstractDAO<CarCircuitSuitability> {
+    /**
+     * The SQL statement to be executed.
+     */
     private static final String STATEMENT = "INSERT INTO assessment.\"carCircuitSuitability\" (\"carType\", \"circuitType\") VALUES (?, ?)";
+
+    /**
+     * The {@link CarCircuitSuitability} object to be inserted into the database.
+     */
     private final CarCircuitSuitability cCSuit;
 
+    /**
+     * Create a new object for inserting a new carCircuitSuitability into the database.
+     *
+     * @param con the connection to the database.
+     * @param cCSuit the {@link CarCircuitSuitability} object to be inserted into the database.
+     */
     public InsertCarCircuitSuitabilityDAO(Connection con, CarCircuitSuitability cCSuit) {
         super(con);
 

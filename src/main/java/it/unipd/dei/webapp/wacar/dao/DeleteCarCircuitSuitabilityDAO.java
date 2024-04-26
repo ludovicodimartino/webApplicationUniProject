@@ -5,11 +5,30 @@ import it.unipd.dei.webapp.wacar.resource.CarCircuitSuitability;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 
+/**
+ * This class is the data access object used to delete car circuit suitability form the database.
+ *
+ * @author Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
+ * @version 1.00
+ * @since 1.00
+ */
 public class DeleteCarCircuitSuitabilityDAO extends AbstractDAO<CarCircuitSuitability> {
+    /**
+     * The SQL statement to be executed.
+     */
     private static final String STATEMENT = "DELETE FROM assessment.\"carCircuitSuitability\" WHERE \"carType\" = ? AND \"circuitType\" = ?;";
 
+    /**
+     * The {@link CarCircuitSuitability} object to be deleted from the database.
+     */
     final CarCircuitSuitability cCSuit;
 
+
+    /**
+     * Create a new object for deleting the carCircuitSuitability from the database.
+     * @param con the connection to the database.
+     * @param cCSuit the {@link CarCircuitSuitability} object to be deleted from the database.
+     */
     public DeleteCarCircuitSuitabilityDAO(Connection con, CarCircuitSuitability cCSuit) {
         super(con);
 

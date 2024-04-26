@@ -16,8 +16,16 @@ import java.util.List;
  * @since 1.00
  */
 public class GetCircuitTypesDAO extends AbstractDAO<List<Type>> {
-    private static final String STATEMENT_CAR_TYPE = "SELECT * FROM assessment.\"circuitType\"";
+    /**
+     * The SQL statement to be executed.
+     */
+    private static final String STATEMENT = "SELECT * FROM assessment.\"circuitType\"";
 
+    /**
+     * Creates the DAO in order to get the circuit types.
+     *
+     * @param con the connection to the database.
+     */
     public GetCircuitTypesDAO(Connection con) {
         super(con);
     }
@@ -31,7 +39,7 @@ public class GetCircuitTypesDAO extends AbstractDAO<List<Type>> {
         final List<Type> carTypes = new ArrayList<>();
 
         try {
-            pstmt = con.prepareStatement(STATEMENT_CAR_TYPE);
+            pstmt = con.prepareStatement(STATEMENT);
 
             // Execute the query
             rs = pstmt.executeQuery();

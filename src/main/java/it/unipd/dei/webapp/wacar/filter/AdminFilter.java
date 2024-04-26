@@ -10,7 +10,14 @@ import org.apache.logging.log4j.Logger;
 
 import java.io.IOException;
 
-
+/**
+ * This class protects the pages dedicated to the admin.
+ * This filter intercepts incoming requests and redirects them to the login page.
+ *
+ * @author Filippo Galli (filippo.galli@studenti.unipd.it)
+ * @version 1.00
+ * @since 1.00
+ */
 public class AdminFilter extends AbstractFilter {
 
     final static Logger LOGGER = LogManager.getLogger(AdminFilter.class);

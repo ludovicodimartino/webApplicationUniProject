@@ -1,6 +1,7 @@
 package it.unipd.dei.webapp.wacar.dao;
 
 import it.unipd.dei.webapp.wacar.resource.Car;
+import it.unipd.dei.webapp.wacar.resource.CarCircuitSuitability;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,10 +15,23 @@ import java.sql.PreparedStatement;
  */
 public class InsertCarDAO extends AbstractDAO<Car> {
 
-    private static final String CAR_INSERT_STATEMENT = "INSERT INTO assessment.car (brand, model, \"type\", horsepower, \"0-100\", \"maxSpeed\", description, available, image, imageMediaType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    /**
+     * The SQL statement to be executed.
+     */
+    private static final String STATEMENT = "INSERT INTO assessment.car (brand, model, \"type\", horsepower, \"0-100\", \"maxSpeed\", description, available, image, imageMediaType) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
+    /**
+     * The {@link Car} object to be inserted into the database.
+     */
     private final Car car;
 
+
+    /**
+     * Creates a new object for inserting a new Car into the database.
+     *
+     * @param con the connection to the database.
+     * @param car the {@link Car} object to be inserted into the database.
+     */
     public InsertCarDAO(final Connection con, final Car car) {
         super(con);
 
@@ -32,7 +46,7 @@ public class InsertCarDAO extends AbstractDAO<Car> {
     @Override
     protected void doAccess() throws Exception {
 
-        try (PreparedStatement stmnt = con.prepareStatement(CAR_INSERT_STATEMENT)) {
+        try (PreparedStatement stmnt = con.prepareStatement(STATEMENT)) {
             stmnt.setString(1, car.getBrand());
             stmnt.setString(2, car.getModel());
             stmnt.setString(3, car.getType());

@@ -7,12 +7,33 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * This class represents the data access object (DAO) for loading the image of a circuit from the database.
+ * It executes a query to retrieve the image and its media type based on the given circuit name.
+ *
+ * @author Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
+ * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
+ * @version 1.0
+ * @since 1.0
+ */
 public class LoadCircuitImageDAO extends AbstractDAO<Circuit> {
+    /**
+     * The SQL statement to be executed.
+     */
     private static final String STATEMENT = "SELECT image, imageMediaType FROM assessment.circuit WHERE name=?";
 
+    /**
+     * The name of the circuit.
+     */
     private final String name;
 
 
+    /**
+     * Create a new DAO to load the circuit image.
+     *
+     * @param con the connection to the database
+     * @param name the name of the circuit
+     */
     public LoadCircuitImageDAO(final Connection con, final String name) {
         super(con);
         this.name = name;

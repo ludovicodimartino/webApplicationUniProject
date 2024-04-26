@@ -16,8 +16,16 @@ import java.util.List;
  * @since 1.00
  */
 public class GetCarTypesDAO extends AbstractDAO<List<Type>> {
+    /**
+     * The SQL statement to be executed.
+     */
     private static final String STATEMENT_CAR_TYPE = "SELECT * FROM assessment.\"carType\"";
 
+    /**
+     * Creates the DAO in order to get the car types.
+     *
+     * @param con the connection to the database.
+     */
     public GetCarTypesDAO(Connection con) {
         super(con);
     }

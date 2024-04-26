@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 
 import it.unipd.dei.webapp.wacar.utils.CarOrCircuitType;
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.activation.MimeTypeParseException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -101,8 +102,10 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     }
                     break;
                 default:
-                    Message m = new Message("An error occurred default", "E200", "Operation Unknown");
-                    LOGGER.info("stacktrace {}:", m.getMessage());
+                    ErrorCode err = ErrorCode.UNSUPPORTED_OPERATION;
+                    Message m = new Message("The operation required it's not supported", err.getErrorCode(), err.getErrorMessage());
+                    LOGGER.warn("Unsupported operation.", m.getMessage());
+                    res.setStatus(err.getHTTPCode());
             }
         } catch (Exception e) {
             LOGGER.error("Unable to serve request.", e);
@@ -339,7 +342,7 @@ public class AdminServlet extends AbstractDatabaseServlet {
                     break;
 
                 default:
-                    Message m = new Message("An error occurred default", "E200", "Operation Unknown");
+                    Message m = new Message("The required operation is not supported", ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(), ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage());
                     LOGGER.info("stacktrace {}:", m.getMessage());
             }
         } catch (Exception e) {
@@ -463,34 +466,40 @@ public class AdminServlet extends AbstractDatabaseServlet {
             }
 
         } catch (NumberFormatException e) {
+            ErrorCode err = ErrorCode.WRONG_INPUT_FIELDS;
             m = new Message(
                     "Cannot create the car object. Invalid input parameters: maxSpeed, horsepower and acceleration must be integer.",
-                    "E100", e.getMessage());
+                    err.getErrorCode(), err.getErrorMessage());
         } catch (MimeTypeParseException e) {
+            ErrorCode err = ErrorCode.UNSUPPORTED_INPUT_MEDIA_TYPE;
             m = new Message(
                     "Cannot create the car object. Unsupported MIME media type for car image. Expected: image/png or image/jpeg.",
-                    "E600", e.getMessage());
+                    err.getErrorCode(), err.getErrorMessage());
         } catch (SQLException e) {
             if ("23505".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the car object: car %s %s already exists.", brand, model), "E300",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EXISTING_RESOURCE;
+                m = new Message(String.format("Cannot create the car object: car %s %s already exists.", brand, model), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         new StringFormattedMessage("Cannot create the car object: car %s %s already exists.", brand, model),
                         e);
             } else if ("23503".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the car object: car type %s does not exist.", type), "E400",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.DEPENDENT_RESOURCE;
+                m = new Message(String.format("Cannot create the car object: car type %s does not exist.", type), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         new StringFormattedMessage("Cannot create the car object: car type %s does not exist.", type),
                         e);
             } else if ("23502".equals(e.getSQLState())) {
-                m = new Message("Cannot create the car object: one or more car attributes are null.", "E500",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EMPTY_INPUT_FIELDS;
+                m = new Message("Cannot create the car object: one or more car attributes are null.", err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         "Cannot create the car object: one or more car attributes are null.",
                         e);
             } else {
-                m = new Message("Cannot create the car object: unexpected error while accessing the database.", "E200",
+                ErrorCode err = ErrorCode.CANNOT_CREATE_RESOURCE;
+                m = new Message("Cannot create the car object: unexpected error while accessing the database.", err.getErrorMessage(),
                         e.getMessage());
 
                 LOGGER.error("Cannot create the car object: unexpected error while accessing the database.", e);
@@ -628,35 +637,41 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
 
         } catch (NumberFormatException e) {
+            ErrorCode err = ErrorCode.WRONG_INPUT_FIELDS;
             m = new Message(
                     "Cannot create the circuit object. Invalid input parameters: maxSpeed, horsepower and acceleration must be integer.",
-                    "E100", e.getMessage());
+                    err.getErrorCode(), err.getErrorMessage());
         } catch (MimeTypeParseException e) {
+            ErrorCode err = ErrorCode.UNSUPPORTED_INPUT_MEDIA_TYPE;
             m = new Message(
                     "Cannot create the circuit object. Unsupported MIME media type for circuit image. Expected: image/png or image/jpeg.",
-                    "E600", e.getMessage());
+                    err.getErrorCode(), err.getErrorMessage());
         } catch (SQLException e) {
             if ("23505".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the circuit object: circuit %s already exists.", name), "E300",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EXISTING_RESOURCE;
+                m = new Message(String.format("Cannot create the circuit object: circuit %s already exists.", name), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         new StringFormattedMessage("Cannot create the circuit object: circuit %s already exists.", name),
                         e);
             } else if ("23503".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the circuit object: circuit type %s does not exist.", type), "E400",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.DEPENDENT_RESOURCE;
+                m = new Message(String.format("Cannot create the circuit object: circuit type %s does not exist.", type), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         new StringFormattedMessage("Cannot create the circuit object: circuit type %s does not exist.", type),
                         e);
             } else if ("23502".equals(e.getSQLState())) {
-                m = new Message("Cannot create the circuit object: one or more car attributes are null.", "E500",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EMPTY_INPUT_FIELDS;
+                m = new Message("Cannot create the circuit object: one or more car attributes are null.", err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         "Cannot create the circuit object: one or more car attributes are null.",
                         e);
             } else {
-                m = new Message("Cannot create the circuit object: unexpected error while accessing the database.", "E200",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.CANNOT_CREATE_RESOURCE;
+                m = new Message("Cannot create the circuit object: unexpected error while accessing the database.", err.getErrorCode(),
+                        err.getErrorMessage());
 
                 LOGGER.error("Cannot create the circuit object: unexpected error while accessing the database.", e);
             }
@@ -712,24 +727,28 @@ public class AdminServlet extends AbstractDatabaseServlet {
             LOGGER.info(String.format("Mapping between car type %s and circuit type %s successfully created.", carType, circuitType));
         } catch (SQLException e) {
             if ("23505".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the mapping: mapping %s %s already exists.", carType, circuitType), "E300",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EXISTING_RESOURCE;
+                m = new Message(String.format("Cannot create the mapping: mapping %s %s already exists.", carType, circuitType), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(String.format("Cannot create the mapping: mapping %s %s already exists.", carType, circuitType));
             } else if ("23503".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the mapping: car type %s or circuit type %s does not exist.", carType, circuitType), "E400",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.DEPENDENT_RESOURCE;
+                m = new Message(String.format("Cannot create the mapping: car type %s or circuit type %s does not exist.", carType, circuitType), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         String.format("Cannot create the mapping: car type %s or circuit type %s does not exist.", carType, circuitType),
                         e);
             } else if ("23502".equals(e.getSQLState())) {
-                m = new Message("Cannot create the mapping: the circuit type or the car type are null.", "E500",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EMPTY_INPUT_FIELDS;
+                m = new Message("Cannot create the mapping: the circuit type or the car type are null.", err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         "Cannot create the mapping: the circuit type or the car type are null.",
                         e);
             } else {
-                m = new Message("Cannot create the mapping: unexpected error while accessing the database.", "E200",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.CANNOT_CREATE_RESOURCE;
+                m = new Message("Cannot create the mapping: unexpected error while accessing the database.", err.getErrorCode(),
+                        err.getErrorMessage());
 
                 LOGGER.error("Cannot create the mapping: unexpected error while accessing the database.", e);
             }
@@ -778,25 +797,24 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
             LOGGER.info(String.format("Mapping between car type %s and circuit type %s successfully deleted.", carType, circuitType));
         } catch (SQLException e) {
-            if ("23505".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot delete the mapping: mapping %s %s already exists.", carType, circuitType), "E300",
-                        e.getMessage());
-                LOGGER.error(String.format("Cannot delete the mapping: mapping %s %s already exists.", carType, circuitType));
-            } else if ("23503".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot delete the mapping: car type %s or circuit type %s does not exist.", carType, circuitType), "E400",
-                        e.getMessage());
+            if ("23503".equals(e.getSQLState())) {
+                ErrorCode err = ErrorCode.RESOURCE_NOT_FOUND;
+                m = new Message(String.format("Cannot delete the mapping: car type %s or circuit type %s does not exist.", carType, circuitType), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         String.format("Cannot delete the mapping: car type %s or circuit type %s does not exist.", carType, circuitType),
                         e);
             } else if ("23502".equals(e.getSQLState())) {
-                m = new Message("Cannot delete the mapping: the circuit type or the car type are null.", "E500",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EMPTY_INPUT_FIELDS;
+                m = new Message("Cannot delete the mapping: the circuit type or the car type are null.", err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         "Cannot delete the mapping: the circuit type or the car type are null.",
                         e);
             } else {
-                m = new Message("Cannot delete the mapping: unexpected error while accessing the database.", "E200",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.CANNOT_DELETE_RESOURCE;
+                m = new Message("Cannot delete the mapping: unexpected error while accessing the database.", err.getErrorCode(),
+                        err.getErrorMessage());
 
                 LOGGER.error("Cannot delete the mapping: unexpected error while accessing the database.", e);
             }
@@ -856,20 +874,23 @@ public class AdminServlet extends AbstractDatabaseServlet {
 
         } catch (SQLException e) {
             if ("23505".equals(e.getSQLState())) {
-                m = new Message(String.format("Cannot create the %s object: %s %s already exists.", carOrCircuit.getName(), carOrCircuit.getName(), name), "E300",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EXISTING_RESOURCE;
+                m = new Message(String.format("Cannot create the %s object: %s %s already exists.", carOrCircuit.getName(), carOrCircuit.getName(), name), err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         new StringFormattedMessage("Cannot create the %s object: %s %s already exists.", carOrCircuit.getName(), carOrCircuit.getName(), name),
                         e);
             } else if ("23502".equals(e.getSQLState())) {
-                m = new Message("Cannot create the type object: the type name cannot be null.", "E500",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.EMPTY_INPUT_FIELDS;
+                m = new Message("Cannot create the type object: the type name cannot be null.", err.getErrorCode(),
+                        err.getErrorMessage());
                 LOGGER.error(
                         "Cannot create the type object: the type name cannot be null.",
                         e);
             } else {
-                m = new Message("Cannot create the type object: unexpected error while accessing the database.", "E200",
-                        e.getMessage());
+                ErrorCode err = ErrorCode.CANNOT_CREATE_RESOURCE;
+                m = new Message("Cannot create the type object: unexpected error while accessing the database.", err.getErrorCode(),
+                        err.getErrorMessage());
 
                 LOGGER.error("Cannot create the type object: unexpected error while accessing the database.", e);
             }

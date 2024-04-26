@@ -142,15 +142,19 @@ public enum ErrorCode {
     RESOURCE_NOT_FOUND("E5A3", HttpServletResponse.SC_NOT_FOUND,"Resource already exists."),
 
     /**
-     * Cannot modify a resource because other resources depend on it
+     * Cannot modify or create a resource because other resources depend on it
      */
-    DEPENDENT_RESOURCE("E5A4", HttpServletResponse.SC_CONFLICT,"Cannot modify a resource because other resources depend on it."),
+    DEPENDENT_RESOURCE("E5A4", HttpServletResponse.SC_CONFLICT,"Cannot modify or create a resource because other resources depend on it."),
 
     /**
      * Cannot create resource
      */
-    CANNOT_CREATE_RESOURCE("E5A4", HttpServletResponse.SC_INTERNAL_SERVER_ERROR,"Cannot create resource.");
+    CANNOT_CREATE_RESOURCE("E5A5", HttpServletResponse.SC_INTERNAL_SERVER_ERROR,"Cannot create resource."),
 
+    /**
+     * Cannot delete resource
+     */
+    CANNOT_DELETE_RESOURCE("E5A6", HttpServletResponse.SC_INTERNAL_SERVER_ERROR,"Cannot delete resource.");
 
 
 
