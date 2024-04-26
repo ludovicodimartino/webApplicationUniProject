@@ -206,8 +206,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 if (user == null){
                     //if not, tell it to the user
                     ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
-                    res.setStatus(ec.getHTTPCode());
-                    m = new Message("The user does not exist",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                    m = new Message("The user does not exist",ec.getErrorCode(),ec.getErrorMessage());
                     LOGGER.error("problems with user: {}", m.getMessage());
                     req.setAttribute("message", m);
                     req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
@@ -233,16 +232,14 @@ public class UserServlet extends AbstractDatabaseServlet {
                 if (email == null || email.equals("")) {
                     //the email is null (was not set on the parameters) or an empty string
                     //notify this to the user
-                    ErrorCode ec = ErrorCode.EMAIL_MISSING;
-                    res.setStatus(ec.getHTTPCode());
-                    m = new Message("Insert an email",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                    m = new Message("Insert an email",ErrorCode.EMAIL_MISSING.getErrorCode(),ErrorCode.EMAIL_MISSING.getErrorMessage());
                     req.setAttribute("message", m);
                     LOGGER.error("problems with fields: {}", m.getMessage());
 
                 } else if (password == null || password.equals("")) {
                     //the password was empty
                     ErrorCode ec = ErrorCode.PASSWORD_MISSING;
-                    m = new Message("Insert the password",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                    m = new Message("Insert the password",ec.getErrorCode(),ec.getErrorMessage());
                     LOGGER.error("problems with fields: {}", m.getMessage());
                     req.setAttribute("message", m);
                     req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
@@ -250,7 +247,8 @@ public class UserServlet extends AbstractDatabaseServlet {
                 // check password is compliant
                 else if (!password.matches(regex_psw)){
                     ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
-                    m = new Message("This password is not compliant",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+
+                    m = new Message("This password is not compliant",ec.getErrorCode(),ec.getErrorMessage());
 
                     LOGGER.error("problems with fields: {}", m.getMessage());
                     req.setAttribute("message", m);
@@ -261,7 +259,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 else if (!email.matches(regex_email)){
                     ErrorCode ec = ErrorCode.MAIL_NOT_COMPLIANT;
 
-                    m = new Message("This is not an email",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                    m = new Message("This is not an email",ec.getErrorCode(),ec.getErrorMessage());
                     LOGGER.error("problems with fields: {}", m.getMessage());
                     req.setAttribute("message", m);
                     req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
@@ -285,7 +283,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                     if (user == null){
                         //if not, tell it to the user
                         ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
-                        m = new Message("The user does not exist",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                        m = new Message("The user does not exist",ec.getErrorCode(),ec.getErrorMessage());
                         LOGGER.error("problems with user: {}", m.getMessage());
                         req.setAttribute("message", m);
                         req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
@@ -365,7 +363,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                 fieldEmpty = true;
                 ErrorCode ec = ErrorCode.EMPTY_INPUT_FIELDS;
-                m = new Message("Some fields are empty", Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                m = new Message("Some fields are empty", ec.getErrorCode(),ec.getErrorMessage());
                 LOGGER.error("problems with fields: {}", m.getMessage());
                 req.setAttribute("message", m);
                 req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
@@ -373,7 +371,7 @@ public class UserServlet extends AbstractDatabaseServlet {
             // check password is compliant
             else if (!password.matches(regex_psw)) {
                 ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
-                m = new Message("This password is not compliant",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                m = new Message("This password is not compliant",ec.getErrorCode(),ec.getErrorMessage());
 
                 LOGGER.error("problems with fields: {}", m.getMessage());
                 req.setAttribute("message", m);
@@ -384,7 +382,7 @@ public class UserServlet extends AbstractDatabaseServlet {
             else if (!email.matches(regex_email)) {
                 ErrorCode ec = ErrorCode.MAIL_NOT_COMPLIANT;
 
-                m = new Message("This is not an email",Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                m = new Message("This is not an email",ec.getErrorCode(),ec.getErrorMessage());
                 LOGGER.error("problems with fields: {}", m.getMessage());
                 req.setAttribute("message", m);
                 req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
@@ -403,7 +401,7 @@ public class UserServlet extends AbstractDatabaseServlet {
 
                 ErrorCode ec = ErrorCode.MAIL_ALREADY_USED;
                 res.setStatus(ec.getHTTPCode());
-                m = new Message("This user already exists", Integer.toString(ec.getErrorCode()),ec.getErrorMessage());
+                m = new Message("This user already exists", ec.getErrorCode(),ec.getErrorMessage());
                 req.setAttribute("message", m);
                 req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
 

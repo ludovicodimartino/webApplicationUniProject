@@ -283,7 +283,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		String path = req.getRequestURI();
 		Message m = null;
 
-		// the requested resource was not a list of cars
+		// the requested resource was not an order
 		if (path.lastIndexOf("user/order") <= 0) {
 			LOGGER.info("Return false");
 			return false;

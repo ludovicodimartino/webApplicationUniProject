@@ -25,6 +25,7 @@ import java.sql.SQLException;
 /**
  * Provides support for the actual implementation of a DAO object.
  *
+ *
  * <p>
  * {@code AbstractDAO} is designed to achieve the following goals:
  * <ol>
@@ -36,7 +37,7 @@ import java.sql.SQLException;
  * transparently change the underlying DBMS, without the need of modifying their
  * code.
  * </ol>
- * </p>
+ *
  *
  * <p>
  * With respect to the first goal, {@code AbstractDAO}
@@ -68,6 +69,7 @@ import java.sql.SQLException;
  * providing a pre-packed logic for connection and transaction management, that
  * is what {@link AbstractDAO#access()} does.
  * </p>
+ *
  *
  * @param <T> the type of the output parameter returned by the DAO.
  *
