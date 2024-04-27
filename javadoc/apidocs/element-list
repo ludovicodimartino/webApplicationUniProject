@@ -1,0 +1,6 @@
+it.unipd.dei.webapp.wacar.dao
+it.unipd.dei.webapp.wacar.filter
+it.unipd.dei.webapp.wacar.resource
+it.unipd.dei.webapp.wacar.rest
+it.unipd.dei.webapp.wacar.servlet
+it.unipd.dei.webapp.wacar.utils

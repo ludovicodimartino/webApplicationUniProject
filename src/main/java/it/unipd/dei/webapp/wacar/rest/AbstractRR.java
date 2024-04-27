@@ -146,10 +146,10 @@ public abstract class AbstractRR implements RestResource {
     public void serve() throws IOException {
 
         try {
-            // check if there exists a valid authorization header
-            // if it exists, check if the user is of type "USER"
+            // check if the requested resource is protected
+            // if yes, check if the user is authorized to access the requested resource
             // otherwise, prevent to send the response
-            if (!checkIsLoggedIn(req, res)) {
+            if ((req.getRequestURI().contains("rest/user") || req.getRequestURI().contains("rest/admin")) && !checkIsLoggedIn(req, res)) {
                 return;
             }
 

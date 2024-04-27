@@ -83,10 +83,11 @@ public final class GetOrderByIdAndUserEmailRR extends AbstractRR {
 				res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 				m.toJSON(res.getOutputStream());
 			}
-		} catch (EOFException ex) {
-			LOGGER.warn("Cannot find the order: no order JSON object found in the request.", ex);
+		} catch (NumberFormatException ex) {
+			LOGGER.warn("Cannot find the order: wrong format for URI /user/order/{orderId}.", ex);
 
-			m = new Message("Cannot find the order: no order JSON object found in the request.", "E4A8", ex.getMessage());
+			m = new Message("Cannot find the order: wrong format for URI /user/order/{orderId}.", "E4A7",
+					ex.getMessage());
 			res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 			m.toJSON(res.getOutputStream());
 		} catch (SQLException ex) {

@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"it.unipd.dei.webapp.wacar.dao"},{"l":"it.unipd.dei.webapp.wacar.filter"},{"l":"it.unipd.dei.webapp.wacar.resource"},{"l":"it.unipd.dei.webapp.wacar.rest"},{"l":"it.unipd.dei.webapp.wacar.servlet"},{"l":"it.unipd.dei.webapp.wacar.utils"}];updateSearchResults();

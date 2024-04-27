@@ -263,9 +263,9 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		if (path.isEmpty() || path.equals("/")) {
 			LOGGER.info("path /");
 			switch (method) {
-				case "GET":
-					new ListCarsRR(req, res, getConnection()).serve();
-					break;
+//				case "GET":
+//					new ListCarsRR(req, res, getConnection()).serve();
+//					break;
 				default:
 					LOGGER.warn("Unsupported operation for URI /: %s.", method);
 
@@ -289,7 +289,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 				m = new Message(
 						"Wrong format for URI /order/{orderId}: no {orderId} specified.",
 						ErrorCode.WRONG_URI_FORMAT.getErrorCode(),
-						String.format("Requested URI: %s.", req.getRequestURI()));
+						ErrorCode.WRONG_URI_FORMAT.getErrorMessage());
 				res.setStatus(ErrorCode.WRONG_URI_FORMAT.getHTTPCode());
 				m.toJSON(res.getOutputStream());
 			} else {

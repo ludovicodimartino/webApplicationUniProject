@@ -2,101 +2,9 @@
 
 In this section we report all the resources available via the REST API. In particular, we implemented via REST API, all the parts of the web application that allows the final user to look at the cars and the circuits and to make an order (the REST resources have been tested via the curl method).
 
-\subsubsection*{User signup}
-
-The following endpoint allows the user to signup in Wacar by passing the data to be inserted in the database using a JSON file.
-
-\begin{itemize}
-    \item URL: \texttt{/user/signup/}
-    \item Method: \texttt{POST}
-    \item URL Parameters: None
-    \item Data Parameters: \\
-    \textbf{Required}:\\
-    Email= \{String\}\\
-    Name = \{String\}\\
-    Surname = \{String\}\\
-    Address = \{String\}\\
-    Password = \{String\}\\
-    \item Success Response:\\
-    \textbf{Code}: 200\\
-    \textbf{Content}: New user in inserted into the database, login operation is performed and the user is redirected to the homepage\\
-    \item Error Response:\\
-    \textbf{Code}: -101 PASSWORD\_NOT\_COMPLIANT\\
-    \textbf{Content}: {"error":{"code": -101, "message": "Password not compliant."}}\\
-    \textbf{When}: The user is trying to register inserting a non compliant password\\
-    \\
-    \\
-    \textbf{Code}: -102 MAIL\_NOT\_COMPLIANT\\
-    \textbf{Content}: {"error":{"code": -102, "message": "Email not compliant."}}\\
-    \textbf{When}: The user is trying to register inserting a non compliant email\\
-    \\
-    \\
-    \textbf{Code}: -104 EMPTY\_INPUT\_FIELDS\\
-    \textbf{Content}: {"error":{"code": -104, "message": "One or more input fields are empty."}}\\
-    \textbf{When}: The user is trying to register without inseriting one or more mandatory fields\\
-    \\
-    \\
-    \textbf{Code}: -108 MAIL\_ALREADY\_USED\\
-    \textbf{Content}: {"error":{"code": -108, "message": "Email already used."}}\\
-    \textbf{When}: The user is trying to register inserting a email already in the database\\
-    \\
-    \\
-\end{itemize}
-
-
-\subsubsection*{User login}
-
-% the description of the resource
-
-The following endpoint allows the user to login in Wacar
-
-\begin{itemize}
-    \item URL: \texttt{/user/login/}
-    \item Method: \texttt{POST}
-    \item URL Parameters: None
-    \item Data Parameters: \\
-    \textbf{Required}:\\
-    Email= {String}\\
-    Password = {String}\\
-    \item Success Response:\\
-    \textbf{Code}: 200\\
-    \textbf{Content}: Login operation is performed, new session for the user is created and the user is redirected to the homepage\\
-    \item Error Response:\\
-    \textbf{Code}: -101 PASSWORD\_NOT\_COMPLIANT\\
-    \textbf{Content}: {"error":{"code": -101, "message": "Password not compliant."}}\\
-    \textbf{When}: The user is trying to login inserting a non compliant password\\
-    \\
-    \\
-    \textbf{Code}: -102 MAIL\_NOT\_COMPLIANT\\
-    \textbf{Content}: {"error":{"code": -102, "message": "Email not compliant."}}\\
-    \textbf{When}: The user is trying to login inserting a non compliant email\\
-    \\
-    \\
-    \textbf{Code}: -103 USER\_NOT\_EXISTS\\
-    \textbf{Content}: {"error":{"code": -103, "message": "User does not exists."}}\\
-    \textbf{When}: The user is trying to login inserting a email that is not in the database\\
-    \\
-    \\
-    \textbf{Code}: -104 EMPTY\_INPUT\_FIELDS\\
-    \textbf{Content}: {"error":{"code": -104, "message": "One or more input fields are empty."}}\\
-    \textbf{When}: The user is trying to login without inserting one or more mandatory fields\\
-    \\
-    \\
-    \textbf{Code}: -105 EMAIL\_MISSING\\
-    \textbf{Content}: {"error":{"code": -105, "message": "Email missing."}}\\
-    \textbf{When}: The user is trying to login without inserting the email field\\
-    \\
-    \\
-    \textbf{Code}: -106 PASSWORD\_MISSING\\
-    \textbf{Content}: {"error":{"code": -106, "message": "Password missing."}}\\
-    \textbf{When}: The user is trying to login without inserting the password field\\
-    \\
-    \\
-\end{itemize}
-
 \subsection*{List circuits}
 
-The following endpoint allows to list all the circuits (and returns a JSON).
+The following endpoint allows to list all the circuits (and returns a JSON). For this first part of the project, to see the JSON output it is necessary to use the command "\textit{curl http://localhost:8081/wacar/rest/circuit}" from the prompt, because currently the "application/json" media type is not supported. In this way, you can still check the first version of the page implemented with a servlet, while in the next part of the project we will complete the REST version.
 
 \begin{itemize}
     \item URL: \texttt{/rest/circuit}
@@ -132,7 +40,7 @@ The following endpoint allows to list all the circuits (and returns a JSON).
 
 \subsection*{List cars}
 
-The following endpoint allows to list all the cars (and returns a JSON).
+The following endpoint allows to list all the cars (and returns a JSON). As for the list car REST api, to see the JSON output it is necessary to use the command "\textit{curl http://localhost:8081/wacar/rest/cars}"
 
 \begin{itemize}
     \item URL: \texttt{/rest/cars}
@@ -168,7 +76,7 @@ The following endpoint allows to list all the cars (and returns a JSON).
 
 \subsection*{Read order}
 
-The following endpoint allows to retrieve a specific order given the id (and returns a JSON).
+The following endpoint allows to retrieve a specific order given the id (and returns a JSON). To get the JSON of the order, you have to send an authorization token BASIC in the format user-email:password in Base64.
 
 \begin{itemize}
 	\item URL: \texttt{/rest/user/order/\{orderId\}}
@@ -178,7 +86,7 @@ The following endpoint allows to retrieve a specific order given the id (and ret
 	\item Data parameters: \texttt{None}
 	\item Success Response: \\
 	\textbf{Code}: 200\\
-	\textbf{Content}: The JSON corresponding to the order:
+	\textbf{Content}: The JSON corresponding to the order (the tested URI is: rest/user/order/1):
 	\\\begin{verbatim}
 	{
 		"order":{
@@ -195,6 +103,17 @@ The following endpoint allows to retrieve a specific order given the id (and ret
 	}
 	\end{verbatim}
 
+	\item Error Response:\\
+	\textbf{Code}: 400 (internal code: E4A7)\\
+	\textbf{Content}: The message containing the error (wrong URI format)\\
+	\begin{verbatim}
+		{
+			"message": {
+				"message": "Wrong format for URI /order/{orderId}: no {orderId} specified.",
+				"error-code": "E4A7",
+				”error-detail”: ”exception content”
+		}}
+	\end{verbatim}
 	\item Error Response:\\
 	\textbf{Code}: 401 (internal code: E4B3)\\
 	\textbf{Content}: No authorization header sent by the client\\
@@ -222,17 +141,6 @@ The following endpoint allows to retrieve a specific order given the id (and ret
 		{
 			"message": {
 				"message": "Cannot retrieve the order: unexpected error.",
-				"error-code": "E5A1",
-				”error-detail”: ”exception content”
-		}}
-	\end{verbatim}
-	\item Error Response:\\
-	\textbf{Code}: 500 (internal code: E5A1)\\
-	\textbf{Content}: The message containing the error (server error when retrieving the circuits)\\
-	\begin{verbatim}
-		{
-			"message": {
-				"message": "Unable to serve the REST request.",
 				"error-code": "E5A1",
 				”error-detail”: ”exception content”
 		}}

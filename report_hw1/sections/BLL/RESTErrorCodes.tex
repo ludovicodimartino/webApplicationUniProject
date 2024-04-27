@@ -10,6 +10,12 @@ Each entry in the table outlines a unique error scenario, helping streamline the
 \begin{longtable}{|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{4cm}|>{\raggedright\arraybackslash}p{6cm}|} % Specify column format with left-aligned text
 \hline
 \textbf{Error Code} & \textbf{HTTP Status Code} & \textbf{Description} \\\hline
+E1A1 & 400 (Bad Request) & Password not compliant. \\\hline
+E1A2 & 400 (Bad Request) & Email not compliant. \\\hline
+E1A3 & 400 (Bad Request) & User does not exists. \\\hline
+E1A5 & 400 (Bad Request) & Email missing. \\\hline
+E1A6 & 400 (Bad Request) & Password missing. \\\hline
+E1A8 & 409 (Conflict) & Email already used. \\\hline
 E4A1 & 400 (Bad Request) & Output media type not specified. \\\hline
 E4A2 & 406 (Not Acceptable) & Unsupported output media type \\\hline
 E4A3 & 400 (Bad Request) & Input media type not specified. \\\hline
