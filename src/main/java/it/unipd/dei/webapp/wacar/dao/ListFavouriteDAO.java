@@ -20,7 +20,7 @@ import java.util.List;
  * @author Alessandro Leonardi (alessandro.leonardi@studenti.unipd.it)
  */
 public class ListFavouriteDAO extends AbstractDAO{
-    private static final String LIST_FAVOURITE = "SELECT * FROM assessment.favourite where email=?;";
+    private static final String LIST_FAVOURITE = "SELECT * FROM assessment.favourite where account=?;";
     private final String email;
 
     /**
