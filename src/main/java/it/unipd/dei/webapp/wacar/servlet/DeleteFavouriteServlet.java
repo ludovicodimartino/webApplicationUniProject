@@ -90,8 +90,8 @@ public class DeleteFavouriteServlet extends AbstractDatabaseServlet{
             LogContext.removeIPAddress();
             LogContext.removeAction();
             LogContext.removeResource();
-            // Forward to another JSP or servlet if needed
-            req.getRequestDispatcher("/user/list-favourite.jsp").forward(req, res);
+            // Redirect to home
+            res.sendRedirect("/wacar/");
         }
     }
 }

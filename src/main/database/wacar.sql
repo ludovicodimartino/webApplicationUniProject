@@ -257,7 +257,7 @@ ALTER TABLE assessment.favourite OWNER TO wacaruser;
 --
 
 CREATE TABLE assessment."order" (
-    id integer NOT NULL,
+    id serial NOT NULL,
     account text NOT NULL,
     date date NOT NULL,
     "carBrand" character varying(100) NOT NULL,
@@ -270,20 +270,6 @@ CREATE TABLE assessment."order" (
 
 
 ALTER TABLE assessment."order" OWNER TO wacaruser;
-
-
---
--- Name: order_id_seq; Type: SEQUENCE; Schema: assessment; Owner: wacaruser
---
-
-ALTER TABLE assessment."order" ALTER COLUMN id ADD GENERATED ALWAYS AS IDENTITY (
-    SEQUENCE NAME assessment.order_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    MAXVALUE 1000000000
-    CACHE 1
-);
 
 
 --
@@ -340,13 +326,6 @@ COPY assessment."circuitType" (name) FROM stdin;
 
 COPY assessment.favourite (circuit, "carBrand", "carModel", "createdAt", account) FROM stdin;
 \.
-
-
---
--- Name: order_id_seq; Type: SEQUENCE SET; Schema: assessment; Owner: wacaruser
---
-
-SELECT pg_catalog.setval('assessment.order_id_seq', 1, false);
 
 
 --

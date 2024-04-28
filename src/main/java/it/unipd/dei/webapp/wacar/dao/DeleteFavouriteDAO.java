@@ -19,7 +19,7 @@ import java.util.logging.Logger;
  * @author Alessandro Leonardi (alessandro.leonardi@studenti.unipd.it)
  */
 public class DeleteFavouriteDAO extends AbstractDAO{
-    private static final String DELETE_FAVOURITE = "DELETE FROM assessment.favourite WHERE circuit = ?, account = ?, carModel = ?, carBrand = ?;";
+    private static final String DELETE_FAVOURITE = "DELETE FROM assessment.\"favourite\" WHERE circuit = ? AND account = ? AND \"carModel\" = ? AND \"carBrand\" = ?;";
     private String circuit;
     private String account;
     private String carModel;

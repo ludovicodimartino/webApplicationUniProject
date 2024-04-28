@@ -15,7 +15,7 @@ import java.sql.SQLException;
  * @since 1.00
  */
 public class InsertOrderDAO extends AbstractDAO<Order> {
-    private static final String WITHOUT_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (default, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING id;";
+    private static final String WITHOUT_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id;";
     private static final String WITH_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
     private static final String ORDER_DELETE_STATEMENT = "DELETE FROM assessment.\"order\" WHERE id = ?;";
     private final Order order;
