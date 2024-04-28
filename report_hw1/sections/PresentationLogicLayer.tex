@@ -2,7 +2,7 @@
 
 %What pages will be present in your project? briefly indicate how your web site will be organized
 
-WaCar web application is subdivided into two main areas: the admin area and the registered user. The areas are accessible through the login page, where, by inserting a valid combination of email and password, people can access as an admin or a user, depending on the role associated with the email in the database. Below are listed the pages that are going to be developed in WaCar for the users.
+As previously mentioned, WaCar web application is subdivided into two main areas: the admin area and the registered user area. The areas are accessible through the login page, where, by inserting a valid combination of email and password, people can access as an admin or a user, depending on the role associated with the email in the database. Below are listed the pages that are going to be developed in WaCar for the users.
 \begin{itemize}
     \item Homepage: the initial page presented when connecting to the website. On this page login is not needed and not registered user can see the list or cars and circuit or eventually sign up to the website via the corrispondent page;
     \item Login: the page is used by registered admin/users to login
@@ -44,7 +44,7 @@ As it concerns the admin, the following pages have been developed:
 	\end{subfigure}
 \end{figure}
 
-In the \texttt{Sign Up} page, Fig. \ref{fig:signup}, users input their information to create a new account and access to new functionalities. The required information for the registration are email, password, name, surname, and address. The password must meet certain criteria including a minimum of 8 characters, at least one number, and at least one uppercase letter. Upon clicking "Sign up" the user's credentials are added to the database and users are redirected to the homepage. If the provided credentials do not meet the required criteria an error message is displayed to the user. The login process mirrors the sign up process, but only requires the user to input their email and password and upon clicking "Login" a search is conducted in the database, Fig. \ref{fig:signin}. If the provided email exists and the user's password matches the encrypted password stored in the database, the login operation is executed, otherwise the user is informed that email or password are incorrect.
+In the \texttt{Sign Up} page, Fig. \ref{fig:signup}, users input their information to create a new account and access to new functionalities. The required information for the registration are email, password, name, surname, and address. The password must meet certain criteria including a minimum of 8 characters, at least one number, and at least one uppercase letter. Upon clicking "Sign up" the user's credentials are added to the database and users are redirected to the homepage. If the provided credentials do not meet the required criteria an error message is displayed to the user. The login process mirrors the sign up process, but only requires the user to input their email and password and, upon clicking "Login", a search is conducted in the database Fig. \ref{fig:signin}. If the provided email exists and the user's password matches the encrypted password stored in the database, the login operation is executed, otherwise the user is informed that email or password are incorrect.
 
 \subsection{Homepage}
 

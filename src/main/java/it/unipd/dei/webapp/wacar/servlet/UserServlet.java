@@ -74,6 +74,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                 break;
             case "logout/":
                 // logout and return to homepage
+                LogContext.setAction("LOGOUT");
                 logoutOperations(req, res);
                 break;
             case "updateAccount/":
@@ -97,9 +98,11 @@ public class UserServlet extends AbstractDatabaseServlet {
                 break;
 
             default:
-                Message m = new Message("Insert an email",ErrorCode.RESOURCE_NOT_FOUND.getErrorCode(),ErrorCode.RESOURCE_NOT_FOUND.getErrorMessage());
+                ErrorCode err = ErrorCode.UNSUPPORTED_OPERATION;
+                Message m = new Message("he operation required it's not supported",err.getErrorCode(),err.getErrorMessage());
                 req.setAttribute("message", m);
-                LOGGER.error("problems with fields: {}", m.getMessage());
+                LOGGER.warn("Unsupported operation. {}", m.getMessage());
+                res.setStatus(err.getHTTPCode());
         }
 
 

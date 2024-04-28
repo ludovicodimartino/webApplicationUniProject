@@ -29,7 +29,7 @@
             <form action="/wacar/user/listOrdersByAccount" method="get">
                 <button type="submit">Order list</button>
             </form>
-            <form action="/jsp/recap-favourite.jsp" method="get">
+            <form action="/wacar/user/list-favourite" method="get">
                 <button type="submit">Favourite list</button>
             </form>
         </c:if>

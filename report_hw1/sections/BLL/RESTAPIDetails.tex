@@ -13,8 +13,42 @@ The following endpoint allows to list all the circuits (and returns a JSON). For
     \item Data parameters: \texttt{None}
     \item Success Response: \\
         \textbf{Code}: 200\\
-        \textbf{Content}: The JSON corresponding to the list of circuits
-        \texttt{INSERT JSON}
+        \textbf{Content}: The JSON corresponding to the list of circuits (the tested URI is: rest/circuit):
+	\\\begin{verbatim}
+		{
+			"resource-list": [
+			  {
+				"circuit": {
+				  "name": "Autodromo Nazionale Monza",
+				  "type": "straights",
+				  "length": 5793,
+				  "corners number": 11,
+				  "address": "Viale di Vedano, 5, 20900 Monza MB",
+				  "description": "Ci sono molte rette",
+				  "lap price": 20,
+				  "available": true,
+				  "imageMediaType": "jpg"
+				}
+			  },
+			  {
+				"circuit": {
+				  "name": "Autodromo Vallelunga",
+				  "type": "tourism",
+				  "length": 4085,
+				  "corners number": 15,
+				  "address": "Via della Mola Maggiorana, 4, 00063 Campagnano di Roma RM",
+				  "description": "Alcune descrizioni.",
+				  "lap price": 12,
+				  "available": true,
+				  "imageMediaType": "jpg"
+				}
+			  },
+			  ...
+			]
+		  }
+		  
+	\end{verbatim}
+		
     \item Error Response:\\
     \textbf{Code}: 500 (internal code: E5A1)\\
     \textbf{Content}: The message containing the error (server error when retrieving the circuits)\\
@@ -49,8 +83,42 @@ The following endpoint allows to list all the cars (and returns a JSON). As for 
     \item Data parameters: \texttt{None}
     \item Success Response: \\
     \textbf{Code}: 200\\
-    \textbf{Content}: The JSON corresponding to the list of cars
-    \texttt{INSERT JSON}
+    \textbf{Content}: The JSON corresponding to the list of cars (the tested URI is: rest/cars):
+    \\\begin{verbatim}
+		{
+  "resource-list": [
+    {
+      "circuit": {
+        "name": "Autodromo Nazionale Monza",
+        "type": "straights",
+        "length": 5793,
+        "corners number": 11,
+        "address": "Viale di Vedano, 5, 20900 Monza MB",
+        "description": "Ci sono molte rette",
+        "lap price": 20,
+        "available": true,
+        "imageMediaType": "jpg"
+      }
+    },
+    {
+      "circuit": {
+        "name": "Autodromo Vallelunga",
+        "type": "tourism",
+        "length": 4085,
+        "corners number": 15,
+        "address": "Via della Mola Maggiorana, 4, 00063 Campagnano di Roma RM",
+        "description": "Alcune descrizioni.",
+        "lap price": 12,
+        "available": true,
+        "imageMediaType": "jpg"
+      }
+    },
+    ...
+  ]
+}
+
+		  
+	\end{verbatim}
     \item Error Response:\\
     \textbf{Code}: 500 (internal code: E5A1)\\
     \textbf{Content}: The message containing the error (server error when retrieving the cars)\\

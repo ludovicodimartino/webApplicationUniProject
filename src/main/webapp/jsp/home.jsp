@@ -114,7 +114,7 @@
                 </c:when>
             </c:choose>
             <!-- Logout -->
-            <form method="GET" action="/wacar/logout/">
+            <form method="POST" action="/wacar/logout/">
                 <button type="submit">Logout</button>
             </form>
         </c:when>
