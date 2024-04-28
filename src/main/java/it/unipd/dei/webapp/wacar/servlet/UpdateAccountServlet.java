@@ -1,5 +1,7 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+
+import com.oracle.wls.shaded.org.apache.xalan.xsltc.compiler.util.ErrorMsg;
 import it.unipd.dei.webapp.wacar.dao.UpdateAccountDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
 import jakarta.servlet.ServletException;
@@ -30,7 +32,7 @@ public class UpdateAccountServlet extends AbstractDatabaseServlet{
      * @throws ServletException if any problem occurs while executing the servlet.
      * @throws IOException if any error occurs in the client/server communication.
      */
- @Override
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
         LogContext.setAction(Actions.UPDATE_ACCOUNT);
@@ -43,25 +45,28 @@ public class UpdateAccountServlet extends AbstractDatabaseServlet{
         }
         User user = (User) session.getAttribute("account");
         LOGGER.info(String.format("Authorized access by %s for updating the account.", user.getEmail()));
-     Message m = null;
-     String password= null;
-     String address = null;
-     User updatedUser = null;
+        Message m = null;
+        String password= null;
+        String address = null;
+        User updatedUser = null;
         try {
             password = request.getParameter("password");
             address = request.getParameter("address");
             // Create a User object with the updated information
             updatedUser = new User(user.getEmail(), password, address);
         }catch (Exception e) {
-            LOGGER.error("Invalid request");
+            LOGGER.error("Invalid request: %s", e.getMessage());
         }
-     try {
-         new UpdateAccountDAO(getConnection(), updatedUser).access().getOutputParam();
-     } catch (SQLException e) {
-         LOGGER.error("Unable to update the account " + e.getMessage());
-         }
+        try {
+            new UpdateAccountDAO(getConnection(), updatedUser).access().getOutputParam();
+        } catch (SQLException e) {
+            String errorMsg = e.getMessage().substring(e.getMessage().indexOf(":") + 2, e.getMessage().indexOf(" Where:"));
+            m = new Message("Unable to update the user's information", "E5A1", e.getMessage());
+            request.setAttribute("message", m);
+            LOGGER.error("Unable to update the user's information", errorMsg);
+        }
 
 
-     }
+    }
 
 }

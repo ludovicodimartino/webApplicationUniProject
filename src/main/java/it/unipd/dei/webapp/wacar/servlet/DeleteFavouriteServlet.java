@@ -7,6 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.apache.logging.log4j.message.StringFormattedMessage;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -42,6 +43,9 @@ public class DeleteFavouriteServlet extends AbstractDatabaseServlet{
         LogContext.setIPAddress(req.getRemoteAddr());
         LogContext.setResource(req.getRequestURI());
         LogContext.setAction(Actions.DELETE_FAVOURITE);
+        Message m;
+        Favourite favouriteToDelete = null;
+        DeleteFavouriteDAO dao = null;
 
         HttpSession session = req.getSession();
         if (session == null) {
@@ -52,20 +56,20 @@ public class DeleteFavouriteServlet extends AbstractDatabaseServlet{
         }
 
         User user = (User) session.getAttribute("account");
-        if (user == null) {
-            LOGGER.error("No user in session. User cannot delete the Favourite");
+        try{
+            String circuitName = req.getParameter("circuitName");
+            String carBrand = req.getParameter("carBrand");
+            String carModel = req.getParameter("carModel");
+            favouriteToDelete = new Favourite(circuitName, carBrand, carModel, user.getEmail());
+        }
+        catch(Exception ex)
+        {
+            LOGGER.error(new StringFormattedMessage("No user in session. User cannot delete the Favourite"));
+            LogContext.setUser("NOT_LOGGED");
             LogContext.removeIPAddress();
             LogContext.removeAction();
-            throw new ServletException("No user in session. User cannot delete the favourite.");
         }
 
-        String circuitName = req.getParameter("circuitName");
-        String carBrand = req.getParameter("carBrand");
-        String carModel = req.getParameter("carModel");
-
-        Favourite favouriteToDelete = new Favourite(circuitName, carBrand, carModel, user.getEmail());
-
-        DeleteFavouriteDAO dao = null;
         try {
             dao = new DeleteFavouriteDAO(getConnection(), favouriteToDelete);
             dao.access(); // This should delete the favourite
@@ -78,6 +82,7 @@ public class DeleteFavouriteServlet extends AbstractDatabaseServlet{
             req.setAttribute("message", new Message("Favorite has been deleted successfully"));
 
         } catch (SQLException ex) {
+            m= new Message("Error while deleting the favourite ", "E5A6", ex.getMessage());
             LOGGER.error("Error deleting favourite", ex);
             // Set an error message
             req.setAttribute("message", new Message("Error deleting favourite. Please try again later."));

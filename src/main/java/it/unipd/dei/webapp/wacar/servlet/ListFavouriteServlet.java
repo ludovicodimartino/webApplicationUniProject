@@ -58,7 +58,7 @@ public class ListFavouriteServlet extends AbstractDatabaseServlet{
             m = new Message("Favourites have been retrieved");
             LOGGER.info("All favourites have been retrieved");
         } catch (SQLException ex) {
-            m = new Message("Unexpected error while searching for favourites in database");
+            m = new Message("Unexpected error while searching for favourites in database. ","E5A1",ex.getMessage());
             LOGGER.error("Unexpected error while searching for favourites in database. ", ex);
         } finally {
             LogContext.removeIPAddress();
