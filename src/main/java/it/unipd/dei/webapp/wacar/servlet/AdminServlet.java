@@ -35,10 +35,16 @@ import org.apache.logging.log4j.message.StringFormattedMessage;
 public class AdminServlet extends AbstractDatabaseServlet {
 
     /**
-     * Handles the HTTP GET request of the admin, that are:
+     * Handles the HTTP GET request of the admin, that are sent to retrieve the following pages:
      * <pre>
-     *  - insertCar page
-     *  - insertCircuit page
+     *  - insertCar
+     *  - insertCircuit
+     *  - insertMapping
+     *  - edit car
+     *  - edit circuit
+     *  - insert car type
+     *  - insert circuit type
+     *  - admin-info
      *  </pre>
      *
      * @param req the {@code HttpServletRequest} incoming request from the client
@@ -277,12 +283,12 @@ public class AdminServlet extends AbstractDatabaseServlet {
      * <pre>
      *  - insertCar
      *  - insertCircuit
-     *  - addCircuitType
-     *  - addCarType
-     *  - modifyCar
-     *  - modifyCircuit
-     *  - makeCarUnavailable
-     *  - makeCircuitUnavailable
+     *  - insertMapping
+     *  - deleteMapping
+     *  - insertCircuitType
+     *  - insertCarType
+     *  - editCar
+     *  - editCircuit
      *  </pre>
      *
      * @param req the {@code HttpServletRequest} incoming request from the client

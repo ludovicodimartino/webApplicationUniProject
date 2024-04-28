@@ -21,3 +21,12 @@ The application is set up to run on Docker. To run it follow these steps:
     ```
 
 The web application should now be accessible at [http://localhost:8081/wacar](http://localhost:8081/wacar). 
+
+## Default accounts credentials _for testing purpose_
+### ADMIN
+- e-mail: admin@example.com
+- password: Admin123
+
+### USER
+- e-mail: default@example.com
+- password: Default123

@@ -20,6 +20,6 @@ Three of the operations handled by the UserServlet are: user login, retrieval of
 
 \textbf{CarListServlet}: Handles requests related to retrieving the list of cars from the database and displaying them on a web page. It extends \texttt{AbstractDatabaseServlet} and implements the \texttt{doGet} method. The servlet retrieves the list of cars using \texttt{ListCarDAO} and forwards the request to the JSP page for rendering. \texttt{ListCarDAO} manages the data access for retrieving the list of cars from the database selecting all cars and constructs \texttt{Car} objects from the result set.
 
-\textbf{AdminServlet}: Manages admin operations, such as inserting cars and circuits. The \texttt{InsertCarDAO} class is used for inserting a new car record into the database. It prepares the SQL statement to insert a new car and executes it with the provided \texttt{Car} object.\\
+\textbf{AdminServlet}: Manages admin operations, such as inserting cars and circuits, edit them, inserting new car and circuit types and managing the mapping between type of cars and type of circuits. It implements the \texttt{doGet} and \texttt{doPost} methods to manage HTTP requests.\\
 
 Each DAO class extends the AbstractDAO class, which manages interactions with the database, and defines the doAccess() method. The Message resource plays a crucial role in conveying messages to the end user, such as errors encountered while handling resources. All resources (message, user, order) are Java classes, each equipped with its constructors and methods for accessing the resource.
