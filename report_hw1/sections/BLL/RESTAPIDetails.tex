@@ -88,34 +88,38 @@ The following endpoint allows to list all the cars (and returns a JSON). As for 
 		{
   "resource-list": [
     {
-      "circuit": {
-        "name": "Autodromo Nazionale Monza",
-        "type": "straights",
-        "length": 5793,
-        "corners number": 11,
-        "address": "Viale di Vedano, 5, 20900 Monza MB",
-        "description": "Ci sono molte rette",
-        "lap price": 20,
+      "car": {
+        "brand": "Maserati",
+        "model": "GranTurismo Trofeo",
+        "description": "Il GranTurismo porta l'innovazione della pista sulla strada
+		 per prestazioni senza precedenti.",
+        "max speed": 320,
+        "horsepower": 550,
+        "0-100": 3.0,
         "available": true,
+        "type": "performance",
         "imageMediaType": "jpg"
       }
     },
     {
-      "circuit": {
-        "name": "Autodromo Vallelunga",
-        "type": "tourism",
-        "length": 4085,
-        "corners number": 15,
-        "address": "Via della Mola Maggiorana, 4, 00063 Campagnano di Roma RM",
-        "description": "Alcune descrizioni.",
-        "lap price": 12,
+      "car": {
+        "brand": "Lamborghini",
+        "model": "Huracan Tecnica",
+        "description": "Combina la massima espressione della potenza Lamborghini con
+		 il raffinamento esclusivo della manualità italiana, questa serie incarna un 
+		 design autentico e una tecnologia meccanica all'avanguardia.",
+        "max speed": 325,
+        "horsepower": 640,
+        "0-100": 3.0,
         "available": true,
+        "type": "supercar",
         "imageMediaType": "jpg"
       }
     },
-    ...
+	...
   ]
 }
+
 
 		  
 	\end{verbatim}

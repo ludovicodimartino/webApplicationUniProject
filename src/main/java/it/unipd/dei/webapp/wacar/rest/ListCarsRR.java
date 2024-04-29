@@ -1,8 +1,8 @@
 package it.unipd.dei.webapp.wacar.rest;
 
-import it.unipd.dei.webapp.wacar.dao.ListCircuitDAO;
+import it.unipd.dei.webapp.wacar.dao.ListCarDAO;
 import it.unipd.dei.webapp.wacar.resource.Actions;
-import it.unipd.dei.webapp.wacar.resource.Circuit;
+import it.unipd.dei.webapp.wacar.resource.Car;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.ResourceList;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
@@ -12,11 +12,10 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A REST resource for listing {@link it.unipd.dei.webapp.wacar.resource.Circuit}(s)
+ * A REST resource for listing {@link it.unipd.dei.webapp.wacar.resource.Car}(s)
  *
  * @author Michele Scapinello (michele.scapinello@studenti.unipd.it)
  * @version 1.00
@@ -25,14 +24,14 @@ import java.util.List;
 public class ListCarsRR extends AbstractRR {
 
     /**
-     * Creates a new REST resource for listing {@code Circuit}(s).
+     * Creates a new REST resource for listing {@code Cars}(s).
      *
      * @param req the HTTP request.
      * @param res the HTTP response.
      * @param con the connection to the database.
      */
     public ListCarsRR(final HttpServletRequest req, HttpServletResponse res, Connection con) {
-        super(Actions.GET_ALL_CIRCUITS, req, res, con);
+        super(Actions.GET_ALL_CARS, req, res, con);
     }
 
     /**
@@ -46,15 +45,15 @@ public class ListCarsRR extends AbstractRR {
     @Override
     protected void doServe() throws IOException {
         Message m = null;
-        List<Circuit> cars = null;
+        List<Car> cars = null;
         try {
 
-            // creates a new DAO for accessing the database and lists the circuits
-            cars = new ListCircuitDAO(con).access().getOutputParam();
+            // creates a new DAO for accessing the database and lists the cars
+            cars = new ListCarDAO(con).access().getOutputParam();
 
             if (cars != null) {
                 LOGGER.info("Car(s) successfully listed.");
-                LOGGER.info(cars.getFirst().getName());
+                LOGGER.info(cars.getFirst().getModel());
 
                 res.setStatus(HttpServletResponse.SC_OK);
                 new ResourceList<>(cars).toJSON(res.getOutputStream());
