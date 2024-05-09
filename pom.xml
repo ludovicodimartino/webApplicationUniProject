@@ -16,15 +16,37 @@
     </properties>
 
     <name>WaCar</name>
-    <description>App description</description>
+    <description>Book your car racing sessions across different tracks in Italy.</description>
+    <url>https://bitbucket.org/upd-dei-stud-prj/wa2324-wacar/</url>
     <inceptionYear>2023</inceptionYear>
+
     <developers>
         <developer>
-            <id>wc</id>
-            <name>WaCar</name>
-            <email></email>
-            <url></url>
+            <id>ldm</id>
+            <name>Ludovico Di Martino</name>
+            <email>ludovico.dimartino@studenti.unipd.it</email>
         </developer>
+        <developer>
+            <id>fg</id>
+            <name>Filippo Galli</name>
+            <email></email>
+        </developer>
+        <developer>
+            <id>al</id>
+            <name>Alessandro Leonardi</name>
+            <email></email>
+        </developer>
+        <developer>
+            <id>mr</id>
+            <name>Manuel Rigobello</name>
+            <email></email>
+        </developer>
+        <developer>
+            <id>ms</id>
+            <name>Michele Scapinello</name>
+            <email></email>
+        </developer>
+
     </developers>
     <licenses>
         <license>
@@ -35,7 +57,7 @@
     </licenses>
     <organization>
         <name>Department of Information Engineering (DEI), University of Padua, Italy</name>
-        <url>http://www.dei.unipd.it/en/</url>
+        <url>https://www.dei.unipd.it/en/</url>
     </organization>
     <!-- Configuration of the default build lifecycle -->
     <build>
