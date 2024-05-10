@@ -49,6 +49,11 @@ public class ListFavouriteServlet extends AbstractDatabaseServlet{
         LOGGER.info("op GET {}", op);
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute("account");
+        boolean isUserLogged = user!=null;
+
+        if (isUserLogged) {
+            req.setAttribute("accountType", user.getType());
+        }
 
         Message m = null;
         List<Favourite> favouritesList = null;

@@ -1,4 +1,4 @@
-<%@ page import="it.unipd.dei.webapp.wacar.resource.Car" %>
+<%@ page import="it.unipd.dei.webapp.wacar.resource.Circuit" %>
 <%@ page import="java.util.List" %>
 <!-- displayCircuits.jsp -->
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
@@ -9,176 +9,47 @@
 <head>
     <meta charset="UTF-8">
     <title>List of Circuits</title>
-    <style>
-        .circuit-container {
-            cursor: pointer;
-            display: inline-block; /* Display divs in a row */
-            vertical-align: top; /* Align divs to the top */
-            margin: 20px;
-        }
-
-        .circuit-card {
-            border-radius: 10px;
-            width: 350px;
-            background-color: lightgrey;
-            padding: 15px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-        }
-
-        .circuit-card img {
-            height: 70%;
-            width: 100%;
-            object-fit: cover;
-            object-position: center;
-            border-radius: 10px;
-        }
-
-        .circuit-card h1 {
-            font-size: 20px;
-            margin-top: auto;
-            margin-bottom: 5px;
-        }
-
-        .circuit-card h5 {
-            font-size: 15px;
-            color: grey;
-            margin-top: 3px;
-            margin-bottom: 10px;
-        }
-
-        .additional-info {
-            display: none;
-            background-color: white;
-            border: 1px solid lightgrey;
-            padding: 10px;
-            border-radius: 5px;
-            z-index: 1;
-        }
-
-        .circuit-container:hover .circuit-card {
-            transform: scale(1.1);
-        }
-
-        .circuit-container:hover .additional-info {
-            display: block;
-        }
-
-        .circuit-container:hover {
-            height: auto; /* Expand the height to fit the additional-info */
-        }
-
-        .navbar {
-            background-color: red;
-            color: white;
-            padding: 10px 20px; /* Add padding for spacing */
-            display: flex;
-            justify-content: space-around; /* Arrange links evenly */
-            align-items: center; /* Align links vertically */
-        }
-
-        .navbar a {
-            text-decoration: none; /* Remove underline from links */
-            color: white; /* Set link color */
-            font-weight: bold; /* Make text bold */
-            transition: color 0.3s ease; /* Add transition effect */
-        }
-
-        .navbar a:hover {
-            color: lightgrey; /* Change text color on hover */
-        }
-
-    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list.css">
 </head>
 <body>
-<c:choose>
-    <c:when test="${not empty accountType}">
-        <c:choose>
-            <c:when test="${accountType eq 'USER'}">
-                <div class="navbar">
-                    <a href="/wacar/">Home</a>
-                    <a href="/wacar/car_list/">Car List</a>
-                    <a href="/wacar/user/listOrdersByAccount">Orders</a>
-                    <a href="/wacar/user/user-info">Account</a>
-                    <!-- Add more links as needed -->
-                </div>
-            </c:when>
-            <c:when test="${accountType eq 'ADMIN'}">
-                <div class="navbar">
-                    <a href="/wacar/">Home</a>
-                    <a href="/wacar/car_list/">Car List</a>
-                    <a href="/wacar/admin/insertCar/">Insert new Car</a>
-                    <a href="/wacar/admin/insertCircuit/">Insert new Circuit</a>
-                    <a href="/wacar/admin/insertMapping/">Insert new Mapping</a>
-                    <a href="/wacar/admin/admin-info">Account</a>
-                </div>
-            </c:when>
-        </c:choose>
-    </c:when>
-    <c:when test="${empty accountType}">
-        <div class="navbar">
-            <a href="/wacar/">Home</a>
-            <a href="/wacar/car_list/">Car List</a>
-            <!-- Add more links as needed -->
-        </div>
-    </c:when>
-</c:choose>
+<%@ include file="toolbar.jsp" %>
+
 <c:if test="${not empty circuits}">
-    <c:forEach var="circuit" items="${circuits}">
-        <div class="circuit-container">
-            <div class="circuit-card">
-                <img src="<c:url value='/loadCircuitImage'><c:param name='name' value='${circuit.name}'/></c:url>"
-                     alt="circuit image"/>
-                <h1><c:out value="${circuit.name}"/></h1>
-                <h5><c:out value="${circuit.type}"/></h5>
-                <c:choose>
-                    <c:when test="${accountType eq 'ADMIN'}">
-                        <tr>
-                            <td>
-                                <a href="/wacar/admin/editCircuit/?name=${circuit.name}" class="btn link" type="button">
-                                    Modify
-                                </a>
-                            </td>
-                        </tr>
-                    </c:when>
-                    <c:otherwise>
-                        <!-- Handle other cases if needed -->
-                    </c:otherwise>
-                </c:choose>
-                <div class="additional-info">
-                    <table>
-                        <tr>
-                            <td>Address:</td>
-                            <td><c:out value="${circuit.address}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Length:</td>
-                            <td><c:out value="${circuit.length}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Corners:</td>
-                            <td><c:out value="${circuit.cornersNumber}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Description:</td>
-                            <td><c:out value="${circuit.description}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Price per lap:</td>
-                            <td><c:out value="${circuit.lapPrice}"/></td>
-                        </tr>
-                        <tr>
-                            <td>Available:</td>
-                            <td><c:out value="${circuit.available}"/></td>
-                        </tr>
-                    </table>
+    <div class="outer-container">
+        <c:forEach var="circuit" items="${circuits}" varStatus="loop">
+            <div class="item-container">
+                <div class="card position-relative" data-toggle="modal" data-target="#circuitModal${loop.index}">
+                    <img src="<c:url value='/loadCircuitImage'><c:param name='name' value='${circuit.name}'/></c:url>" class="card-img-top" alt="circuit image">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-2 text-muted">${circuit.name}</h6>
+                    </div>
+                </div>
+                <!-- Opened circuit card -->
+                <div class="modal fade" id="circuitModal${loop.index}" tabindex="-1" role="dialog" aria-labelledby="circuitModalLabel${loop.index}" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="circuitModalLabel${loop.index}">${circuit.name}</h5>
+                                <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <img src="<c:url value='/loadCircuitImage'><c:param name='name' value='${circuit.name}'/></c:url>" class="card-img-top" alt="circuit image">
+                                <p>${circuit.description}</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </c:forEach>
+        </c:forEach>
+    </div>
 </c:if>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://kit.fontawesome.com/a076d05399.js"></script> <!-- Font Awesome for icons -->
 </body>
 </html>

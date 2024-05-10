@@ -46,6 +46,7 @@ public class UserServlet extends AbstractDatabaseServlet {
         boolean isUserLogged = user!=null;
         if (isUserLogged) {
             LogContext.setUser(user.getEmail());
+            req.setAttribute("accountType", user.getType());
         }
         else {
             LogContext.setUser("User not logged");
