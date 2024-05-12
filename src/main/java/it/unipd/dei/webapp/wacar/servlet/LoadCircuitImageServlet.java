@@ -46,7 +46,7 @@ public class LoadCircuitImageServlet extends AbstractDatabaseServlet {
 
         try {
 
-            name = req.getParameter("name");
+            name = req.getParameter("circuitName");
 
             LogContext.setResource(req.getRequestURI());
 

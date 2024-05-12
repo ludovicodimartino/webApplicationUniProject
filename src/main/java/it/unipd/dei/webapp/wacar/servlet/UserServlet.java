@@ -10,13 +10,16 @@ import it.unipd.dei.webapp.wacar.resource.User;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
+import java.util.Base64;
 
 /**
  * Servlet for managing user-related operations.
@@ -28,6 +31,16 @@ import java.sql.SQLException;
  */
 @WebServlet(name = "UserServlet", value = "/user/*")
 public class UserServlet extends AbstractDatabaseServlet {
+
+    /**
+     * The Base64 decoder
+     */
+    private static final Base64.Decoder DECODER = Base64.getDecoder();
+
+    /**
+     * The Base64 encoder
+     */
+    private static final Base64.Encoder ENCODER = Base64.getEncoder();
 
     /**
      * Handles HTTP GET requests for user-related operations.
@@ -234,6 +247,18 @@ public class UserServlet extends AbstractDatabaseServlet {
                     HttpSession session = req.getSession();
                     session.setAttribute(LoginFilter.ACCOUNT_ATTRIBUTE, user);
                     LogContext.setUser(email);
+
+                    // Create cookie
+                    String authInfo = email + ":" + password;
+                    byte[] bytes = ENCODER.encode(authInfo.getBytes());
+
+                    String token = "BASIC " + new String(bytes, StandardCharsets.UTF_16);
+                    
+                    LOGGER.info("Token: " + token);
+
+                    Cookie authCookie = new Cookie("Authorization", token);
+                    authCookie.setHttpOnly(true);
+                    res.addCookie(authCookie);
 
                     // login credentials were correct: we redirect the user to the homepage
                     // now the session is active and its data can be used to change the homepage

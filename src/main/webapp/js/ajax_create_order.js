@@ -1,0 +1,335 @@
+/*
+    Copyright 2018-2023 University of Padua, Italy
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
+
+    Author: Manuel Rigobello (manuel.rigobello@studenti.unipd.it)
+    Version: 1.0
+    Since: 1.0
+*/
+
+let order = {
+	id: -1,
+	date: null,
+	account: null,
+	carBrand: null,
+	carModel: null,
+	circuit: null,
+	createdAt: null,
+	nLaps: -1,
+	price: -1,
+}
+
+
+let lapPrice = -1
+
+
+// select all the buttons with the class name "btn"
+const buttons = document.querySelectorAll(".carBtn");
+
+// Add an event listener to the button,
+// to invoke the function making the AJAX call
+buttons.forEach(function(button) {
+	button.addEventListener("click", handleSelectCarClick);
+})
+
+// document.getElementById("getCircuitByCarTypeButton").addEventListener("click", getCircuitByCarType);
+console.log("Event listener added to getCircuitByCarTypeButton.")
+
+/**
+ * Searches for circuits that are suitable for the selected car type.
+ *
+ * @returns {boolean} true if the HTTP request was successful; false otherwise.
+ */
+function handleSelectCarClick() {
+	console.log("cookie: ", document.cookie);
+
+	// get the value of the salary from the form field
+	// const carTypeObject = document.getElementById("carType");
+	const carType = this.getAttribute("carType");
+
+	console.log("car type", carType);
+	order.carBrand = this.getAttribute("carBrand");
+	order.carModel = this.getAttribute("carModel");
+	order.circuit = "";
+
+	document.getElementById("completeOrder").replaceChildren();
+
+	console.log("order:", order)
+
+	const url = "http://localhost:8081/wacar/rest/user/order/create/" + carType;
+
+	console.log("Request URL: %s.", url)
+
+	// the XMLHttpRequest object
+	const xhr = new XMLHttpRequest();
+
+	if (!xhr) {
+		console.log("Cannot create an XMLHttpRequest instance.")
+
+		alert("Giving up :( Cannot create an XMLHttpRequest instance");
+		return false;
+	}
+
+	// set up the call back for handling the request
+	xhr.onreadystatechange = function () {
+		processCircuitsByCarType(this);
+	};
+
+	// perform the request
+	console.log("Performing the HTTP GET request.");
+
+	xhr.open('GET', url, true);
+	xhr.setRequestHeader('Authorization', 'BASIC ZGVmYXVsdEBleGFtcGxlLmNvbTpEZWZhdWx0MTIz');
+	xhr.withCredentials = true;
+	console.log();
+	xhr.send();
+
+	console.log("HTTP GET request sent. ", xhr);
+}
+
+/**
+ * Processes the HTTP response and writes the results back to the HTML page.
+ *
+ * @param xhr the XMLHttpRequest object performing the request.
+ */
+function processCircuitsByCarType(xhr) {
+
+	// not finished yet
+	if (xhr.readyState !== XMLHttpRequest.DONE) {
+		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]",
+			xhr.readyState);
+		return;
+	}
+
+	const div = document.getElementById("circuits");
+
+	// remove all the children of the result div, appended by a previous call, if any
+	div.replaceChildren();
+
+	if (xhr.status !== 200) {
+		console.log("Request unsuccessful: HTTP status = %d.", xhr.status);
+		console.log(xhr.response);
+
+		div.appendChild(document.createTextNode("Unable to perform the AJAX request."));
+
+		return;
+	}
+
+	const title = document.createElement("h2");
+	title.textContent = "Select a circuit";
+	div.appendChild(title);
+
+	const circuitSection = document.createElement("div");
+	circuitSection.classList.add("row", "row-cols-3");
+	div.appendChild(circuitSection);
+
+	// parse the response as JSON and extract the resource-list array
+	const resourceList = JSON.parse(xhr.responseText)["resource-list"];
+
+	for (let i = 0; i < resourceList.length; i++) { // Loop inside circuits
+		let circuit = resourceList[i].circuit;
+
+		console.log(circuit)
+
+		let card = document.createElement("div");
+    card.className = "card";
+		circuitSection.appendChild(card);
+
+		let image = document.createElement("img");
+		image.className = "card-img-top";
+		image.src = "/wacar/loadCircuitImage?circuitName=" + circuit.name;
+		card.appendChild(image);
+
+		let cardBody = document.createElement("div");
+		cardBody.className = "card-body";
+		card.appendChild(cardBody);
+
+		let circuitName = document.createElement("h5");
+		circuitName.className = "card-title";
+		circuitName.textContent = circuit.name;
+		cardBody.appendChild(circuitName);
+
+		let circuitType = document.createElement("p");
+		circuitType.className = "card-text";
+		circuitType.textContent = circuit.type;
+		cardBody.appendChild(circuitType);
+
+		let button = document.createElement("button");
+		button.classList.add("circuitBtn", "btn", "btn-primary");
+		button.type = "submit";
+		button.textContent = "Select";
+		button.setAttribute("circuitName", circuit.name);
+		button.setAttribute("lapPrice", circuit["lap price"]);
+		button.addEventListener("click", handleSelectCircuitClick);
+		cardBody.appendChild(button);
+	}
+
+	console.log("HTTP GET request successfully performed and processed.");
+}
+
+function handleSelectCircuitClick() {
+	document.getElementById("completeOrder").replaceChildren();
+
+	let divCompleteOrder = document.getElementById("completeOrder");
+
+	order.circuit = this.getAttribute("circuitName");
+	console.log("this button", this);
+	lapPrice = parseInt(this.getAttribute("lapPrice"));
+	console.log("lapPrice after click", lapPrice);
+
+	// Title --- Complete your order ---
+	const title = document.createElement("h2");
+	title.textContent = "Complete your order";
+	divCompleteOrder.appendChild(title);
+
+	// Div of rows for date form
+	let rowDiv = document.createElement("div");
+	rowDiv.classList.add("row", "g-2", "align-items-center");
+	divCompleteOrder.appendChild(rowDiv);
+
+	// Col label date form
+	let colDiv = document.createElement("div");
+	colDiv.classList.add("col-auto");
+	rowDiv.appendChild(colDiv);
+
+	// Label --- Select a date ---
+	let label = document.createElement("label");
+	label.classList.add("col-form-label");
+	label.textContent = "Select a date: ";
+	colDiv.appendChild(label);
+
+	colDiv = document.createElement("div");
+	colDiv.classList.add("col-auto");
+	rowDiv.appendChild(colDiv);
+
+	// Input date form
+	let inputDate = document.createElement("input");
+	inputDate.classList.add("form-control");
+	inputDate.id = "date";
+	inputDate.type = "date";
+	inputDate.setAttribute("min", "2018-01-01");
+	colDiv.appendChild(inputDate);
+
+	// Row for number of laps
+	rowDiv = document.createElement("div");
+	rowDiv.classList.add("row", "g-2", "align-items-center");
+	divCompleteOrder.appendChild(rowDiv);
+
+	colDiv = document.createElement("div");
+	colDiv.classList.add("col-auto");
+	rowDiv.appendChild(colDiv);
+
+	// Label --- Select number of laps ---
+	label = document.createElement("label");
+	label.classList.add("col-form-label");
+	label.textContent = "Select the number of laps: ";
+	colDiv.appendChild(label);
+
+	colDiv = document.createElement("div");
+	colDiv.classList.add("col-auto");
+	rowDiv.appendChild(colDiv);
+
+	let inputLaps = document.createElement("input");
+	inputLaps.classList.add("form-control");
+	inputLaps.id = "nLaps";
+	inputLaps.type = "number";
+	inputLaps.setAttribute("min", "1");
+	inputLaps.addEventListener("change", handleUpdateTotalPrice);
+	colDiv.appendChild(inputLaps);
+
+	rowDiv = document.createElement("div");
+	rowDiv.classList.add("row", "g-2", "align-items-center");
+	divCompleteOrder.appendChild(rowDiv);
+
+	// Col label price
+	colDiv = document.createElement("div");
+	colDiv.classList.add("col-auto");
+	rowDiv.appendChild(colDiv);
+
+	let totalPrice = document.createElement("label");
+	totalPrice.id = "totalPrice";
+	totalPrice.textContent = "Total price: €0";
+	colDiv.appendChild(totalPrice);
+
+	let button = document.createElement("button");
+	button.className = "createOrderBtn";
+	button.textContent = "Create order";
+	button.setAttribute("date", inputDate.value);
+	button.setAttribute("nLaps", inputLaps.value);
+	button.addEventListener("click", handleCreateOrderClick);
+	colDiv.appendChild(button);
+
+	const setFavBtn = document.createElement("button");
+	setFavBtn.addEventListener("click", handleCreateOrderClick);
+	setFavBtn.textContent = "Add to favourites";
+	divCompleteOrder.appendChild(setFavBtn);
+
+	console.log(order);
+}
+
+function handleUpdateTotalPrice() {
+	let label = document.getElementById("totalPrice");
+	if (lapPrice != null && this.value != null) {
+		label.textContent = "Total price: €" + lapPrice*this.value;
+	}
+}
+
+function handleCreateOrderClick() {
+	let date = document.getElementById("date");
+	order.date = date.value;
+	let nLaps = document.getElementById("nLaps");
+	order.nLaps = parseInt(nLaps.value);
+	order.price = parseInt(order.nLaps * lapPrice);
+
+
+	const url = "http://localhost:8081/wacar/rest/user/order/create/complete";
+
+	// the XMLHttpRequest object
+	const xhr = new XMLHttpRequest();
+	xhr.open("POST", url);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.setRequestHeader("Authorization", "BASIC ZGVmYXVsdEBleGFtcGxlLmNvbTpEZWZhdWx0MTIz");
+
+	if (!xhr) {
+		console.log("Cannot create an XMLHttpRequest instance.")
+
+		alert("Giving up :( Cannot create an XMLHttpRequest instance");
+		return false;
+	}
+
+	// set up the call back for handling the request
+	xhr.onreadystatechange = function () {
+		processCreateOrder(this);
+	};
+
+	// perform the request
+	console.log("Performing the HTTP GET request.");
+
+	// TODO: complete order!!!
+	const timeNow = new Date();
+	order.createdAt = timeNow.toISOString();
+	console.log(order.createdAt);
+
+	order.account = "default@example.com";
+
+	var orderString = JSON.stringify({ "order": order });
+	console.log(orderString)
+	xhr.send(orderString);
+
+	console.log("HTTP GET request sent. ", xhr);
+}
+
+function processCreateOrder() {
+	console.log("Create order complete");
+}

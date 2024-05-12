@@ -21,6 +21,8 @@ import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.rest.GetOrderByIdAndUserEmailRR;
+import it.unipd.dei.webapp.wacar.rest.InsertOrderRR;
+import it.unipd.dei.webapp.wacar.rest.ListCircuitByCarTypeRR;
 import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
@@ -249,6 +251,8 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		String path = req.getRequestURI();
 		Message m = null;
 
+		LOGGER.info("I am here");
+
 		// the requested resource was not an order
 		if (path.lastIndexOf("user/order") <= 0) {
 			LOGGER.info("Return false");
@@ -276,6 +280,56 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 					m.toJSON(res.getOutputStream());
 					break;
 			}
+		} else if (path.contains("/")) {
+			String op = path.substring(path.lastIndexOf("/") + 1);
+			LOGGER.info("Inside order/create handler");
+
+			if (op.equals("complete")) {
+				LOGGER.info("Inside create/complete handler");
+
+				switch (method) {
+					case "POST":
+						new InsertOrderRR(req, res, getConnection()).serve();
+	
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /order/create/complete: %s.", method);
+	
+						m = new Message("Unsupported operation for URI /order/create/complete.",
+								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+								String.format("Requested operation %s.", method));
+						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+						m.toJSON(res.getOutputStream());
+						break;
+				}
+			} else {
+				LOGGER.info("Inside create/{carType} handler");
+				
+				// the request URI is: /order/create
+				// Step 1: retrieve the available cars
+				LOGGER.info("method: " + method);
+				LOGGER.info("carType: " + op);
+				switch (method) {
+					case "GET":
+						LOGGER.info("Inside switch order/create");
+						new ListCircuitByCarTypeRR(req, res, getConnection(), op).serve();
+	
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /order/create: %s.", method);
+	
+						m = new Message("Unsupported operation for URI /order/create.",
+								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+								String.format("Requested operation %s.", method));
+						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+						m.toJSON(res.getOutputStream());
+						break;
+				}
+			}
+
+
+
+
 		} else {
 			// the request URI is: /order/{orderId}
 			path = path.substring(path.lastIndexOf("/") + 1);

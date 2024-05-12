@@ -59,9 +59,7 @@ public final class InsertOrderRR extends AbstractRR {
 		Message m = null;
 
 		try {
-
 			final Order order = Order.fromJSON(req.getInputStream());
-
 			LogContext.setResource(Integer.toString(order.getId()));
 
 			o = new InsertOrderDAO(con, order).access().getOutputParam();

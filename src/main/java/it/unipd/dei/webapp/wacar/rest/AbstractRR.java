@@ -194,7 +194,6 @@ public abstract class AbstractRR implements RestResource {
      */
     protected boolean checkMethodMediaType(final HttpServletRequest req, final HttpServletResponse res) throws
             IOException {
-
         final String method = req.getMethod();
         final String contentType = req.getHeader("Content-Type");
         final String accept = req.getHeader("Accept");
@@ -274,7 +273,9 @@ public abstract class AbstractRR implements RestResource {
     protected boolean checkIsLoggedIn(final HttpServletRequest req, final HttpServletResponse res) throws IOException {
         Message m = null;
         // get the authorization information
+        LOGGER.info(req.toString());
         final String auth = req.getHeader("Authorization");
+        LOGGER.info("token: " + auth);
 
         if (auth == null || auth.isBlank()) {
             LOGGER.error("No authorization header sent by the client");

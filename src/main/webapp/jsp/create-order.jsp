@@ -13,122 +13,109 @@
 		<meta charset="utf-8">
 		<title>Create a new order</title>
 		<style>
-		    .row{
-		        display: flex;
-		    }
+      @keyframes show {
+        100% {
+          opacity: 1;
+          transform: none;
+        }
+      }
 
-            .card{
-              border-radius: 10px;
-              height: 250px;
-              width: 350px;
-              background-color: lightgrey;
-              padding: 15px;
-              margin: 20px;
-              display: flex;
-              flex-direction: column;
-              align-items: center;
-              justify-content: center;
-            }
+      .container {
+        background-color: red;
+        border-radius: 1rem;
+        box-shadow: 0px 0px 10px darkred;
+        margin-top: 2rem;
+        padding: 1rem;
 
-            .card img {
-              height: 70%;
-              width: 100%;
-              object-fit: cover;
-              object-position: center;
-              border-radius: 10px;
-              position: relative;
-            }
+        opacity: 0;
+        transform: rotateX(-90deg);
+        transform-origin: top center;
 
-            .card h1 {
-              font-size: 20px;
-              margin-top: auto;
-              margin-bottom: 5px;
-            }
+        animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+      }
 
-            .card h5 {
-              font-size: 15px;
-              color: grey;
-              margin-top: 3px;
-              margin-bottom: 10px;
-            }
+      .container h2 {
+        margin-left: 2rem;
+      }
 
-            .card .btn {
-                width: 100%;
-                height: 10%;
-                object-position: center;
-                border-radius: 10px;
-                background-color: white;
-                text-decoration: none;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            }
+      .row {
+        padding-left: 0rem;
+        padding-right: 0rem;
+
+        opacity: 0;
+        transform: rotateX(-90deg);
+        transform-origin: top center;
+
+        animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+      }
+
+      .row .card {
+        border-radius: 10px;
+        height: 21rem;
+        width: 22rem;
+        background-color: lightgrey;
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+        padding-right: 0%;
+        padding-left: 0%;
+      }
+
+      .row .card .card-img-top {
+        height: 60%;
+        width: 100%;
+        object-position: center;
+        border-radius: 10px;
+        position: relative;
+      }
+
+      .row .card .card-body {
+        height: 40%;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
+      }
+
+      .row .card .card-body .card-text {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+      }
+
+      .formComplete {
+        margin-left: 2rem;
+      }
 		</style>
+
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 	</head>
 
     <body>
+        <h1>Create a new order</h1>
+        <hr>
         <c:if test="${not empty carsList}">
-            <h1>Select a car</h1>
-            <div class="row">
-                    <c:forEach var="car" items="${carsList}">
-                        <div>
-                            <div>
-                                <div class="card">
-                                    <img src="<c:url value="/loadCarImage"><c:param name="brand" value="${car.brand}"/><c:param name="model" value="${car.model}"/></c:url>"/>
-                                    <h1><c:out value="${car.brand} ${car.model}"/></h1>
-                                    <h5><c:out value="${car.type}"/></h5>
-                                    <a href="circuits/?carBrand=${car.brand}&carModel=${car.model}&carType=${car.type}" class="btn link" type="button">
-                                        Select
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
+          <div class="container">         
+            <h2>Select a car</h2>
+            <div class="row row-cols-3">
+              <c:forEach var="car" items="${carsList}">
+                <div class="card">
+                    <img class="card-img-top" src="<c:url value="/loadCarImage"><c:param name="brand" value="${car.brand}"/><c:param name="model" value="${car.model}"/></c:url>"/>
+                    <div class="card-body">
+                      <h5 class="card-title"><c:out value="${car.brand} ${car.model}"/></h5>
+                      <p class="card-text"><c:out value="${car.type}"/></p>
+                      <button class="carBtn btn btn-primary" type="submit" id="getCircuitByCarTypeButton" carBrand="${car.brand}" carModel="${car.model}" carType="${car.type}">Select</a>
+                    </div>
+                </div>
+              </c:forEach>
             </div>
-        </c:if>
-        <c:if test="${not empty circuitsList}">
-            <h1>Select a circuit</h1>
-            <div class="row">
-                    <c:forEach var="circuit" items="${circuitsList}">
-                        <div>
-                            <div>
-                                <div class="card">
-                                    <img src="<c:url value="/loadCircuitImage"><c:param name="name" value="${circuit.name}"/></c:url>"/>
-                                    <h1><c:out value="${circuit.name}"/></h1>
-                                    <h5><c:out value="${circuit.type}"/></h5>
-                                    <a href="../complete-order/?carBrand=${carBrand}&carModel=${carModel}&circuitName=${circuit.name}&circuitLapPrice=${circuit.lapPrice}" class="btn link" type="button">
-                                        Select
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </c:forEach>
-            </div>
+          </div>
         </c:if>
 
-        <div>
-            <c:if test="${not empty carBrand && not empty carModel && not empty circuitName}">
-                <h1>Save as favourite</h1>
-                <form method="POST" action="/wacar/user/create-favourite/recap">
-                    <input type="hidden" name="carBrand" value="${carBrand}">
-                    <input type="hidden" name="carModel" value="${carModel}">
-                    <input type="hidden" name="circuitName" value="${circuitName}">
-                    <label>You do not know when you can race? save the car and the circuit!</label>
-                    <button type="submit">Save as favourite</button><br/>
-                </form>
-                <h1>Complete your order</h1>
-                <form method="POST" action="/wacar/user/create-order/recap">
-                    <label for="date">Select a date:</label>
-                    <input type="date" name="date" min="2018-01-01" /></br>
-                    <label for="nLaps">Select the number of laps:</label>
-                    <input type="number" name="nLaps" min="1"></br>
-                    <button type="submit">Create order</button><br/>
-                    <input type="hidden" name="carBrand" value="${carBrand}">
-                    <input type="hidden" name="carModel" value="${carModel}">
-                    <input type="hidden" name="circuitName" value="${circuitName}">
-                    <input type="hidden" name="lapPrice" value="${lapPrice}">
-                </form>
-            </c:if>
+        <div class="container" id="circuits">
+          <h2>Select a circuit</h2>
         </div>
+        <!-- <div id="addFavourite"></div> -->
+        <div class="container" id="completeOrder"></div>
+
+        <script type="text/javascript" src="<c:url value="/js/ajax_create_order.js"/>"></script>
     </body>
 </html>

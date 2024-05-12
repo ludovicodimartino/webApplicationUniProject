@@ -12,6 +12,7 @@ import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDate;
 
 /**
@@ -258,7 +259,7 @@ public class Order extends AbstractResource {
             // while we are not on the start of an element or the element is not
             // a token element, advance to the next element (if any)
             while (jp.getCurrentToken() != JsonToken.FIELD_NAME || !"order".equals(jp.getCurrentName())) { // Keep reading tokens
-
+                LOGGER.info("current token " + jp.getCurrentName());
                 // there are no more events
                 if (jp.nextToken() == null) {
                     LOGGER.error("No order object found in the stream.");
@@ -282,7 +283,7 @@ public class Order extends AbstractResource {
                             String d = jp.getText();
 
                             try {
-                                java.util.Date utilDate = new SimpleDateFormat("dd MMM yyyy").parse(d);
+                                java.util.Date utilDate = new SimpleDateFormat("yyyy-MM-dd").parse(d);
                                 date = new Date(utilDate.getTime());
                             } catch (ParseException pe) {
 
@@ -314,8 +315,9 @@ public class Order extends AbstractResource {
                             break;
                         case "createdAt":
                             jp.nextToken();
-                            String ts = jp.getText();
-                            createdAt = Timestamp.valueOf(ts);
+
+                            Instant instant = Instant.parse(jp.getText());
+                            createdAt = Timestamp.from(instant);
                             break;
                     }
                 }

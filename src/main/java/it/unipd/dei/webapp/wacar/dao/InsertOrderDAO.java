@@ -5,7 +5,11 @@ import it.unipd.dei.webapp.wacar.resource.Order;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 /**
  * Insert a new order in the database.
@@ -15,8 +19,8 @@ import java.sql.SQLException;
  * @since 1.00
  */
 public class InsertOrderDAO extends AbstractDAO<Order> {
-    private static final String WITHOUT_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING id;";
-    private static final String WITH_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+    private static final String WITHOUT_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;";
+    private static final String WITH_ID_ORDER_INSERT_STATEMENT = "INSERT INTO assessment.\"order\"(id, date, \"carBrand\", \"carModel\", circuit, \"createdAt\", \"nLaps\", price, account) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) RETURNING *;";
     private static final String ORDER_DELETE_STATEMENT = "DELETE FROM assessment.\"order\" WHERE id = ?;";
     private final Order order;
 
@@ -41,6 +45,9 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
     protected void doAccess() throws SQLException {
         PreparedStatement pstmt = null;
         con.setAutoCommit(false); // For an eventual rollback
+        Order o = null;
+        ResultSet rs = null;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
         try {
             if (order.getId() <= 0) {
@@ -55,13 +62,30 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
                 pstmt.setInt(7, order.getPrice());
                 pstmt.setString(8, order.getAccount());
 
-                pstmt.execute();
+                rs = pstmt.executeQuery();
+
+                if (rs.next()) {
+                    java.util.Date inputDate;
+                    java.sql.Date date;
+
+                    try {
+                        inputDate = df.parse(rs.getString("date"));
+                        date = new java.sql.Date(inputDate.getTime());
+
+                        o = new Order(rs.getInt("id"), rs.getString("account"), date, rs.getString("carBrand"), rs.getString("carModel"), rs.getString("circuit"), rs.getTimestamp("createdAt"), rs.getInt("nLaps"), rs.getInt("price"));
+        
+                        LOGGER.info("New oder with id = %d has been inserted correctly.", o.getId());
+                    } catch (Exception e) {
+                        LOGGER.error("Invalid request: %s", e.getMessage());
+                    }
+                    
+                }
             } else {
                 pstmt = con.prepareStatement(ORDER_DELETE_STATEMENT);
                 pstmt.setInt(1, order.getId());
                 // User has modified one of their order so, before inserting the new one, the old order is deleted
                 if (pstmt.executeUpdate() > 0) { // Delete old order
-                    LOGGER.info("Order with id %d has been removed correctly. Now the new order can be added.", order.getId());
+                    LOGGER.info("New oder with id = %d has been deleted correctly.", order.getAccount());
                 }
 
                 pstmt = con.prepareStatement(WITH_ID_ORDER_INSERT_STATEMENT);
@@ -75,10 +99,25 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
                 pstmt.setInt(8, order.getPrice());
                 pstmt.setString(9, order.getAccount());
 
-                pstmt.execute();
-            }
+                rs = pstmt.executeQuery();
 
-            LOGGER.info("New oder with id = %d has been inserted correctly.", order.getAccount());
+                if (rs.next()) {
+                    java.util.Date inputDate;
+                    java.sql.Date date;
+
+                    try {
+                        inputDate = df.parse(rs.getString("date"));
+                        date = new java.sql.Date(inputDate.getTime());
+                        
+                        o = new Order(rs.getInt("id"), rs.getString("account"), date, rs.getString("carBrand"), rs.getString("carModel"), rs.getString("circuit"), Timestamp.valueOf(rs.getString("createdAt")), rs.getInt("nLaps"), rs.getInt("price"));
+        
+                        LOGGER.info("New oder with id = %d has been inserted correctly.", o.getId());
+                    } catch (Exception e) {
+                        LOGGER.error("Invalid request: %s", e.getMessage());
+                    }
+                    
+                }
+            }
 
             con.commit();
         } catch (SQLException e) {
@@ -89,5 +128,7 @@ public class InsertOrderDAO extends AbstractDAO<Order> {
                 pstmt.close();
             }
         }
+
+        outputParam = o;
     }
 }
