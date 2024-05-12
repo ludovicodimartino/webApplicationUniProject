@@ -5,6 +5,7 @@ import it.unipd.dei.webapp.wacar.resource.*;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -903,10 +904,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
         }
 
         try {
-            // stores the message as a request attribute
-            req.setAttribute("message", m);
-            if(carOrCircuit == CarOrCircuitType.CAR_TYPE) insertCarTypePage(req,res);
-            else insertCircuitTypePage(req, res);
+            OutputStream out = res.getOutputStream();
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            m.toJSON(out);
+            out.flush();
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating the %s object %s.", carOrCircuit.getName(), name), e);
             throw e;
