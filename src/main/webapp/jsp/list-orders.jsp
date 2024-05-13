@@ -44,14 +44,15 @@
                     <td>
                         <c:choose>
                             <c:when test="${modifyAvailable[loop.index]}">
-                                <a href="/wacar/rest/user/order/${order.id}" class="btn btn-primary btn-sm" role="button">
-                                    Modify
-                                </a>
+                                <form action="/wacar/user/update/${order.id}" method="get">
+                                    <button class="btn btn-primary btn-sm" onclick="modifyOrder('${order.id}')">Modify order</button>
+                                </form>
                             </c:when>
                             <c:otherwise>
-                                <button class="btn btn-primary btn-sm" disabled>Modify</button>
+                                <button class="btn btn-primary btn-sm" disabled>Modify order</button>
                             </c:otherwise>
                         </c:choose>
+
                     </td>
                 </tr>
             </c:forEach>

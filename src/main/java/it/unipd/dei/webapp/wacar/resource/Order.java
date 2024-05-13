@@ -28,7 +28,7 @@ public class Order extends AbstractResource {
     /**
      * The account that made the order
      */
-    private final String account;
+    private String account;
 
     /**
      * The date
@@ -38,22 +38,22 @@ public class Order extends AbstractResource {
     /**
      * The car brand
      */
-    private final String carBrand;
+    private String carBrand;
 
     /**
      * The car model
      */
-    private final String carModel;
+    private String carModel;
 
     /**
      * The name of the circuit
      */
-    private final String circuit;
+    private String circuit;
 
     /**
      * Thew time in which the account created the order
      */
-    private final Timestamp createdAt;
+    private Timestamp createdAt;
 
     /**
      * The number of laps 
@@ -63,7 +63,7 @@ public class Order extends AbstractResource {
     /**
      * The price
      */
-    private final int price;
+    private int price;
 
     /**
      * Constructs a new Order object with the specified attributes.
@@ -113,6 +113,22 @@ public class Order extends AbstractResource {
         this.nLaps = nLaps;
         this.price = price;
     }
+
+    /**
+     * Constructs a new Order object with the specified attributes, used to update order.
+     *
+     * @param id        the id of the order
+     * @param date      the date in which the experience will take place
+     * @param nLaps     the number of laps
+     * @param price     the price of the order
+     */
+    public Order(int id, Date date, int nLaps, int price){
+        this.id = id;
+        this.date = date;
+        this.nLaps = nLaps;
+        this.price = price;
+    }
+
 
     /**
      * Returns the id number of the order.
