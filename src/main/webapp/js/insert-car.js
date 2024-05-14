@@ -3,9 +3,10 @@ $(document).ready(function(){
     const imageInput = $("#image");
     const modalCarType = $("#newCarTypeModal");
     const typeNameInput = $("#typeName");
-    const addTypeBtn = $("#addTypeBtn");
     const carTypeSelect = $("#type");
     const liveAlert = $("#liveAlertPlaceholder");
+    const carTypeForm = $("#carTypeForm");
+    const insertCarForm = $("#insertCarForm");
 
     // Display the selected image
     imageInput.change( event => {
@@ -24,13 +25,17 @@ $(document).ready(function(){
     });
 
     // Add car type
-    addTypeBtn.click(() => {
-        // Check empty type
-        if(typeNameInput.val() === ""){
-            warningMessage("Car type cannot be empty.")
-            modalCarType.modal('hide');
-            return;
-        }
+    carTypeForm.submit((e) => {
+        // Prevents the form from the default submission
+        e.preventDefault();
+        e.stopPropagation();
+
+        // Checks whether the input is valid
+        const isValid = typeNameInput[0].checkValidity();
+        carTypeForm.addClass('was-validated');
+
+        // return if the form is not valid
+        if(!isValid) return;
 
         // The XMLHttpRequest object for making the AJAX call
         const xhr = new XMLHttpRequest();
@@ -56,6 +61,22 @@ $(document).ready(function(){
         console.log("AJAX request performed.");
     });
 
+    // Insert car
+    insertCarForm.submit((e) => {
+
+        // Checks whether the input is valid
+        const isValid = insertCarForm[0].checkValidity();
+        insertCarForm.addClass('was-validated');
+
+        // return if the form is not valid
+        if(!isValid){
+            // Prevents the form from the default submission
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+    });
+
     const processResponse = (xhr) => {
         console.log("PROCESSING RESPONSE");
         if (xhr.status !== 200){
@@ -76,19 +97,20 @@ $(document).ready(function(){
                 value: typeNameInput.val(),
                 text: typeNameInput.val()
             }));
+
+            // Set the newly created car type
             carTypeSelect.val(typeNameInput.val());
-            typeNameInput.val("");
         }
+
+        //reset modal
+        carTypeForm.removeClass('was-validated');
+        typeNameInput.val("");
         modalCarType.modal('hide');
     }
 
     const successMessage = (message) => {
         console.log("SUCCESS MESSAGE " + message);
         appendAlert(message,  'success');
-    }
-
-    const warningMessage = (message) => {
-        appendAlert(message,  'warning');
     }
 
     const errorMessage = (errorCode, errorDetails, errorMessage) => {

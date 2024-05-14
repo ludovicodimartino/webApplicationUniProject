@@ -19,23 +19,11 @@ Since: 1.00
 <body>
 
 
-
 <div class="container">
-    <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-        <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-        </symbol>
-        <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
-        </symbol>
-        <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
-            <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
-        </symbol>
-    </svg>
-
     <h1 class="mb-4">Add new Car</h1>
     <div id="liveAlertPlaceholder"></div>
-    <form enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/insertCar/" method="POST">
+    <form enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/insertCar/" method="POST"
+          class="needs-validation" id="insertCarForm" novalidate>
 
         <div class="row mb-3">
             <div class="col-md-6">
@@ -46,7 +34,9 @@ Since: 1.00
                     <label class="form-label text-white" for="image"></label>
                     <input type="file" class="form-control" id="image" name="image"
                            accept="image/png, image/jpeg"/>
-
+                    <div class="invalid-feedback">
+                        Please select a valid image. Only png and jpeg format are accepted.
+                    </div>
                 </div>
             </div>
             <div class="col-md-6">
@@ -54,10 +44,16 @@ Since: 1.00
                     <div class="form-floating px-1 mb-3">
                         <input type="text" class="form-control" placeholder="Brand" id="brand" name="brand" required>
                         <label for="brand">Brand</label>
+                        <div class="invalid-feedback">
+                            Please insert a valid brand name.
+                        </div>
                     </div>
                     <div class="form-floating px-1 mb-3">
                         <input type="text" class="form-control" placeholder="Model" id="model" name="model" required>
                         <label for="model">Model</label>
+                        <div class="invalid-feedback">
+                            Please insert a valid model name.
+                        </div>
                     </div>
 
                     <jsp:useBean id="carList" scope="request" type="java.util.List"/>
@@ -70,6 +66,9 @@ Since: 1.00
                                 </c:forEach>
                             </select>
                             <label for="type" class="form-label">Type</label>
+                            <div class="invalid-feedback">
+                                Please provide a valid car type.
+                            </div>
                         </div>
                         <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal"
                                 data-bs-target="#newCarTypeModal">Add new type
@@ -94,25 +93,39 @@ Since: 1.00
             <textarea id="description" class="form-control" name="description"
                       placeholder="Brief description of the car" required></textarea>
             <label for="description">Description</label>
+            <div class="invalid-feedback">
+                Please provide a description.
+            </div>
         </div>
 
         <div class="row mb-3">
             <div class="col-md-4 mb-3">
                 <div class="form-floating">
-                    <input type="number" class="form-control" id="maxSpeed" name="maxSpeed" required>
+                    <input type="number" class="form-control" id="maxSpeed" name="maxSpeed" min="20" max="500" required>
                     <label for="maxSpeed">Max Speed</label>
+                    <div class="invalid-feedback">
+                        Please insert a valid max speed.
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-floating">
-                    <input type="number" class="form-control" id="horsepower" name="horsepower" required>
+                    <input type="number" class="form-control" id="horsepower" name="horsepower" min="10" max="5000"
+                           required>
                     <label for="horsepower">Horsepower</label>
+                    <div class="invalid-feedback">
+                        Please insert a valid horsepower value.
+                    </div>
                 </div>
             </div>
             <div class="col-md-4 mb-3">
                 <div class="form-floating">
-                    <input type="number" class="form-control" id="acceleration" name="acceleration" step=".01" required>
+                    <input type="number" class="form-control" id="acceleration" name="acceleration" step=".01" min="0"
+                           max="500" required>
                     <label for="acceleration">0-100 (in seconds)</label>
+                    <div class="invalid-feedback">
+                        Please insert a valid 0-100 value.
+                    </div>
                 </div>
             </div>
         </div>
@@ -128,23 +141,26 @@ Since: 1.00
     <!-- Modal -->
     <div class="modal fade" id="newCarTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">New car type</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="carTypeForm" method="post">
-                            <div class="form-floating mb-3">
-                                <input type="text" class="form-control" id="typeName" name="name">
-                                <label for="typeName">Car type name</label>
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">New car type</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="carTypeForm" method="post" class="needs-validation" novalidate>
+                        <div class="form-floating mb-3">
+                            <input type="text" class="form-control" id="typeName" name="name" required>
+                            <label for="typeName">Car type name</label>
+                            <div class="invalid-feedback">
+                                Please provide a valid car type name.
                             </div>
-                            <input type="button" class="btn btn-primary" id="addTypeBtn" value="Add">
-                        </form>
-                    </div>
+                        </div>
+                        <input type="submit" class="btn btn-primary" id="addTypeBtn" value="Add">
+                    </form>
                 </div>
             </div>
+        </div>
     </div>
 
 </div>
