@@ -12,6 +12,7 @@
     <title>List Orders</title>
 </head>
 <body>
+<%@ include file="header.jsp" %>
 <%@ include file="toolbar.jsp" %>
 
 

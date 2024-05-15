@@ -13,6 +13,7 @@
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list.css">
 </head>
 <body>
+<%@ include file="header.jsp" %>
 <%@ include file="toolbar.jsp" %>
 
 <c:if test="${not empty circuits}">
