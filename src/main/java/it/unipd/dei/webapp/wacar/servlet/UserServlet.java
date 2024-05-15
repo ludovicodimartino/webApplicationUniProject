@@ -56,6 +56,13 @@ public class UserServlet extends AbstractDatabaseServlet {
         LogContext.setIPAddress(req.getRemoteAddr());
         HttpSession session = req.getSession();
         User user = (User) session.getAttribute(LoginFilter.ACCOUNT_ATTRIBUTE);
+
+        String firstURL = req.getHeader("referer");
+        if (firstURL != null) {
+            req.getSession().setAttribute("firstURL", firstURL);
+            LOGGER.info("referer URL {}", firstURL);
+        }
+
         boolean isUserLogged = user!=null;
         if (isUserLogged) {
             LogContext.setUser(user.getEmail());
@@ -77,7 +84,6 @@ public class UserServlet extends AbstractDatabaseServlet {
         switch (op){
 
             case "login/":
-                req.getSession().invalidate();
                 LogContext.setAction("LOGIN");
                 req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
                 break;
@@ -140,6 +146,7 @@ public class UserServlet extends AbstractDatabaseServlet {
         LogContext.setResource(req.getRequestURI());
         LogContext.setAction("LOGIN");
         String op = req.getRequestURI();
+
 
         //remove everything prior to /user/ (included) and use the remainder as
         //indicator for the required operation
@@ -208,6 +215,7 @@ public class UserServlet extends AbstractDatabaseServlet {
         User user;
         Message m;
 
+
         String regex_psw = "^(?=.*[A-Z])(?=.*[0-9]).{8,}$";
         String regex_email  = "^[a-z0-9+_.-]+@[a-z0-9.-]+\\.[a-z]{2,}$";
 
@@ -248,21 +256,16 @@ public class UserServlet extends AbstractDatabaseServlet {
                     session.setAttribute(LoginFilter.ACCOUNT_ATTRIBUTE, user);
                     LogContext.setUser(email);
 
-                    // Create cookie
-                    String authInfo = email + ":" + password;
-                    byte[] bytes = ENCODER.encode(authInfo.getBytes());
+                    String firstURL = (String) session.getAttribute("firstURL");
+                    LOGGER.info("FIRST URL {}", firstURL);
 
-                    String token = "BASIC " + new String(bytes, StandardCharsets.UTF_16);
-                    
-                    LOGGER.info("Token: " + token);
-
-                    Cookie authCookie = new Cookie("Authorization", token);
-                    authCookie.setHttpOnly(true);
-                    res.addCookie(authCookie);
-
-                    // login credentials were correct: we redirect the user to the homepage
-                    // now the session is active and its data can be used to change the homepage
-                    res.sendRedirect(req.getContextPath()+"/home");
+                    // login credentials were correct: we redirect the user to last pag before login
+                    if (firstURL == null) {
+                        res.sendRedirect(req.getContextPath() + "/home");
+                    }
+                    else {
+                        res.sendRedirect(firstURL);
+                    }
 
                 }
             }
@@ -341,9 +344,16 @@ public class UserServlet extends AbstractDatabaseServlet {
                         session.setAttribute("role", user.getType());
                         LogContext.setUser(email);
 
-                        // login credentials were correct: we redirect the user to the homepage
-                        // now the session is active and its data can be used to change the homepage
-                        res.sendRedirect(req.getContextPath()+"/home");
+                        String firstURL = (String) session.getAttribute("firstURL");
+                        LOGGER.info("FIRST URL {}", firstURL);
+
+                        // login credentials were correct: we redirect the user to last pag before login
+                        if (firstURL == null) {
+                            res.sendRedirect(req.getContextPath() + "/home");
+                        }
+                        else {
+                            res.sendRedirect(firstURL);
+                        }
 
 
                     }
