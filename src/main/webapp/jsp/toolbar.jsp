@@ -7,9 +7,9 @@
 </head>
 <body>
 <c:choose>
-    <c:when test="${not empty accountType}">
+    <c:when test="${not empty sessionScope.account.type}">
         <c:choose>
-            <c:when test="${accountType eq 'USER'}">
+            <c:when test="${sessionScope.account.type eq 'USER'}">
                 <div class="navbar">
                     <a href="/wacar/">Home</a>
                     <a href="/wacar/circuit_list/">Circuit List</a>
@@ -18,7 +18,7 @@
                     <a href="/wacar/user/user-info">Account</a>
                 </div>
             </c:when>
-            <c:when test="${accountType eq 'ADMIN'}">
+            <c:when test="${sessionScope.account.type eq 'ADMIN'}">
                 <div class="navbar">
                     <a href="/wacar/">Home</a>
                     <a href="/wacar/circuit_list/">Circuit List</a>
@@ -30,7 +30,7 @@
             </c:when>
         </c:choose>
     </c:when>
-    <c:when test="${empty accountType}">
+    <c:when test="${empty sessionScope.account.type}">
         <div class="navbar">
             <a href="/wacar/">Home</a>
         </div>

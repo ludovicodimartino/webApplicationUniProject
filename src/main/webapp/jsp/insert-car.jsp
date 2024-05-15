@@ -18,6 +18,8 @@ Since: 1.00
 </head>
 <body>
 
+<%@ include file="header.jsp" %>
+<%@ include file="toolbar.jsp" %>
 
 <div class="container">
     <h1 class="mb-4">Add new Car</h1>
@@ -28,11 +30,11 @@ Since: 1.00
         <div class="row mb-3">
             <div class="col-md-6">
                 <img id="selectedImage" class="w-100 rounded mb-2"
-                     src="https://mdbootstrap.com/img/Photos/Others/placeholder.jpg"
+                     src="${pageContext.request.contextPath}/images/carImagePlaceholder.png"
                      alt="selected car image"/>
                 <div class="input-group mb-3">
                     <label class="form-label text-white" for="image"></label>
-                    <input type="file" class="form-control" id="image" name="image"
+                    <input type="file" class="form-control rounded" id="image" name="image"
                            accept="image/png, image/jpeg"/>
                     <div class="invalid-feedback">
                         Please select a valid image. Only png and jpeg format are accepted.
@@ -40,7 +42,7 @@ Since: 1.00
                 </div>
             </div>
             <div class="col-md-6">
-                <div class="row">
+                <div class="row h-100">
                     <div class="form-floating px-1 mb-3">
                         <input type="text" class="form-control" placeholder="Brand" id="brand" name="brand" required>
                         <label for="brand">Brand</label>
@@ -58,20 +60,14 @@ Since: 1.00
 
                     <jsp:useBean id="carList" scope="request" type="java.util.List"/>
                     <div class="input-group px-1 mb-3">
-                        <div class="form-floating">
-                            <select id="type" class="form-select" name="type" required>
-                                <option value="">Select car type</option>
-                                <c:forEach items="${carList}" var="car" varStatus="loop">
-                                    <option value="${car.name}"><c:out value="${car.name}"/></option>
-                                </c:forEach>
-                            </select>
-                            <label for="type" class="form-label">Type</label>
-                            <div class="invalid-feedback">
-                                Please provide a valid car type.
-                            </div>
-                        </div>
+                        <select id="type" class="form-select" name="type" required>
+                            <option value="">Select car type</option>
+                            <c:forEach items="${carList}" var="car" varStatus="loop">
+                                <option value="${car.name}"><c:out value="${car.name}"/></option>
+                            </c:forEach>
+                        </select>
                         <button class="btn btn-outline-secondary" type="button" data-bs-toggle="modal"
-                                data-bs-target="#newCarTypeModal">Add new type
+                                data-bs-target="#newCarTypeModal">Add new <b>car type</b>
                         </button>
                     </div>
 
@@ -141,7 +137,7 @@ Since: 1.00
     <!-- Modal -->
     <div class="modal fade" id="newCarTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
 
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel">New car type</h1>

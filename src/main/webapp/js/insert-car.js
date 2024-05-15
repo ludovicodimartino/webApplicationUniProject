@@ -8,14 +8,23 @@ $(document).ready(function(){
     const carTypeForm = $("#carTypeForm");
     const insertCarForm = $("#insertCarForm");
 
+    // Set the image as invalid
+    imageInput[0].setCustomValidity("Invalid image.");
+
     // Display the selected image
     imageInput.change( event => {
         const fileInput = event.target;
-
-        if (fileInput.files && fileInput.files[0]) {
+        const validImageTypes = ['image/jpeg', 'image/png'];
+        if (fileInput.files && fileInput.files[0] && validImageTypes.includes(fileInput.files[0]['type'])) {
             const reader = new FileReader();
             reader.onload = e =>  selectedImage.attr('src', e.target.result);
             reader.readAsDataURL(fileInput.files[0]);
+            imageInput[0].setCustomValidity("");
+        }else{ //invalid image
+            const placeholderImageURL = "/wacar/images/carImagePlaceholder.png"
+            selectedImage.attr('src', placeholderImageURL);
+            imageInput[0].setCustomValidity("Invalid image.");
+            // console.log(imageInput[0].validity.valid);
         }
     });
 
