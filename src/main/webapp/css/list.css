@@ -6,7 +6,7 @@
     grid-gap: 20px;
 }
 
-.item-container {
+.row {
     cursor: pointer;
     display: inline-block;
     vertical-align: top;

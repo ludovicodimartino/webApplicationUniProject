@@ -9,6 +9,7 @@
 <head>
     <meta charset="UTF-8">
     <title>List of Cars</title>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/create-order.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list.css">
 </head>
@@ -21,25 +22,21 @@
     <div class="outer-container">
         <!-- for each car in database -->
         <c:forEach var="car" items="${cars}" varStatus="loop">
-            <div class="item-container">
-                <div class="card position-relative" data-toggle="modal" data-target="#carModal${loop.index}">
-                    <img src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="card-img-top" alt="car image">
-                    <div class="card-img-overlay card-img-overlay-top-left">
-                        <h5 class="card-title card-title-outside">${car.brand}</h5>
-                    </div>
+            <div class="row">
+                <div class="card" data-toggle="modal" data-target="#carModal${loop.index}">
+                    <img class="card-img-top" src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="card-img-top" alt="car image">
                     <div class="card-body">
-                        <h6 class="card-subtitle mb-2 text-muted">${car.model}</h6>
+                        <p class="h5"><c:out value="${car.brand} ${car.model}"/></p>
+                        <p class="h6"><c:out value="${car.type}"/></p>
                     </div>
                 </div>
                 <!-- Opened/clicked car card -->
                 <div class="modal fade" id="carModal${loop.index}" tabindex="-1" role="dialog" aria-labelledby="carModalLabel${loop.index}" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="carModalLabel${loop.index}">${car.brand} ${car.model}</h5>
-                                <button type="button" class="close close-btn" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+                                <h3 class="modal-title fs-5" id="carModalLabel${loop.index}">${car.brand} ${car.model}</h3>
+                                <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <div class="container-fluid">

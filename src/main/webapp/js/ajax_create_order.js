@@ -35,13 +35,16 @@ let lapPrice = -1
 
 
 // select all the buttons with the class name "btn"
-const buttons = document.querySelectorAll(".carBtn");
+const buttons = document.querySelectorAll(".cardBtn");
 
 // Add an event listener to the button,
 // to invoke the function making the AJAX call
 buttons.forEach(function(button) {
 	button.addEventListener("click", handleSelectCarClick);
 })
+
+const btnOrder = document.getElementById("createOrder");
+btnOrder.addEventListener("click", handleCreateOrderClick);
 
 // document.getElementById("getCircuitByCarTypeButton").addEventListener("click", getCircuitByCarType);
 console.log("Event listener added to getCircuitByCarTypeButton.")
@@ -113,6 +116,12 @@ function processCircuitsByCarType(xhr) {
 	}
 
 	const div = document.getElementById("circuits");
+	div.classList.remove("hidden");
+	div.classList.add("show");
+
+	const divOrder = document.getElementById("completeOrder");
+	divOrder.classList.remove("show");
+	divOrder.classList.add("hidden");
 
 	// remove all the children of the result div, appended by a previous call, if any
 	div.replaceChildren();
@@ -143,7 +152,11 @@ function processCircuitsByCarType(xhr) {
 		console.log(circuit)
 
 		let card = document.createElement("div");
-    card.className = "card";
+    card.classList.add("card", "circuitBtn");
+		card.type = "submit";
+		card.setAttribute("circuitName", circuit.name);
+		card.setAttribute("lapPrice", circuit["lap price"]);
+		card.addEventListener("click", handleSelectCircuitClick);
 		circuitSection.appendChild(card);
 
 		let image = document.createElement("img");
@@ -164,24 +177,16 @@ function processCircuitsByCarType(xhr) {
 		circuitType.className = "card-text";
 		circuitType.textContent = circuit.type;
 		cardBody.appendChild(circuitType);
-
-		let button = document.createElement("button");
-		button.classList.add("circuitBtn", "btn", "btn-primary");
-		button.type = "submit";
-		button.textContent = "Select";
-		button.setAttribute("circuitName", circuit.name);
-		button.setAttribute("lapPrice", circuit["lap price"]);
-		button.addEventListener("click", handleSelectCircuitClick);
-		cardBody.appendChild(button);
 	}
 
 	console.log("HTTP GET request successfully performed and processed.");
 }
 
 function handleSelectCircuitClick() {
-	document.getElementById("completeOrder").replaceChildren();
-
-	let divCompleteOrder = document.getElementById("completeOrder");
+	let div = document.getElementById("completeOrder");
+	div.classList.remove("hidden");
+	div.classList.add("show");
+	div.replaceChildren();
 
 	order.circuit = this.getAttribute("circuitName");
 	console.log("this button", this);
@@ -190,27 +195,27 @@ function handleSelectCircuitClick() {
 
 	// Title --- Complete your order ---
 	const title = document.createElement("h2");
-	title.textContent = "Complete your order";
-	divCompleteOrder.appendChild(title);
+	title.textContent = "Select the date and how many laps";
+	div.appendChild(title);
 
 	// Div of rows for date form
 	let rowDiv = document.createElement("div");
-	rowDiv.classList.add("row", "g-2", "align-items-center");
-	divCompleteOrder.appendChild(rowDiv);
+	rowDiv.classList.add("row", "g-2", "align-items-center", "mb-1", "mt-1");
+	div.appendChild(rowDiv);
 
 	// Col label date form
 	let colDiv = document.createElement("div");
-	colDiv.classList.add("col-auto");
+	colDiv.classList.add("col-md-3");
 	rowDiv.appendChild(colDiv);
 
 	// Label --- Select a date ---
 	let label = document.createElement("label");
-	label.classList.add("col-form-label");
+	label.classList.add("form-label");
 	label.textContent = "Select a date: ";
 	colDiv.appendChild(label);
 
 	colDiv = document.createElement("div");
-	colDiv.classList.add("col-auto");
+	colDiv.classList.add("col-md-3");
 	rowDiv.appendChild(colDiv);
 
 	// Input date form
@@ -223,21 +228,21 @@ function handleSelectCircuitClick() {
 
 	// Row for number of laps
 	rowDiv = document.createElement("div");
-	rowDiv.classList.add("row", "g-2", "align-items-center");
-	divCompleteOrder.appendChild(rowDiv);
+	rowDiv.classList.add("row", "g-2", "align-items-center", "mb-1", "mt-1");
+	div.appendChild(rowDiv);
 
 	colDiv = document.createElement("div");
-	colDiv.classList.add("col-auto");
+	colDiv.classList.add("col-md-3");
 	rowDiv.appendChild(colDiv);
 
 	// Label --- Select number of laps ---
 	label = document.createElement("label");
-	label.classList.add("col-form-label");
+	label.classList.add("form-label");
 	label.textContent = "Select the number of laps: ";
 	colDiv.appendChild(label);
 
 	colDiv = document.createElement("div");
-	colDiv.classList.add("col-auto");
+	colDiv.classList.add("col-md-3");
 	rowDiv.appendChild(colDiv);
 
 	let inputLaps = document.createElement("input");
@@ -249,31 +254,47 @@ function handleSelectCircuitClick() {
 	colDiv.appendChild(inputLaps);
 
 	rowDiv = document.createElement("div");
-	rowDiv.classList.add("row", "g-2", "align-items-center");
-	divCompleteOrder.appendChild(rowDiv);
+	rowDiv.classList.add("row", "g-2", "align-items-center", "mb-1", "mt-1");
+	div.appendChild(rowDiv);
 
 	// Col label price
 	colDiv = document.createElement("div");
-	colDiv.classList.add("col-auto");
+	colDiv.classList.add("col-md-3");
 	rowDiv.appendChild(colDiv);
 
 	let totalPrice = document.createElement("label");
-	totalPrice.id = "totalPrice";
-	totalPrice.textContent = "Total price: €0";
+	totalPrice.classList.add("form-label");
+	totalPrice.textContent = "Total price:";
 	colDiv.appendChild(totalPrice);
 
+	let price = document.createElement("label");
+	price.id = "totalPrice";
+	price.textContent = "€0";
+	price.classList.add("form-label");
+	colDiv.appendChild(price);
+
+	colDiv = document.createElement("div");
+	colDiv.classList.add("col-md-3");
+	rowDiv.appendChild(colDiv);
+
+	const btnCol = document.createElement("div");
+	btnCol.classList.add("d-grid", "gap-2");
+	colDiv.appendChild(btnCol);
+
 	let button = document.createElement("button");
-	button.className = "createOrderBtn";
-	button.textContent = "Create order";
+	button.classList.add("createOrderBtn", "btn", "btn-primary");
+	button.textContent = "Proceed to order";
 	button.setAttribute("date", inputDate.value);
 	button.setAttribute("nLaps", inputLaps.value);
-	button.addEventListener("click", handleCreateOrderClick);
-	colDiv.appendChild(button);
+	button.setAttribute("data-bs-toggle", "modal");
+	button.setAttribute("data-bs-target", "#orderModal");
+	btnCol.appendChild(button);
 
-	const setFavBtn = document.createElement("button");
-	setFavBtn.addEventListener("click", handleCreateOrderClick);
-	setFavBtn.textContent = "Add to favourites";
-	divCompleteOrder.appendChild(setFavBtn);
+	const addFavBtn = document.createElement("button");
+	addFavBtn.classList.add("btn", "btn-primary");
+	addFavBtn.addEventListener("click", handleAddFavouriteClick);
+	addFavBtn.textContent = "Add to favourites";
+	btnCol.appendChild(addFavBtn);
 
 	console.log(order);
 }
@@ -281,7 +302,7 @@ function handleSelectCircuitClick() {
 function handleUpdateTotalPrice() {
 	let label = document.getElementById("totalPrice");
 	if (lapPrice != null && this.value != null) {
-		label.textContent = "Total price: €" + lapPrice*this.value;
+		label.textContent = "€" + lapPrice*this.value;
 	}
 }
 
@@ -330,6 +351,32 @@ function handleCreateOrderClick() {
 	console.log("HTTP GET request sent. ", xhr);
 }
 
-function processCreateOrder() {
-	console.log("Create order complete");
+function processCreateOrder(xhr) {
+	// not finished yet
+	if (xhr.readyState !== XMLHttpRequest.DONE) {
+		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]", xhr.readyState);
+		return;
+	}
+
+	var response = JSON.parse(xhr.responseText);
+	// Show alert based on the success (or failure) of the request
+	if (xhr.status !== 200) {
+		console.log("i'm here, error");
+		document.getElementById("errorAlert").style.display = "block";
+		document.getElementById("successAlert").style.display = "none";
+	} else {
+		console.log("i'm here, success");
+		document.getElementById("successAlert").style.display = "block";
+		document.getElementById("errorAlert").style.display = "none";
+	}
+	
+	document.getElementById("returnHome").addEventListener("click", returnHome);
+}
+
+function returnHome() {
+	window.location.replace("http://localhost:8081/wacar/");
+}
+
+function handleAddFavouriteClick() {
+	console.log("press add to favourite");
 }

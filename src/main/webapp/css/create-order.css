@@ -1,0 +1,92 @@
+@keyframes show {
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.container {
+  background-color: lightgrey;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 10px lightgray;
+  margin-top: 2rem;
+  padding: 1rem;
+
+  opacity: 0;
+  transform: rotateX(-90deg);
+  transform-origin: top center;
+
+  animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+}
+
+.hidden {
+  display: none;
+}
+
+.show {
+  display: block;
+}
+
+.container h2 {
+  margin-left: 2rem;
+}
+
+.row {
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  opacity: 0;
+  transform: rotateX(-90deg);
+  transform-origin: top center;
+
+  animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+}
+
+.row .card {
+  border-radius: 10px;
+  border-color: #D76464;
+  border-width: 1px;
+  box-shadow: 0px 0px 10px #D76464;
+  height: 20.5rem;
+  width: 22.5rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: 1rem auto auto auto;
+  padding-right: 0%;
+  padding-left: 0%;
+  transition: transform 0.4s;
+}
+
+.row .card:hover {
+  transform: scale(1.1);
+  z-index: 2;
+}
+
+.row .card .card-img-top {
+  height: 65%;
+  width: 100%;
+  object-position: center;
+  border-radius: 10px;
+  position: relative;
+}
+
+.row .card .card-body {
+  height: 35%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.row .card .card-body .card-text {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.formComplete {
+  margin-left: 2rem;
+}
+
+.container .form-label {
+  margin-left: 2rem;
+  font-size: 1.5rem;
+}
