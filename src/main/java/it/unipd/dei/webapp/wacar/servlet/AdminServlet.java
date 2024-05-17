@@ -514,13 +514,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
         }
 
         try {
-
-            // stores the car and the message as a request attribute
-            req.setAttribute("car", car);
-            req.setAttribute("message", m);
-
-            // forwards the control to the create-employee-result JSP
-            req.getRequestDispatcher("/jsp/create-car-result.jsp").forward(req, res);
+            OutputStream out = res.getOutputStream();
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            m.toJSON(out);
+            out.flush();
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating the car object %s %s.", brand, model), e);
             throw e;
@@ -685,12 +683,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
         }
 
         try {
-            // stores the car and the message as a request attribute
-            req.setAttribute("circuit", circuit);
-            req.setAttribute("message", m);
-
-            // forwards the control to the JSP
-            req.getRequestDispatcher("/jsp/create-circuit-result.jsp").forward(req, res);
+            OutputStream out = res.getOutputStream();
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            m.toJSON(out);
+            out.flush();
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating the circuit object %s.", name), e);
             throw e;

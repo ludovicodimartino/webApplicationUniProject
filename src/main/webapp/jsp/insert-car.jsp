@@ -1,6 +1,6 @@
 <!--
 Author: Ludovico Di Martino (ludovico.dimartino@studenti.unipd.it)
-Version: 1.00
+Version: 2.00
 Since: 1.00
 -->
 
@@ -22,7 +22,7 @@ Since: 1.00
 <%@ include file="toolbar.jsp" %>
 
 <div class="container">
-    <h1 class="mb-4">Add new Car</h1>
+    <h1 class="mb-4 mt-4">Add new Car</h1>
     <div id="liveAlertPlaceholder"></div>
     <form enctype="multipart/form-data" action="${pageContext.request.contextPath}/admin/insertCar/" method="POST"
           class="needs-validation" id="insertCarForm" novalidate>

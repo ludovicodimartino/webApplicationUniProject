@@ -1,21 +1,21 @@
+
 // The Alert DOM element
 let liveAlert;
-
 $(document).ready(function(){
     const selectedImage = $("#selectedImage");
     const imageInput = $("#image");
-    const modalCarType = $("#newCarTypeModal");
+    const modalCircuitType = $("#newCircuitTypeModal");
     const typeNameInput = $("#typeName");
-    const carTypeSelect = $("#type");
+    const circuitTypeSelect = $("#type");
     liveAlert = $("#liveAlertPlaceholder");
-    const carTypeForm = $("#carTypeForm");
-    const insertCarForm = $("#insertCarForm");
+    const circuitTypeForm = $("#circuitTypeForm");
+    const insertCircuitForm = $("#insertCircuitForm");
 
     // Set the image as invalid
     imageInput[0].setCustomValidity("Invalid image.");
 
     // Placeholder image
-    const placeholderImageURL = "/wacar/images/carImagePlaceholder.png"
+    const placeholderImageURL = "/wacar/images/circuitImagePlaceholder.png"
 
     // Display the selected image
     imageInput.change( event => {
@@ -33,81 +33,81 @@ $(document).ready(function(){
     });
 
     // Focus on the input as soon as the modal is opened
-    modalCarType.on('shown.bs.modal', () => {
-       typeNameInput.focus();
+    modalCircuitType.on('shown.bs.modal', () => {
+        typeNameInput.focus();
     });
 
-    // Add car type
-    carTypeForm.submit((e) => {
+    // Add circuit type
+    circuitTypeForm.submit((e) => {
         // Prevents the form from the default submission
         e.preventDefault();
         e.stopPropagation();
 
         // Checks whether the input is valid
         const isValid = typeNameInput[0].checkValidity();
-        carTypeForm.addClass('was-validated');
+        circuitTypeForm.addClass('was-validated');
 
         // return if the form is not valid
         if(!isValid) return;
 
 
         // Perform the AJAX request
-        const url = "/wacar/admin/insertCarType/";
+        const url = "/wacar/admin/insertCircuitType/";
         const requestBody = "name=" + typeNameInput.val();
         const contentType = "application/x-www-form-urlencoded";
         const afterRequestFunction = (status) => {
             if(!status) { // Success
                 // If the type was correctly inserted in the db
-                carTypeSelect.append($('<option>', {
+                circuitTypeSelect.append($('<option>', {
                     value: typeNameInput.val(),
                     text: typeNameInput.val()
                 }));
 
                 // Set the newly created car type
-                carTypeSelect.val(typeNameInput.val());
+                circuitTypeSelect.val(typeNameInput.val());
             }
 
             //reset modal
-            carTypeForm.removeClass('was-validated');
+            circuitTypeForm.removeClass('was-validated');
             typeNameInput.val("");
-            modalCarType.modal('hide');
+            modalCircuitType.modal('hide');
 
         }
 
         performPOSTAjaxRequest(url, requestBody, contentType, afterRequestFunction);
     });
 
-    // Insert car
-    insertCarForm.submit((e) => {
+    // Insert circuit
+    insertCircuitForm.submit((e) => {
         // Prevents the form from the default submission
         e.preventDefault();
         e.stopPropagation();
 
         // Checks whether the input is valid
-        const isValid = insertCarForm[0].checkValidity();
-        insertCarForm.addClass('was-validated');
+        const isValid = insertCircuitForm[0].checkValidity();
+        insertCircuitForm.addClass('was-validated');
 
         // return if the form is not valid
         if(!isValid) return;
 
         //set up post-request parameters.
-        const url= "/wacar/admin/insertCar/";
+        const url= "/wacar/admin/insertCircuit/";
 
         //Let the browser to insert the content type and the boundary.
         const contentType = null;
-        const body = new FormData(insertCarForm[0]);
+        const body = new FormData(insertCircuitForm[0]);
         const afterResponseFunction = (status) => {
             if(!status){ // Success
 
                 // clear form
-                $(':input','#insertCarForm')
+                $(':input','#insertCircuitForm')
                     .not(':button, :submit, :reset, :hidden')
                     .val('')
                     .prop('checked', false)
                     .prop('selected', false);
 
                 // remove validations form
-                insertCarForm.removeClass('was-validated');
+                insertCircuitForm.removeClass('was-validated');
 
                 // remove image
                 selectedImage.attr('src', placeholderImageURL);
@@ -120,4 +120,5 @@ $(document).ready(function(){
         performPOSTAjaxRequest(url, body, contentType, afterResponseFunction);
 
     });
+
 });
