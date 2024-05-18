@@ -18,6 +18,9 @@
 	</head>
 
     <body>
+      <%@ include file="header.jsp" %>
+      <%@ include file="toolbar.jsp" %>
+
         <h1>Create a new order</h1>
         <hr>
         <c:if test="${not empty carsList}">
@@ -89,7 +92,7 @@
 
         
 
-        <script type="text/javascript" src="<c:url value="/js/ajax_create_order.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/create_order.js"/>"></script>
 
     </body>
 </html>

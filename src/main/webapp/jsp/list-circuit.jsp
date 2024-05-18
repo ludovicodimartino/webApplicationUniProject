@@ -17,11 +17,11 @@
 <%@ include file="toolbar.jsp" %>
 
 <c:if test="${not empty circuits}">
-    <div class="outer-container">
-        <c:forEach var="circuit" items="${circuits}" varStatus="loop">
-            <div class="item-container">
+    <div class="container">
+        <div class="row row-cols-3">
+            <c:forEach var="circuit" items="${circuits}" varStatus="loop">
                 <div class="card position-relative" data-toggle="modal" data-target="#circuitModal${loop.index}">
-                    <img src="<c:url value='/loadCircuitImage'><c:param name='name' value='${circuit.name}'/></c:url>" class="card-img-top" alt="circuit image">
+                    <img src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuit.name}'/></c:url>" class="card-img-top" alt="circuit image">
                     <div class="card-body">
                         <h6 class="card-subtitle mb-2 text-muted">${circuit.name}</h6>
                     </div>
@@ -37,14 +37,14 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <img src="<c:url value='/loadCircuitImage'><c:param name='name' value='${circuit.name}'/></c:url>" class="card-img-top" alt="circuit image">
+                                <img src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuit.name}'/></c:url>" class="card-img-top" alt="circuit image">
                                 <p>${circuit.description}</p>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </div>
     </div>
 </c:if>
 
