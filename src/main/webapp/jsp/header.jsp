@@ -30,9 +30,7 @@
                 <c:choose>
                     <c:when test="${not empty sessionScope.account}">
                         <li class="nav-item">
-                            <form method="POST" action="/wacar/logout/">
-                                <button class="nav-link">Logout</button>
-                            </form>
+                            <button id="logout" class="nav-link">Logout</button>
                         </li>
                     </c:when>
                     <c:otherwise>
@@ -49,6 +47,9 @@
         </div>
     </div>
 </nav>
+
+
+<script type="text/javascript" src="<c:url value="/js/logout.js"/>"></script>
 
 </body>
 </html>

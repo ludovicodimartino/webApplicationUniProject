@@ -21,7 +21,7 @@
                 </div>
             </c:when>
         </c:choose>
-        <form method="POST" action="/wacar/signup/">
+        <!-- <form method="POST" action="/wacar/signup/"> -->
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
                 <input name="email" id="email" type="email" class="form-control rounded-input" required placeholder="Enter your email">
@@ -47,12 +47,13 @@
                         'and lowercase letter, and at least 8 or more characters')" required
                        placeholder="Enter your password">
             </div>
-            <button type="submit" class="btn btn-success">Submit</button>
-            <button type="reset" class="btn btn-secondary">Reset</button>
-        </form>
+            <button id="signup" type="submit" class="btn btn-success">Submit</button>
+            <button id="reset" type="reset" class="btn btn-secondary">Reset</button>
+        <!-- </form> -->
     </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script type="text/javascript" src="<c:url value="/js/signup.js"/>"></script>
 </body>
 </html>

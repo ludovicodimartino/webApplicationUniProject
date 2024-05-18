@@ -195,7 +195,6 @@ public class UserServlet extends AbstractDatabaseServlet {
         } else {
             LOGGER.info("User NULL");
         }
-        response.sendRedirect(request.getContextPath() + "/");
     }
 
 
@@ -256,16 +255,10 @@ public class UserServlet extends AbstractDatabaseServlet {
                     session.setAttribute(LoginFilter.ACCOUNT_ATTRIBUTE, user);
                     LogContext.setUser(email);
 
-                    String firstURL = (String) session.getAttribute("firstURL");
-                    LOGGER.info("FIRST URL {}", firstURL);
-
-                    // login credentials were correct: we redirect the user to last pag before login
-                    if (firstURL == null) {
-                        res.sendRedirect(req.getContextPath() + "/home");
-                    }
-                    else {
-                        res.sendRedirect(firstURL);
-                    }
+                    // Add token header Authorization
+                    byte[] tokenBytes = (email+":"+req.getParameter("password")).getBytes();
+                    String token = ENCODER.encodeToString(tokenBytes);
+                    res.addHeader("Authorization", "BASIC " + token);
 
                 }
             }
@@ -344,18 +337,10 @@ public class UserServlet extends AbstractDatabaseServlet {
                         session.setAttribute("role", user.getType());
                         LogContext.setUser(email);
 
-                        String firstURL = (String) session.getAttribute("firstURL");
-                        LOGGER.info("FIRST URL {}", firstURL);
-
-                        // login credentials were correct: we redirect the user to last pag before login
-                        if (firstURL == null) {
-                            res.sendRedirect(req.getContextPath() + "/home");
-                        }
-                        else {
-                            res.sendRedirect(firstURL);
-                        }
-
-
+                        // Add token header Authorization
+                        byte[] tokenBytes = (email+":"+req.getParameter("password")).getBytes();
+                        String token = ENCODER.encodeToString(tokenBytes);
+                        res.addHeader("Authorization", "BASIC " + token);
                     }
                 }
             }
@@ -473,8 +458,6 @@ public class UserServlet extends AbstractDatabaseServlet {
                 //login page
 
                 loginOperations(req, res, true);
-
-
             }
 
         } catch (SQLException | ServletException e) {

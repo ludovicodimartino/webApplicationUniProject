@@ -93,7 +93,8 @@ function handleSelectCarClick() {
 	console.log("Performing the HTTP GET request.");
 
 	xhr.open('GET', url, true);
-	xhr.setRequestHeader('Authorization', 'BASIC ZGVmYXVsdEBleGFtcGxlLmNvbTpEZWZhdWx0MTIz');
+	const auth = sessionStorage.getItem("Authorization");
+	xhr.setRequestHeader('Authorization', sessionStorage.getItem("Authorization"));
 	xhr.withCredentials = true;
 	console.log();
 	xhr.send();
@@ -320,7 +321,7 @@ function handleCreateOrderClick() {
 	const xhr = new XMLHttpRequest();
 	xhr.open("POST", url);
 	xhr.setRequestHeader("Content-Type", "application/json");
-	xhr.setRequestHeader("Authorization", "BASIC ZGVmYXVsdEBleGFtcGxlLmNvbTpEZWZhdWx0MTIz");
+	xhr.setRequestHeader("Authorization", sessionStorage.getItem("Authorization"));
 
 	if (!xhr) {
 		console.log("Cannot create an XMLHttpRequest instance.")
@@ -342,7 +343,7 @@ function handleCreateOrderClick() {
 	order.createdAt = timeNow.toISOString();
 	console.log(order.createdAt);
 
-	order.account = "default@example.com";
+	order.account = sessionStorage.getItem("email");
 
 	var orderString = JSON.stringify({ "order": order });
 	console.log(orderString)
