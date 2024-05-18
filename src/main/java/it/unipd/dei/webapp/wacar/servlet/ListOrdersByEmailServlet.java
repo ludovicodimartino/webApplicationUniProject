@@ -1,12 +1,10 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
+import it.unipd.dei.webapp.wacar.dao.GetCarDAO;
+import it.unipd.dei.webapp.wacar.dao.GetCircuitDAO;
 import it.unipd.dei.webapp.wacar.dao.ListOrdersByEmailDAO;
 import it.unipd.dei.webapp.wacar.filter.LoginFilter;
-import it.unipd.dei.webapp.wacar.resource.Actions;
-import it.unipd.dei.webapp.wacar.resource.Message;
-import it.unipd.dei.webapp.wacar.resource.Order;
-import it.unipd.dei.webapp.wacar.resource.User;
-import it.unipd.dei.webapp.wacar.resource.LogContext;
+import it.unipd.dei.webapp.wacar.resource.*;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,7 +15,9 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -59,12 +59,27 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
             LogContext.setUser("NOT_LOGGED");
         }
 
-        Message m = null;
+        Message m;
         List<Order> orders = null;
+        Map<Integer, Car> cars = new HashMap<>();
+        Map<Integer, Circuit> circuits = new HashMap<>();
+
 
         try {
             assert user != null;
             orders = new ListOrdersByEmailDAO(getConnection(), user.getEmail()).access().getOutputParam();
+
+            for (Order order: orders){
+                Car car = new GetCarDAO(getConnection(), order.getCarBrand(), order.getCarModel()).access().getOutputParam();
+                Circuit circuit = new GetCircuitDAO(getConnection(), order.getCircuit()).access().getOutputParam();
+                cars.put(order.getId(), car);
+                circuits.put(order.getId(), circuit);
+            }
+
+            LOGGER.info("Order size: {}", orders.size());
+            LOGGER.info("User mail: {}", user.getEmail());
+
+
 
             m = new Message("Orders for user successfully retrieved");
             LOGGER.info("Orders for user successfully retrieved");
@@ -104,6 +119,8 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
             req.setAttribute("modifyAvailable", isDifferenceGreaterThan3DaysArray);
         }
         req.setAttribute("orders", orders);
+        req.setAttribute("cars", cars);
+        req.setAttribute("circuits", circuits);
         req.setAttribute("message", m);
 
         req.getRequestDispatcher("/jsp/list-orders.jsp").forward(req, res);

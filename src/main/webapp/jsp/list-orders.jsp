@@ -10,16 +10,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <title>List Orders</title>
+    <style>
+        .modal-dialog {
+            max-width: 600px;
+        }
+    </style>
 </head>
 <body>
 <%@ include file="header.jsp" %>
 <%@ include file="toolbar.jsp" %>
 
-
 <div class="container">
     <h2>List of Orders</h2>
     <table class="table table-striped">
-        <tbody>
+        <thead>
         <tr>
             <th>Id</th>
             <th>Date</th>
@@ -31,6 +35,8 @@
             <th>Price</th>
             <th>Modify</th>
         </tr>
+        </thead>
+        <tbody>
         <c:if test="${not empty orders}">
             <c:forEach var="order" items="${orders}" varStatus="loop">
                 <tr>
@@ -43,19 +49,64 @@
                     <td><c:out value="${order.NLaps}"/></td>
                     <td><c:out value="${order.price}"/></td>
                     <td>
-                        <c:choose>
-                            <c:when test="${modifyAvailable[loop.index]}">
-                                <form action="/wacar/user/update/${order.id}" method="get">
-                                    <button class="btn btn-primary btn-sm" onclick="modifyOrder('${order.id}')">Modify order</button>
-                                </form>
-                            </c:when>
-                            <c:otherwise>
-                                <button class="btn btn-primary btn-sm" disabled>Modify order</button>
-                            </c:otherwise>
-                        </c:choose>
-
+                        <button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#orderModal${order.id}">Modify order</button>
                     </td>
                 </tr>
+
+                <!-- Modal -->
+                <div class="modal fade" id="orderModal${order.id}" tabindex="-1" aria-labelledby="orderModalLabel${order.id}" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="orderModalLabel${order.id}">Order ${order.id} Details</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 image-container p-3">
+                                    <img class="card-img-top" src="<c:url value='/loadCarImage'><c:param name='model' value='${cars[order.id].model}'/><c:param name='brand' value='${cars[order.id].brand}'/></c:url>" alt="car image">
+                                </div>
+                                <div class="col-md-6 image-container p-3">
+                                    <img class="card-img-top" src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuits[order.id].name}'/></c:url>" alt="circuit image">
+                                </div>
+                            </div>
+                            <div class="modal-body">                            <div class="modal-body">
+                                <form id="orderForm${order.id}" action="/wacar/order/update/${order.id}" method="post">
+                                    <input type="hidden" name="orderId" value="${order.id}">
+                                    <div class="mb-3">
+                                        <label for="orderDate${order.id}" class="form-label">Date</label>
+                                        <input type="date" name="date" min="2024-01-01" class="form-control" id="orderDate${order.id}" value="${order.date}">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="orderCarBrand${order.id}" class="form-label">Car Brand</label>
+                                            <input type="text" class="form-control" id="orderCarBrand${order.id}" value="${order.carBrand}" disabled>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="orderCarModel${order.id}" class="form-label">Car Model</label>
+                                            <input type="text" class="form-control" id="orderCarModel${order.id}" value="${order.carModel}" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-6 mb-3">
+                                            <label for="orderCircuit${order.id}" class="form-label">Circuit</label>
+                                            <input type="text" class="form-control" id="orderCircuit${order.id}" value="${order.circuit}" disabled>
+                                        </div>
+                                        <div class="col-md-6 mb-3">
+                                            <label for="orderNLaps${order.id}" class="form-label">Number of Laps</label>
+                                            <input type="number" class="form-control" id="nLaps" name="nLaps" value="${order.NLaps}">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="orderPrice${order.id}" class="form-label">Price</label>
+                                        <input type="text" class="form-control" id="orderPrice${order.id}" value="${order.price}" disabled>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Confirm changes</button>
+                                </form>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </c:forEach>
         </c:if>
         </tbody>
