@@ -34,5 +34,60 @@ h1 {
     background-color: #f2f2f2;
 }
 
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin-top: 20px;
+    background-color: #1c1c1e;
+    color: #fff;
+    padding-top: 20px;
+}
+
+.footerContainer {
+    width: 100%;
+    padding: 15px 25px;
+}
+
+.footerColumn {
+    flex: 1;
+    padding: 15px;
+    text-align: left;
+}
+
+.footerColumn h5 {
+    margin-bottom: 10px;
+    color: #D76464;
+    border-bottom: 2px solid #e94560;
+    display: inline-block;
+    padding-bottom: 5px;
+}
+
+.footerColumn ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footerColumn ul li {
+    margin-bottom: 5px;
+}
+
+.footerColumn ul li a {
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.7;
+    transition: opacity 0.3s;
+}
+
+.footerColumn ul li a:hover {
+    opacity: 1;
+}
+
+.text-center.p-3 {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 10px 0;
+    margin-top: 15px;
+}
+
 
 
