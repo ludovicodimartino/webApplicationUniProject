@@ -12,9 +12,11 @@
 	<head>
 		<meta charset="utf-8">
 		<title>Create a new order</title>
-		  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/create-order.css">
+      <link rel="stylesheet" href="${pageContext.request.contextPath}/css/create-order.css">
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 	</head>
 
     <body>
@@ -24,7 +26,7 @@
         <h1>Create a new order</h1>
         <hr>
         <c:if test="${not empty carsList}">
-          <div class="container">         
+          <div class="container">
             <h2>Select a car</h2>
             <div class="row row-cols-3">
               <c:forEach var="car" items="${carsList}">
@@ -54,9 +56,37 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                ...
+                <div class="row">
+                  <div class="col md-6" id="recapOrderCarImage">
+                  </div>
+                  <div class="col md-6" id="recapOrderCircuitImage">
+                  </div>
+                </div>
+                <div class="row mb-4">
+                  <div class="col md-6" id="carLabelRecapOrder">
+                  </div>
+                  <div class="col md-6" id="circuitLabelRecapOrder">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-1">
+                    <span data-bs-toggle="tooltip" data-bs-title="Date" class="material-symbols-outlined">event</span>
+                  </div>
+                  <div class="col md-9" id="orderRecapDate">
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-1">
+                    <span data-bs-toggle="tooltip" data-bs-title="Laps number" class="material-symbols-outlined">laps</span>
+                  </div>
+                  <div class="col" id="orderRecapLapNo">
+                  </div>
+                </div>
               </div>
               <div class="modal-footer">
+                <div class="flex-grow-1 lead">
+                    TOTAL <b id="orderRecapPrice"></b><b>€</b>
+                </div>
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                 <button type="button" id="createOrder" class="btn btn-primary" data-bs-target="#completeModal" data-bs-toggle="modal">Create order</button>
               </div>
@@ -70,13 +100,13 @@
               <div class="modal-body">
                 <div>
                   <div id="successAlert" class="alert alert-success d-flex align-items-center" role="alert">
-                    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>
+                    <span class="material-symbols-outlined bi flex-shrink-0 me-2">check_circle</span>
                     <div>
                       An example success alert with an icon
                     </div>
                   </div>
                   <div id="errorAlert" class="alert alert-danger d-flex align-items-center" role="alert">
-                    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
+                    <span class="material-symbols-outlined bi flex-shrink-0 me-2">error</span>
                     <div>
                       An example danger alert with an icon
                     </div>
@@ -90,7 +120,7 @@
           </div>
         </div>
 
-        
+
 
         <script type="text/javascript" src="<c:url value="/js/create_order.js"/>"></script>
 

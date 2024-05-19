@@ -18,6 +18,10 @@
     Since: 1.0
 */
 
+//Enable tooltips
+const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+
 let order = {
 	id: -1,
 	date: null,
@@ -289,6 +293,7 @@ function handleSelectCircuitClick() {
 	button.setAttribute("nLaps", inputLaps.value);
 	button.setAttribute("data-bs-toggle", "modal");
 	button.setAttribute("data-bs-target", "#orderModal");
+	button.addEventListener("click", populateOrderRecap);
 	btnCol.appendChild(button);
 
 	const addFavBtn = document.createElement("button");
@@ -361,14 +366,14 @@ function processCreateOrder(xhr) {
 
 	var response = JSON.parse(xhr.responseText);
 	// Show alert based on the success (or failure) of the request
-	if (xhr.status !== 200) {
+	if (xhr.status !== 201) {
 		console.log("i'm here, error");
-		document.getElementById("errorAlert").style.display = "block";
-		document.getElementById("successAlert").style.display = "none";
+		document.getElementById("errorAlert").classList.remove('d-none');
+		document.getElementById("successAlert").classList.add('d-none');
 	} else {
 		console.log("i'm here, success");
-		document.getElementById("successAlert").style.display = "block";
-		document.getElementById("errorAlert").style.display = "none";
+		document.getElementById("successAlert").classList.remove('d-none');
+		document.getElementById("errorAlert").classList.add('d-none');
 	}
 	
 	document.getElementById("returnHome").addEventListener("click", returnHome);
@@ -380,4 +385,51 @@ function returnHome() {
 
 function handleAddFavouriteClick() {
 	console.log("press add to favourite");
+}
+
+function populateOrderRecap(){
+	console.log("Order recap population");
+
+	// ADD THE CAR IMAGE
+	const carImageDiv = document.getElementById("recapOrderCarImage");
+	console.log("Order: ", order);
+	carImageDiv.innerHTML = '';
+	const carImg = document.createElement('img');
+	carImg.src = `/wacar/loadCarImage?brand=${order.carBrand}&model=${order.carModel}`;
+	carImg.alt = `Car image of ${order.carBrand} ${order.carModel}`;
+	carImg.classList.add('img-fluid', 'rounded');
+	carImageDiv.appendChild(carImg);
+	const carLabel = document.getElementById("carLabelRecapOrder");
+	carLabel.innerHTML = `${order.carBrand} ${order.carModel}`;
+
+	// ADD THE CIRCUIT IMAGE
+	const circuitImageDiv = document.getElementById("recapOrderCircuitImage");
+	circuitImageDiv.innerHTML = '';
+	const circuitImg = document.createElement('img');
+	circuitImg.src = `/wacar/loadCircuitImage?circuitName=${order.circuit}`;
+	circuitImg.alt = `Circuit image of ${order.circuit}`;
+	circuitImg.classList.add('img-fluid', 'rounded');
+	circuitImageDiv.appendChild(circuitImg);
+	const circuitLabel = document.getElementById("circuitLabelRecapOrder");
+	circuitLabel.innerHTML = `${order.circuit}`;
+
+	//Add DATE
+	const date = document.getElementById("date");
+	const dateDiv = document.getElementById("orderRecapDate");
+	dateDiv.innerHTML = '';
+	let textElement = document.createElement('p');
+	textElement.textContent = date.value;
+	dateDiv.appendChild(textElement);
+
+	//Add laps
+	const laps = document.getElementById("nLaps");
+	const lapNoDiv = document.getElementById("orderRecapLapNo");
+	lapNoDiv.innerHTML = '';
+	textElement = document.createElement('p');
+	textElement.textContent = laps.value;
+	lapNoDiv.appendChild(textElement);
+
+	//Add PRICE
+	const priceDiv = document.getElementById("orderRecapPrice");
+	priceDiv.innerHTML = document.getElementById("totalPrice").innerHTML.substring(1);
 }
