@@ -13,8 +13,8 @@
 		<meta charset="utf-8">
 		<title>Create a new order</title>
       <link rel="stylesheet" href="${pageContext.request.contextPath}/css/create-order.css">
-      <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
       <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+		  <link rel="stylesheet" href="${pageContext.request.contextPath}/css/list.css">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
       <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
       <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"  integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
@@ -123,7 +123,7 @@
 
 
 
-        <script type="text/javascript" src="<c:url value="/js/create_order.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/create-order.js"/>"></script>
 
     </body>
 <c:import url="footer.jsp"/>

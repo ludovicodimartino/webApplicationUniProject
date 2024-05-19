@@ -1,70 +1,82 @@
-.outer-container {
-    margin: 20px auto;
-    max-width: 95%;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(370px, 1fr));
-    grid-gap: 20px;
+@keyframes show {
+  100% {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.container {
+  background-color: lightgrey;
+  border-radius: 1rem;
+  box-shadow: 0px 0px 10px lightgray;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1rem;
+
+  opacity: 0;
+  transform: rotateX(-90deg);
+  transform-origin: top center;
+
+  animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
+}
+
+.container h2 {
+  margin-left: 2rem;
+  margin-bottom: 1rem;
 }
 
 .row {
-    cursor: pointer;
-    display: inline-block;
-    vertical-align: top;
-    margin: 25px;
+  padding-left: 0rem;
+  padding-right: 0rem;
+
+  opacity: 0;
+  transform: rotateX(-90deg);
+  transform-origin: top center;
+
+  animation: show 600ms 100ms cubic-bezier(0.38, 0.97, 0.56, 0.76) forwards;
 }
 
-.card {
-    margin: 8px;
-    border-radius: 10px;
-    width: 380px;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+.row .card {
+  border-radius: 10px;
+  border-color: #D76464;
+  border-width: 1px;
+  box-shadow: 0px 0px 10px #D76464;
+  height: 20.5rem;
+  width: 22.5rem;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  margin: auto auto auto auto;
+  padding-right: 0%;
+  padding-left: 0%;
+  transition: transform 0.4s;
 }
 
-.card img {
-    height: 225px;
-    width: 100%;
-    object-fit: cover;
+.row .card:hover {
+  transform: scale(1.1);
+  z-index: 2;
 }
 
-.card h5 {
-    font-size: 15px;
-    margin-top: 3px;
-    margin-bottom: 10px;
+.row .card .card-img-top {
+  height: 65%;
+  width: 100%;
+  object-position: center;
+  border-radius: 10px;
+  position: relative;
 }
 
-.card h6 {
-    font-size: 18px;
-    text-align: center;
-    font-weight: bold;
+.row .card .card-body {
+  height: 35%;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-.additional-info {
-    display: none;
-    background-color: white;
-    border: 1px solid lightgrey;
-    padding: 10px;
-    border-radius: 5px;
+.row .card .card-body .card-text {
+  margin-top: 0;
+  margin-bottom: 0.5rem;
 }
 
-.item-container:hover .card {
-    transform: scale(1.1);
-}
-
-.item-container:hover .additional-info {
-    display: block;
-}
-
-.card-img-overlay {
-    color: #fff;
-}
-
-
-.close-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: white;
-    border: none;
-    padding: 5px;
+.container .form-label {
+  margin-left: 2rem;
+  font-size: 1.5rem;
 }

@@ -20,10 +20,10 @@
 <%@ include file="toolbar.jsp" %>
 
 <c:if test="${not empty cars}">
-    <div class="outer-container">
+    <div class="container">
         <!-- for each car in database -->
-        <c:forEach var="car" items="${cars}" varStatus="loop">
-            <div class="row">
+        <div class="row">
+            <c:forEach var="car" items="${cars}" varStatus="loop">
                 <div class="card" data-toggle="modal" data-target="#carModal${loop.index}">
                     <img class="card-img-top" src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="card-img-top" alt="car image">
                     <div class="card-body">
@@ -64,8 +64,8 @@
                     </div>
                 </div>
 
-            </div>
-        </c:forEach>
+            </c:forEach>
+        </div>
     </div>
 </c:if>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
