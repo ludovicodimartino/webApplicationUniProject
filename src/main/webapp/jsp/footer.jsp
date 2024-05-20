@@ -3,8 +3,13 @@ Author: Michele Scapinello (michele.scapinello@studenti.unipd.it)
 Version: 1.0
 Since: 1.0
 -->
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<html>
+<head>
+    <title>Header</title>
+</head>
+<body>
+
+<c:set var="home" value="${pageContext.request.contextPath}/jsp/home.jsp" />
 
 <footer class="bg-dark text-white text-center text-lg-start " id="footer">
     <!-- Grid container -->
@@ -14,21 +19,35 @@ Since: 1.0
                 <h5 class="text-uppercase">WACAR</h5>
                 <p> WaCar offers you a platform to book an experience with your favourite car, on your favourite track! What are you waiting for?!! </p>
             </div>
-
-            <div class="footerColumn">
-                <div class="footerNav">
-                    <h5 class="text-uppercase">Our site</h5>
-                    <ul class="list-unstyled">
-                        <li>
-                            <a href="<c:url value="/"/>" class="text-white">Login</a>
-                        </li>
-                        <li>
-                            <a href="<c:url value="/"/>" class="text-white">Sign Up</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
+            <c:choose>
+                <c:when test="${not empty sessionScope.account}">
+                    <div class="footerColumn">
+                        <div class="footerNav">
+                            <h5 class="text-uppercase">Our site</h5>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <button id="logout" class="nav-link">Logout</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </c:when>
+                <c:otherwise>
+                    <div class="footerColumn">
+                        <div class="footerNav">
+                            <h5 class="text-uppercase">Our site</h5>
+                            <ul class="list-unstyled">
+                                <li>
+                                    <a class="nav-link" href="/wacar/signup/">Signup</a>
+                                </li>
+                                <li>
+                                    <a class="nav-link" href="/wacar/login/">Login</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </c:otherwise>
+            </c:choose>
             <div class="footerColumn">
                 <h5 class="text-uppercase mb-0">Contacts</h5>
                 <address>
@@ -43,3 +62,8 @@ Since: 1.0
     </div>
     <!-- Copyright -->
 </footer>
+
+<script type="text/javascript" src="<c:url value="/js/logout.js"/>"></script>
+
+</body>
+</html>
