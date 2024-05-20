@@ -26,7 +26,7 @@ Since: 1.0
                             <h5 class="text-uppercase">Our site</h5>
                             <ul class="list-unstyled">
                                 <li>
-                                    <button id="logout" class="nav-link">Logout</button>
+                                    <button id="footer-logout" class="nav-link">Logout</button>
                                 </li>
                             </ul>
                         </div>
@@ -63,7 +63,7 @@ Since: 1.0
     <!-- Copyright -->
 </footer>
 
-<script type="text/javascript" src="<c:url value="/js/logout.js"/>"></script>
+<script type="text/javascript" src="<c:url value="/js/footer-logout.js"/>"></script>
 
 </body>
 </html>

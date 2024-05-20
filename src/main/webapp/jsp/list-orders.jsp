@@ -66,7 +66,6 @@
                                 <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
                             </ul>
                         </div>
-                        <!--<button class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#orderModal${order.id}">Modify order</button>-->
                     </td>
                 </tr>
 
