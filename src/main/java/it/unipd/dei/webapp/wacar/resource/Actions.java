@@ -166,6 +166,11 @@ public class Actions {
 	public static final String GET_ORDERS_BY_ID = "GET_ORDERS_BY_ID";
 
 	/**
+	 * Getting the orders of a specific id.
+	 */
+	public static final String DELETE_ORDER = "DELETE_ORDER";
+
+	/**
      * This class can be neither instantiated nor sub-classed.
      */
     private Actions() {

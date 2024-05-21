@@ -32,7 +32,6 @@ public class DeleteOrderDAO extends AbstractDAO<Order> {
             LOGGER.error("The order id cannot be negative.");
             throw new NullPointerException("The order id cannot be negative.");
         }
-
         this.id = id;
     }
 

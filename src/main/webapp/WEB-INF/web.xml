@@ -139,6 +139,15 @@
     </servlet-mapping>
 
     <servlet>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <servlet-class>it.unipd.dei.webapp.wacar.servlet.DeleteOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DeleteOrderServlet</servlet-name>
+        <url-pattern>/user/deleteOrder</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
         <servlet-name>LoadCarImageServlet</servlet-name>
         <servlet-class>it.unipd.dei.webapp.wacar.servlet.LoadCarImageServlet</servlet-class>
     </servlet>
