@@ -239,14 +239,13 @@ public class UserServlet extends AbstractDatabaseServlet {
                 if (user == null){
                     //if not, tell it to the user
                     ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
-                    m = new Message("The user does not exist",ec.getErrorCode(),ec.getErrorMessage());
+                    m = new Message("The user does not exist.",ec.getErrorCode(),ec.getErrorMessage());
                     LOGGER.error("problems with user: {}", m.getMessage());
-                    req.setAttribute("message", m);
-                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    m.toJSON(res.getOutputStream());
                 }
                 else{
                     m = new Message("Login success");
-                    req.setAttribute("message", m);
                     LOGGER.info("the user {} LOGGED IN", user.getEmail());
                     LOGGER.info("User account type: {}", user.getType());
 
@@ -259,7 +258,7 @@ public class UserServlet extends AbstractDatabaseServlet {
                     byte[] tokenBytes = (email+":"+req.getParameter("password")).getBytes();
                     String token = ENCODER.encodeToString(tokenBytes);
                     res.addHeader("Authorization", "BASIC " + token);
-
+                    res.setStatus(HttpServletResponse.SC_OK);
                 }
             }
             else
@@ -276,30 +275,30 @@ public class UserServlet extends AbstractDatabaseServlet {
                     ErrorCode ec = ErrorCode.PASSWORD_MISSING;
                     m = new Message("Insert the password",ec.getErrorCode(),ec.getErrorMessage());
                     LOGGER.error("problems with fields: {}", m.getMessage());
-                    req.setAttribute("message", m);
-                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
+                    res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    m.toJSON(res.getOutputStream());
                 }
-                // check password is compliant
-                else if (!password.matches(regex_psw)){
-                    ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
+                // // check password is compliant
+                // else if (!password.matches(regex_psw)){
+                //     ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
 
-                    m = new Message("This password is not compliant",ec.getErrorCode(),ec.getErrorMessage());
+                //     m = new Message("This password is not compliant",ec.getErrorCode(),ec.getErrorMessage());
 
-                    LOGGER.error("problems with fields: {}", m.getMessage());
-                    req.setAttribute("message", m);
-                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
+                //     LOGGER.error("problems with fields: {}", m.getMessage());
+                //     req.setAttribute("message", m);
+                //     req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
 
-                }
-                // check email is compliant
-                else if (!email.matches(regex_email)){
-                    ErrorCode ec = ErrorCode.MAIL_NOT_COMPLIANT;
+                // }
+                // // check email is compliant
+                // else if (!email.matches(regex_email)){
+                //     ErrorCode ec = ErrorCode.MAIL_NOT_COMPLIANT;
 
-                    m = new Message("This is not an email",ec.getErrorCode(),ec.getErrorMessage());
-                    LOGGER.error("problems with fields: {}", m.getMessage());
-                    req.setAttribute("message", m);
-                    req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
+                //     m = new Message("This is not an email",ec.getErrorCode(),ec.getErrorMessage());
+                //     LOGGER.error("problems with fields: {}", m.getMessage());
+                //     req.setAttribute("message", m);
+                //     req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
 
-                }
+                // }
                 else{
 
                     //try to authenticate the user
@@ -320,9 +319,9 @@ public class UserServlet extends AbstractDatabaseServlet {
                         ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
                         m = new Message("The user does not exist",ec.getErrorCode(),ec.getErrorMessage());
                         LOGGER.error("problems with user: {}", m.getMessage());
-                        req.setAttribute("message", m);
-                        req.getRequestDispatcher("/jsp/login.jsp").forward(req, res);
-
+                        
+                        res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        m.toJSON(res.getOutputStream());
                     }
                     else{
                         m = new Message("Login success");
@@ -341,18 +340,22 @@ public class UserServlet extends AbstractDatabaseServlet {
                         byte[] tokenBytes = (email+":"+req.getParameter("password")).getBytes();
                         String token = ENCODER.encodeToString(tokenBytes);
                         res.addHeader("Authorization", "BASIC " + token);
+                        res.setStatus(HttpServletResponse.SC_OK);
                     }
                 }
             }
 
         } catch (SQLException e){
             m = new Message("An error occurred SQL","E200",e.getMessage());
-            req.setAttribute("message", m);
+            // req.setAttribute("message", m);
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            m.toJSON(res.getOutputStream());
             LOGGER.error("stacktrace:", e);
         }
         catch (NumberFormatException e){
             m = new Message("An error occurred handling numbers","E200",e.getMessage());
-            req.setAttribute("message", m);
+            res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            m.toJSON(res.getOutputStream());
             LOGGER.error("stacktrace:", e);
         }
 

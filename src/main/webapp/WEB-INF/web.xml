@@ -117,7 +117,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>CreateFavouriteServlet</servlet-name>
-        <url-pattern>/user/create-favourite/recap</url-pattern>
+        <url-pattern>/user/create-favourite/</url-pattern>
     </servlet-mapping>
 
     <servlet>

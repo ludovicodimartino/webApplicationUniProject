@@ -18,10 +18,22 @@
     Since: 1.0
 */
 
-const button = document.getElementById("login");
-button.addEventListener("click", handleLogin);
+const loginBtn = document.getElementById("login");
+loginBtn.addEventListener("click", handleLogin);
+
+
+const resetBtn = document.getElementById("reset");
+resetBtn.addEventListener("click", function() {
+  document.getElementById("password").value = "";
+  document.getElementById("email").value = "";
+});
 
 function handleLogin() {
+  const alert = document.getElementById("errorAlert");
+  if (!alert.classList.contains("d-none")) {
+    alert.classList.add("d-none");
+  }
+
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const url = "http://localhost:8081/wacar/login/" + "?email=" + email + "&password=" + password;
@@ -56,28 +68,38 @@ function processLogin(xhr) {
   // not finished yet
 	if (xhr.readyState !== XMLHttpRequest.DONE) {
 		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]", xhr.readyState);
-    
-    if (xhr.readyState == XMLHttpRequest.HEADERS_RECEIVED) {
-      const headers = xhr.getAllResponseHeaders();
-      console.log("headers: ", headers);
-  
-      const array = headers.trim().split(/[\r\n]+/);
-      console.log("array: ", array);
-  
-      array.forEach((line) => {
-        const parts = line.split(": ");
-        const header = parts.shift();
-        if (header === "authorization") {
-          const token = parts.join(": ");
-          console.log("token: ", token);
-  
-          sessionStorage.setItem("Authorization", token);
-          sessionStorage.setItem("email", email.value);
-        }
-      });
-
-      window.location.replace("http://localhost:8081/wacar/");
-    }
     return;
-	}
+  }
+    
+  if (xhr.status == 401) {
+    const alert = document.getElementById("errorAlert");
+    const alertText = document.getElementById("errorAlertText");
+    console.log("error message ", xhr.responseText);
+    var message = JSON.parse(xhr.responseText);
+    console.log("error message ", message.message.message);
+    alertText.textContent = message.message.message;
+    alert.classList.remove("d-none");
+    return;
+  } else if (xhr.status == 200) {
+    const headers = xhr.getAllResponseHeaders();
+    console.log("headers: ", headers);
+
+    const array = headers.trim().split(/[\r\n]+/);
+    console.log("array: ", array);
+
+    array.forEach((line) => {
+      const parts = line.split(": ");
+      const header = parts.shift();
+      if (header === "authorization") {
+        const token = parts.join(": ");
+        console.log("token: ", token);
+
+        sessionStorage.setItem("Authorization", token);
+        sessionStorage.setItem("email", email.value);
+      }
+    });
+
+    window.location.replace("http://localhost:8081/wacar/");
+  }
+  return;
 }

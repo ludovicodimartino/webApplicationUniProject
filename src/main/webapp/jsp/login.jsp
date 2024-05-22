@@ -19,13 +19,9 @@
 <div class="container">
     <div class="form-container">
         <h1>LOGIN</h1>
-        <c:choose>
-            <c:when test="${not empty message.error}">
-                <div class="alert alert-danger" role="alert">
-                    <span>${message.message}</span>
-                </div>
-            </c:when>
-        </c:choose>
+        <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+            <span id="errorAlertText"></span>
+        </div>
         <div class="input-group mb-3">
             <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
             <input name="email" id="email" type="email" class="form-control" required placeholder="Enter your email">
