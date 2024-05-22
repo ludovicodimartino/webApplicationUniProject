@@ -14,10 +14,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 
@@ -64,6 +61,9 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
         Map<Integer, Car> cars = new HashMap<>();
         Map<Integer, Circuit> circuits = new HashMap<>();
 
+        // Initialize the before_current_date and after_current_date lists
+        List<Order> before_current_date = new ArrayList<>();
+        List<Order> after_current_date = new ArrayList<>();
 
         try {
             assert user != null;
@@ -106,6 +106,13 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
                 // Calculate the difference in days between the order date and the current date
                 long differenceMillis = orderDate.getTime() - currentDate.getTime();
 
+                // Check if the order date is before or after the current date
+                if (differenceMillis <= 0) {
+                    before_current_date.add(orders.get(i));
+                } else {
+                    after_current_date.add(orders.get(i));
+                }
+
                 long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
 
                 // Check if the difference is greater than 3 days
@@ -117,8 +124,9 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
             }
             // Set the array as an attribute to be passed to the JSP file
             req.setAttribute("modifyAvailable", isDifferenceGreaterThan3DaysArray);
+            req.setAttribute("afterorders", after_current_date);
+            req.setAttribute("beforeorders", before_current_date);
         }
-        req.setAttribute("orders", orders);
         req.setAttribute("cars", cars);
         req.setAttribute("circuits", circuits);
         req.setAttribute("message", m);
