@@ -144,7 +144,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>DeleteOrderServlet</servlet-name>
-        <url-pattern>/user/deleteOrder</url-pattern>
+        <url-pattern>/order/delete/*</url-pattern>
     </servlet-mapping>
 
     <servlet>

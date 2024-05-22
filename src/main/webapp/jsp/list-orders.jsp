@@ -72,11 +72,33 @@
                                 <li><a class="dropdown-item disabled">Edit</a></li>
                             </c:otherwise>
                         </c:choose>
-                        <li><a class="dropdown-item text-danger" href="#">Delete</a></li>
+                        <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${afterorders.id}">Delete</a></li>
                     </ul>
                 </div>
             </td>
         </tr>
+
+        <!-- Modal for DELETE -->
+        <div class="modal fade" id="deleteModal${afterorders.id}" tabindex="-1" aria-labelledby="deleteModalLabel${afterorders.id}" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="deleteModalLabel${afterorders.id}">Deleting order ${afterorders.id}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="deleteForm${afterorders.id}" action="/wacar/order/delete/${afterorders.id}" method="post">
+                            <input type="hidden" name="orderId" value="${afterorders.id}">
+                            <p>Are you sure you want to delete this order?</p>
+                            <button type="submit" class="btn btn-primary">Confirm</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
 
         <!-- Modal -->
         <div class="modal fade" id="orderModal${afterorders.id}" tabindex="-1" aria-labelledby="orderModalLabel${afterorders.id}"

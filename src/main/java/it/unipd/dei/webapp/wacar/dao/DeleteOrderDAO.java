@@ -40,6 +40,8 @@ public class DeleteOrderDAO extends AbstractDAO<Order> {
         PreparedStatement pstmt = null;
         con.setAutoCommit(false); // For an eventual rollback
 
+
+
         try {
             pstmt = con.prepareStatement(ORDER_DELETE_STATEMENT);
 
