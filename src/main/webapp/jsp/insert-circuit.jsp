@@ -61,7 +61,7 @@ Since: 1.00
 
                     <jsp:useBean id="circuitList" scope="request" type="java.util.List"/>
                     <div class="input-group px-1 mb-3">
-                        <select id="type" class="form-select" name="type" required>
+                        <select id="circuitTypeSelect" class="form-select" name="type" required>
                             <option value="">Select circuit type</option>
                             <c:forEach items="${circuitList}" var="circuit" varStatus="loop">
                                 <option value="${circuit.name}"><c:out value="${circuit.name}"/></option>
@@ -134,32 +134,7 @@ Since: 1.00
 
     </form>
 
-
-    <!-- Modal -->
-    <div class="modal fade" id="newCircuitTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-         aria-hidden="true">
-
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">New circuit type</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="circuitTypeForm" method="post" class="needs-validation" novalidate>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="typeName" name="name" required>
-                            <label for="typeName">Circuit type name</label>
-                            <div class="invalid-feedback">
-                                Please provide a valid circuit type name.
-                            </div>
-                        </div>
-                        <input type="submit" class="btn btn-primary" id="addTypeBtn" value="Add">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <c:import url="/jsp/include/circuit-type-modal.jsp"/>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -172,6 +147,7 @@ Since: 1.00
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/admin-utils.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/insert-circuit-type.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/insert-circuit.js"></script>
 </body>
 </html>

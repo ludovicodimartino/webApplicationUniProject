@@ -1,3 +1,6 @@
+// The Alert DOM element
+let liveAlert;
+
 // Function to perform the POST requests to the server
 const performPOSTAjaxRequest = (url, body, contentType, afterResponseFunction) => {
     // The XMLHttpRequest object for making the AJAX call

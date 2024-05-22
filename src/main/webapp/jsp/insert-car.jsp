@@ -60,7 +60,7 @@ Since: 1.00
 
                     <jsp:useBean id="carList" scope="request" type="java.util.List"/>
                     <div class="input-group px-1 mb-3">
-                        <select id="type" class="form-select" name="type" required>
+                        <select id="carTypeSelect" class="form-select" name="type" required>
                             <option value="">Select car type</option>
                             <c:forEach items="${carList}" var="car" varStatus="loop">
                                 <option value="${car.name}"><c:out value="${car.name}"/></option>
@@ -133,31 +133,7 @@ Since: 1.00
 
     </form>
 
-
-    <!-- Modal -->
-    <div class="modal fade" id="newCarTypeModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="exampleModalLabel">New car type</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="carTypeForm" method="post" class="needs-validation" novalidate>
-                        <div class="form-floating mb-3">
-                            <input type="text" class="form-control" id="typeName" name="name" required>
-                            <label for="typeName">Car type name</label>
-                            <div class="invalid-feedback">
-                                Please provide a valid car type name.
-                            </div>
-                        </div>
-                        <input type="submit" class="btn btn-primary" id="addTypeBtn" value="Add">
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <c:import url="/jsp/include/car-type-modal.jsp"/>
 
 </div>
 <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
@@ -169,6 +145,8 @@ Since: 1.00
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/admin-utils.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/insert-car-type.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/insert-car.js"></script>
 </body>
 </html>

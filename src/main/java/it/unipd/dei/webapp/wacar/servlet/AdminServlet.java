@@ -758,9 +758,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
             }
         }
         try {
-            // forwards the control to the JSP
-            req.setAttribute("message", m);
-            carCircuitSuitabilityPage(req, res);
+            OutputStream out = res.getOutputStream();
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            m.toJSON(out);
+            out.flush();
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when creating the mapping (%s, %s).", carType, circuitType), e);
             throw e;
@@ -824,9 +826,11 @@ public class AdminServlet extends AbstractDatabaseServlet {
             }
         }
         try {
-            // forwards the control to the JSP
-            req.setAttribute("message", m);
-            res.sendRedirect(req.getContextPath() + "/admin/insertMapping/");
+            OutputStream out = res.getOutputStream();
+            res.setContentType("application/json");
+            res.setCharacterEncoding("UTF-8");
+            m.toJSON(out);
+            out.flush();
         } catch (IOException e) {
             LOGGER.error(new StringFormattedMessage("Unable to send response when deleting the mapping (%s, %s).", carType, circuitType), e);
             throw e;
