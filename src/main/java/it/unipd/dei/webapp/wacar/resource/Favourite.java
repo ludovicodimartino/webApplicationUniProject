@@ -10,6 +10,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 
 /**
  * Represents a favourite item, typically associated with a user's preferences.
@@ -202,7 +203,9 @@ public class Favourite extends AbstractResource{
                             break;
                         case "createdAt":
                             jp.nextToken();
-                            jcreatedAt = new Timestamp(jp.getLongValue());
+                            
+                            Instant instant = Instant.parse(jp.getText());
+                            jcreatedAt = Timestamp.from(instant);
                             break;
                     }
                 }

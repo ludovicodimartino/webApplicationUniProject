@@ -7,8 +7,8 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class InsertFavouriteDAO extends AbstractDAO<Car> {
-    private static final String FAVOURITE_INSERT_STATEMENT = "INSERT INTO assessment.favourite(circuit, \"carBrand\", \"carModel\", \"createdAt\", account) VALUES (?, ?, ?, ?, ?);";
+public class InsertFavouriteDAO extends AbstractDAO<Favourite> {
+    private static final String FAVOURITE_INSERT_STATEMENT = "INSERT INTO assessment.favourite(circuit, \"carBrand\", \"carModel\", \"createdAt\", account) VALUES (?, ?, ?, ?, ?) RETURNING *;";
 
     private final Favourite favourite;
 
@@ -50,5 +50,7 @@ public class InsertFavouriteDAO extends AbstractDAO<Car> {
                 pstmt.close();
             }
         }
+
+        outputParam = favourite;
     }
 }

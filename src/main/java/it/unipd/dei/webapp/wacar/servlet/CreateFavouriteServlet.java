@@ -2,6 +2,7 @@ package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.dao.InsertFavouriteDAO;
 import it.unipd.dei.webapp.wacar.resource.*;
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -50,6 +51,7 @@ public class CreateFavouriteServlet extends AbstractDatabaseServlet {
 
             favourite = new Favourite(circuitName, carBrand, carModel, user.getEmail(), createdAt);
         } catch (Exception e) {
+            res.setStatus(ErrorCode.WRONG_RESOURCE.getHTTPCode());
             LOGGER.error("Invalid request: ", e.getMessage());
         }
 
@@ -60,7 +62,7 @@ public class CreateFavouriteServlet extends AbstractDatabaseServlet {
                 m = new Message("You already have a favourite with the same choices.", "E5A1", e.getMessage());
                 req.setAttribute("message", m);
             }
-
+            res.setStatus(ErrorCode.CANNOT_CREATE_RESOURCE.getHTTPCode());
             LOGGER.error("Unable to insert the new favourite: %s" + e.getMessage());
         }
 

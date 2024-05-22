@@ -288,6 +288,7 @@ function handleSelectCircuitClick() {
 
 	let button = document.createElement("button");
 	button.classList.add("createOrderBtn", "btn", "btn-primary");
+	button.type = "button";
 	button.textContent = "Proceed to order";
 	button.setAttribute("date", inputDate.value);
 	button.setAttribute("nLaps", inputLaps.value);
@@ -297,10 +298,24 @@ function handleSelectCircuitClick() {
 	btnCol.appendChild(button);
 
 	const addFavBtn = document.createElement("button");
+	addFavBtn.id = "addFavBtn";
+	addFavBtn.type = "button";
 	addFavBtn.classList.add("btn", "btn-primary");
+	addFavBtn.setAttribute("data-bs-target", "#favouriteModal");
+	addFavBtn.setAttribute("data-bs-toggle", "modal");
 	addFavBtn.addEventListener("click", handleAddFavouriteClick);
 	addFavBtn.textContent = "Add to favourites";
 	btnCol.appendChild(addFavBtn);
+
+	const delFavBtn = document.createElement("button");
+	delFavBtn.id = "delFavBtn";
+	delFavBtn.type = "button";
+	delFavBtn.classList.add("btn", "btn-primary", "d-none");
+	delFavBtn.setAttribute("data-bs-target", "#favouriteModal");
+	delFavBtn.setAttribute("data-bs-toggle", "modal");
+	delFavBtn.addEventListener("click", handleDeleteFavouriteClick);
+	delFavBtn.textContent = "Delete from favourites";
+	btnCol.appendChild(delFavBtn);
 
 	console.log(order);
 }
@@ -343,7 +358,6 @@ function handleCreateOrderClick() {
 	// perform the request
 	console.log("Performing the HTTP GET request.");
 
-	// TODO: complete order!!!
 	const timeNow = new Date();
 	order.createdAt = timeNow.toISOString();
 	console.log(order.createdAt);
@@ -368,8 +382,8 @@ function processCreateOrder(xhr) {
 	// Show alert based on the success (or failure) of the request
 	if (xhr.status !== 201) {
 		console.log("i'm here, error");
-		document.getElementById("errorAlert").classList.remove('d-none');
-		document.getElementById("successAlert").classList.add('d-none');
+		document.getElementById("errorAlert").classList.remove("d-none");
+		document.getElementById("successAlert").classList.add("d-none");
 	} else {
 		console.log("i'm here, success");
 		document.getElementById("successAlert").classList.remove('d-none');
@@ -384,7 +398,83 @@ function returnHome() {
 }
 
 function handleAddFavouriteClick() {
-	console.log("press add to favourite");
+	const favourite = {
+		circuit: order.circuit,
+		carBrand: order.carBrand,
+		carModel: order.carModel,
+		account: sessionStorage.getItem("email"),
+		createdAt: -1,
+	}
+
+	const url = "http://localhost:8081/wacar/rest/user/favourite/add";
+	// the XMLHttpRequest object
+	const xhr = new XMLHttpRequest();
+	xhr.open("POST", url, true);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.setRequestHeader("Authorization", sessionStorage.getItem("Authorization"));
+
+	if (!xhr) {
+		console.log("Cannot create an XMLHttpRequest instance.")
+
+		alert("Giving up :( Cannot create an XMLHttpRequest instance");
+		return false;
+	}
+
+	// set up the call back for handling the request
+	xhr.onreadystatechange = function () {
+		processFavouriteOperation(this, "add");
+	};
+
+	// perform the request
+	console.log("Performing the HTTP GET request.");
+
+	const timeNow = new Date();
+	favourite.createdAt = timeNow.toISOString();
+	var favouriteString = JSON.stringify({ "favourite": favourite });
+
+	xhr.withCredentials = true;
+	xhr.send(favouriteString);
+
+	console.log("HTTP GET request sent. ", xhr);
+}
+
+function handleDeleteFavouriteClick() {
+	const favourite = {
+		circuit: order.circuit,
+		carBrand: order.carBrand,
+		carModel: order.carModel,
+		account: sessionStorage.getItem("email"),
+		createdAt: -1,
+	}
+	
+	const url = "http://localhost:8081/wacar/rest/user/favourite/delete";
+	// the XMLHttpRequest object
+	const xhr = new XMLHttpRequest();
+	xhr.open("DELETE", url, true);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	xhr.setRequestHeader("Authorization", sessionStorage.getItem("Authorization"));
+
+	if (!xhr) {
+		console.log("Cannot create an XMLHttpRequest instance.")
+
+		alert("Giving up :( Cannot create an XMLHttpRequest instance");
+		return false;
+	}
+
+	// set up the call back for handling the request
+	xhr.onreadystatechange = function () {
+		processFavouriteOperation(this, "delete");
+	};
+
+	// perform the request
+	console.log("Performing the HTTP GET request.");
+
+	var favouriteString = JSON.stringify({ "favourite": favourite });
+
+	xhr.withCredentials = true;
+	xhr.send(favouriteString);
+
+	console.log("HTTP GET request sent. ", xhr);
 }
 
 function populateOrderRecap(){
@@ -432,4 +522,49 @@ function populateOrderRecap(){
 	//Add PRICE
 	const priceDiv = document.getElementById("orderRecapPrice");
 	priceDiv.innerHTML = document.getElementById("totalPrice").innerHTML.substring(1);
+}
+
+function processFavouriteOperation(xhr, op) {
+	// not finished yet
+	if (xhr.readyState !== XMLHttpRequest.DONE) {
+		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]", xhr.readyState);
+		return;
+	}
+
+	console.log(xhr.status);
+
+	if (op == "add") {
+		if (xhr.status !== 201) {
+			console.log("i'm here, error");
+			document.getElementById("errorFavAlert").classList.remove('d-none');
+			document.getElementById("successFavAlert").classList.add('d-none');
+			const message = xhr.responseText;
+			console.log(message);
+		} else {
+			console.log("i'm here, success");
+			document.getElementById("successFavAlert").classList.remove('d-none');
+			document.getElementById("errorFavAlert").classList.add('d-none');
+	
+			document.getElementById("delFavBtn").classList.remove('d-none');
+			document.getElementById("addFavBtn").classList.add('d-none');
+		}
+	} else if (op == "delete") {
+		if (xhr.status !== 200) {
+			console.log("i'm here, error");
+			document.getElementById("errorFavAlert").classList.remove('d-none');
+			document.getElementById("successFavAlert").classList.add('d-none');
+			const message = xhr.responseText;
+			console.log(message);
+		} else {
+			console.log("i'm here, success");
+			document.getElementById("successFavAlert").classList.remove('d-none');
+			document.getElementById("errorFavAlert").classList.add('d-none');
+	
+			document.getElementById("addFavBtn").classList.remove('d-none');
+			document.getElementById("delFavBtn").classList.add('d-none');
+		}
+	}
+
+
+	console.log("Add favourite completed");
 }

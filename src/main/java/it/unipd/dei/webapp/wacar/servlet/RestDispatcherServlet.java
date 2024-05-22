@@ -22,6 +22,8 @@ import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.rest.GetOrderByIdAndUserEmailRR;
 import it.unipd.dei.webapp.wacar.rest.InsertOrderRR;
+import it.unipd.dei.webapp.wacar.rest.InsertFavouriteRR;
+import it.unipd.dei.webapp.wacar.rest.DeleteFavouriteRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitByCarTypeRR;
 import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
@@ -56,7 +58,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		try {
 
 			// if the requested resource was a Circuit a Car or an Order, delegate its processing and return
-			if (processListCar(req, res) || processOrder(req, res) || processListCircuits(req, res)) {
+			if (processListCar(req, res) || processOrder(req, res) || processFavourite(req, res) || processListCircuits(req, res)) {
 				return;
 			}
 
@@ -356,6 +358,104 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 						LOGGER.warn("Unsupported operation for URI /order/{orderId}: %s.", method);
 
 						m = new Message("Unsupported operation for URI /order/{orderId}.",
+								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+								String.format("Requested operation %s.", method));
+						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+						m.toJSON(res.getOutputStream());
+						break;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Checks whether the request if for visualizing an {@link Order} and, in case, processes it.
+	 *
+	 * @param req the HTTP request.
+	 * @param res the HTTP response.
+	 * @return {@code true} if the request was for a {@code Product}; {@code false} otherwise.
+	 * @throws Exception if any error occurs.
+	 */
+	private boolean processFavourite(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+		final String method = req.getMethod();
+
+		String path = req.getRequestURI();
+		Message m = null;
+
+		LOGGER.info("I am here");
+
+		// the requested resource was not a favourite
+		if (path.lastIndexOf("user/favourite") <= 0) {
+			return false;
+		}
+
+		// strip everything until after the /favourite
+		path = path.substring(path.lastIndexOf("favourite") + 9);
+
+		// the request URI is: /
+		// if method GET, list the available order of the logged in account
+		if (path.isEmpty() || path.equals("/")) {
+			LOGGER.info("path /");
+			switch (method) {
+				default:
+					LOGGER.warn("Unsupported operation for URI /: %s.", method);
+
+					m = new Message(ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage(),
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+							String.format("Requested operation %s.", method));
+					res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+					m.toJSON(res.getOutputStream());
+					break;
+			}
+		} else if (path.contains("/")) {
+			path = path.substring(path.lastIndexOf("/") + 1);
+			if (path.equals("add")) {
+				LOGGER.info("Inside favourite/add handler");
+
+				switch (method) {
+					case "POST":
+						new InsertFavouriteRR(req, res, getConnection()).serve();
+	
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /favourite/add: %s.", method);
+	
+						m = new Message("Unsupported operation for URI /favourite/add.",
+								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+								String.format("Requested operation %s.", method));
+						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+						m.toJSON(res.getOutputStream());
+						break;
+				}
+			} else if (path.equals("delete")) {
+				LOGGER.info("Inside favourite/delete handler");
+
+				switch (method) {
+					case "DELETE":
+						new DeleteFavouriteRR(req, res, getConnection()).serve();
+	
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /favourite/delete: %s.", method);
+	
+						m = new Message("Unsupported operation for URI /favourite/delete.",
+								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+								String.format("Requested operation %s.", method));
+						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+						m.toJSON(res.getOutputStream());
+						break;
+				}
+			} else if (path.equals("search")) {
+				switch (method) {
+					case "GET":
+						// new GetFavouriteRR(req, res, favourite, getConnection()).serve();
+	
+						break;
+					default:
+						LOGGER.warn("Unsupported operation for URI /favourite/search: %s.", method);
+	
+						m = new Message("Unsupported operation for URI /favourite/search.",
 								ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
 								String.format("Requested operation %s.", method));
 						res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());

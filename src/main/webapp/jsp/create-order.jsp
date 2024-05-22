@@ -121,11 +121,31 @@
             </div>
           </div>
         </div>
-
+        <!-- Favourite Add or Delete -->
+        <div class="modal fade" id="favouriteModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-body">
+                <div>
+                  <div id="successFavAlert" class="alert alert-success d-flex align-items-center" role="alert">
+                    <span class="material-symbols-outlined bi flex-shrink-0 me-2">check_circle</span>
+                    <div id="addFavSuccesMessage"></div>
+                  </div>
+                  <div id="errorFavAlert" class="alert alert-danger d-flex align-items-center" role="alert">
+                    <span class="material-symbols-outlined bi flex-shrink-0 me-2">error</span>
+                    <div id="addFavErrorMessage"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" aria-label="Close">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
         <script type="text/javascript" src="<c:url value="/js/create-order.js"/>"></script>
-
     </body>
     <%@ include file="footer.jsp" %>
 </html>
