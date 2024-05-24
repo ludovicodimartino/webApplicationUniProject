@@ -24,19 +24,11 @@ import java.util.concurrent.TimeUnit;
  */
 public class UpdateOrderServlet extends AbstractDatabaseServlet {
 
-    /**
-     * Handles the HTTP post request to update the order of the user
-     *
-     * @param request  the {@code HttpServletRequest} incoming request from the client
-     * @param response the {@code HttpServletResponse} response object from the server
-     * @throws ServletException if any problem occurs while executing the servlet.
-     * @throws IOException      if any error occurs in the client/server communication.
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         LogContext.setIPAddress(request.getRemoteAddr());
         LogContext.setAction(Actions.UPDATE_ACCOUNT);
-        final HttpSession session = request.getSession(false);
+        HttpSession session = request.getSession(false);
 
         if (session == null) {
             String errorMessage = "No session. User cannot modify order.";
@@ -53,7 +45,7 @@ public class UpdateOrderServlet extends AbstractDatabaseServlet {
             int orderId = Integer.parseInt(orderIdStr);
             Order oldOrder = new GetOrderByIdAndUserEmailDAO(getConnection(), user.getEmail(), orderId).access().getOutputParam();
 
-            if (!Objects.equals(user.getEmail(), oldOrder.getAccount())) {
+            if (!user.getEmail().equals(oldOrder.getAccount())) {
                 String errorMessage = "No session. User cannot modify order.";
                 LOGGER.error(errorMessage);
                 LogContext.removeIPAddress();
@@ -72,27 +64,29 @@ public class UpdateOrderServlet extends AbstractDatabaseServlet {
             long differenceInDays = TimeUnit.DAYS.convert(differenceInMillis, TimeUnit.MILLISECONDS);
 
             if (differenceInDays < 3) {
-                ErrorCode ec = ErrorCode.PASSWORD_NOT_COMPLIANT;
-                Message m = new Message("Date inserted not valid", ec.getErrorCode(), ec.getErrorMessage());
-                session.setAttribute("order", oldOrder);
-                LOGGER.error("problems with fields: {}", m.getMessage());
-                request.setAttribute("message", m);
-                request.getRequestDispatcher("/jsp/modifyOrder.jsp").forward(request, response);
+                handleFieldErrors(session, response, oldOrder, "INVALID DATE");
+                return;
+            }
+
+            if (nLaps < 1) {
+                handleFieldErrors(session, response, oldOrder, "INVALID NUMBER OF LAPS");
                 return;
             }
 
             Circuit circuit = new GetCircuitDAO(getConnection(), oldOrder.getCircuit()).access().getOutputParam();
             int newPrice = circuit.getLapPrice() * nLaps;
 
-            LOGGER.info("old price: {} \nnew price: {}", oldOrder.getPrice(), newPrice);
+            LOGGER.info("Old price: {} \nNew price: {}", oldOrder.getPrice(), newPrice);
+
+            Order newOrder = new Order(oldOrder.getId(), date, nLaps, newPrice);
+            LOGGER.info("New order info {} date {} retrieved", newOrder.getId(), newOrder.getDate());
 
             session.setAttribute("order", null);
-            Order newOrder = new Order(oldOrder.getId(), date, nLaps, newPrice);
-            LOGGER.info("New order info {} date {} retrieved", oldOrder.getId(), oldOrder.getDate());
+            session.removeAttribute("errorMessage");
 
             new UpdateOrderDAO(getConnection(), newOrder).access().getOutputParam();
 
-        } catch (SQLException | ParseException e) {
+        } catch (SQLException | ParseException | NumberFormatException e) {
             String errorMsg = e.getMessage().substring(e.getMessage().indexOf(":") + 2, e.getMessage().indexOf(" Where:"));
             Message m = new Message("Unable to update the order's information", "E5A1", e.getMessage());
             request.setAttribute("message", m);
@@ -103,5 +97,14 @@ public class UpdateOrderServlet extends AbstractDatabaseServlet {
         response.sendRedirect("/wacar/user/listOrdersByAccount");
         LogContext.removeIPAddress();
         LogContext.removeAction();
+    }
+
+    private void handleFieldErrors(HttpSession session, HttpServletResponse response, Order oldOrder, String errorMessage) throws IOException {
+        ErrorCode ec = ErrorCode.EMPTY_INPUT_FIELDS;
+        Message m = new Message(errorMessage, ec.getErrorCode(), ec.getErrorMessage());
+        session.setAttribute("order", oldOrder);
+        session.setAttribute("errorMessage", m);
+        LOGGER.error("Problems with fields: {}", m.getMessage());
+        response.sendRedirect("/wacar/user/listOrdersByAccount");
     }
 }

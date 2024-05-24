@@ -27,6 +27,14 @@
 <%@ include file="toolbar.jsp" %>
 
 <div class="container">
+
+    <c:if test="${not empty sessionScope.errorMessage}">
+        <div class="alert alert-danger">
+                ${sessionScope.errorMessage.message}
+        </div>
+        <c:remove var="sessionScope.errorMessage" />
+    </c:if>
+
     <h3>Pending orders</h3>
     <table class="table table-striped">
         <thead>
@@ -100,69 +108,56 @@
 
 
 
-        <!-- Modal -->
-        <div class="modal fade" id="orderModal${afterorders.id}" tabindex="-1" aria-labelledby="orderModalLabel${afterorders.id}"
-             aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="orderModalLabel${afterorders.id}">Order ${afterorders.id} Details</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 image-container p-3">
-                            <img class="card-img-top"
-                                 src="<c:url value='/loadCarImage'><c:param name='model' value='${cars[afterorders.id].model}'/><c:param name='brand' value='${cars[afterorders.id].brand}'/></c:url>"
-                                 alt="car image">
+            <!-- Modal -->
+            <div class="modal fade" id="orderModal${afterorders.id}" tabindex="-1" aria-labelledby="orderModalLabel${afterorders.id}" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="orderModalLabel${afterorders.id}">Order ${afterorders.id} Details</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="col-md-6 image-container p-3">
-                            <img class="card-img-top"
-                                 src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuits[afterorders.id].name}'/></c:url>"
-                                 alt="circuit image">
-                        </div>
-                    </div>
-                    <div class="modal-body">
                         <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-6 image-container p-3">
+                                    <img class="img-fluid rounded" src="<c:url value='/loadCarImage'><c:param name='model' value='${cars[afterorders.id].model}'/><c:param name='brand' value='${cars[afterorders.id].brand}'/></c:url>" alt="car image">
+                                </div>
+                                <div class="col-md-6 image-container p-3">
+                                    <img class="img-fluid rounded" src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuits[afterorders.id].name}'/></c:url>" alt="circuit image">
+                                </div>
+                            </div>
                             <form id="orderForm${afterorders.id}" action="/wacar/order/update/${afterorders.id}" method="post">
                                 <input type="hidden" name="orderId" value="${afterorders.id}">
                                 <div class="mb-3">
                                     <label for="orderDate${afterorders.id}" class="form-label">Date</label>
-                                    <input type="date" name="date" min="2024-01-01" class="form-control"
-                                           id="orderDate${afterorders.id}" value="${afterorders.date}">
+                                    <input type="date" name="date" min="2024-01-01" class="form-control" id="orderDate${afterorders.id}" value="${afterorders.date}">
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="orderCarBrand${afterorders.id}" class="form-label">Car Brand</label>
-                                        <input type="text" class="form-control" id="orderCarBrand${afterorders.id}"
-                                               value="${afterorders.carBrand}" disabled>
+                                        <input type="text" class="form-control" id="orderCarBrand${afterorders.id}" value="${afterorders.carBrand}" disabled>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="orderCarModel${afterorders.id}" class="form-label">Car Model</label>
-                                        <input type="text" class="form-control" id="orderCarModel${afterorders.id}"
-                                               value="${afterorders.carModel}" disabled>
+                                        <input type="text" class="form-control" id="orderCarModel${afterorders.id}" value="${afterorders.carModel}" disabled>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="orderCircuit${afterorders.id}" class="form-label">Circuit</label>
-                                        <input type="text" class="form-control" id="orderCircuit${afterorders.id}"
-                                               value="${afterorders.circuit}" disabled>
+                                        <input type="text" class="form-control" id="orderCircuit${afterorders.id}" value="${afterorders.circuit}" disabled>
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="orderNLaps${afterorders.id}" class="form-label">Number of Laps</label>
-                                        <input type="number" class="form-control" id="nLaps" name="nLaps"
-                                               value="${afterorders.NLaps}">
+                                        <input type="number" class="form-control" id="nLaps" name="nLaps" value="${afterorders.NLaps}">
                                     </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="orderPrice${afterorders.id}" class="form-label">Price</label>
-                                    <input type="text" class="form-control" id="orderPrice${afterorders.id}"
-                                           value="${afterorders.price}" disabled>
+                                    <input type="text" class="form-control" id="orderPrice${afterorders.id}" value="${afterorders.price}" disabled>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Confirm changes</button>
+                                <button type="submit" class="btn btn-primary w-100">Confirm changes</button>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
