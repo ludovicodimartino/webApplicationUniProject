@@ -87,7 +87,7 @@ Since: 1.00
             <tr>
                 <th scope="col">Car Type</th>
                 <th scope="col">Circuit Types</th>
-                <th scope="col">Actions</th>
+                <th scope="col" class="col-1">Delete</th>
             </tr>
             </thead>
             <tbody id="associationBody">
@@ -95,26 +95,20 @@ Since: 1.00
                 <tr>
                     <td rowspan="<c:out value="${fn:length(cCSuit.value)}"/>"><c:out value="${cCSuit.key}"/></td>
                     <td><c:out value="${cCSuit.value[0]}"/></td>
-                    <td>
-                        <form name="f1" action="${pageContext.request.contextPath}/admin/deleteMapping/" method="POST">
-                            <input type="hidden" name="carType" value="${cCSuit.key}"/>
-                            <input type="hidden" name="circuitType" value="${cCSuit.value[0]}"/>
-                            <input id="edit0" type="submit" name="delete" value="delete" class="removeBtn">
-                        </form>
+                    <td class="deleteBtnCol">
+                        <button carType="${cCSuit.key}" circuitType="<c:out value="${cCSuit.value[0]}"/>" class="deleteBtn btn btn-danger">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
                     </td>
                 </tr>
                 <c:forEach items="${cCSuit.value}" var="circuitType" varStatus="loop">
                     <c:if test="${loop.index > 0}">
                         <tr>
                             <td><c:out value="${circuitType}"/></td>
-                            <td>
-                                <form name="f1" action="${pageContext.request.contextPath}/admin/deleteMapping/"
-                                      method="POST">
-                                    <input type="hidden" name="carType" value="${cCSuit.key}"/>
-                                    <input type="hidden" name="circuitType" value="${circuitType}"/>
-                                    <input id="${loop.index}" type="submit" name="delete" value="delete"
-                                           class="removeBtn">
-                                </form>
+                            <td class="deleteBtnCol">
+                                    <button carType="${cCSuit.key}" circuitType="<c:out value="${circuitType}"/>" class="deleteBtn btn btn-danger">
+                                        <span class="material-symbols-outlined">delete</span>
+                                    </button>
                             </td>
                         </tr>
                     </c:if>
