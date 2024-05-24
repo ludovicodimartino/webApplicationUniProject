@@ -35,8 +35,13 @@ $(document).ready(function() {
                     text: typeNameInput.val()
                 }));
 
-                // Set the newly created car type
+                // Set the newly created circuit type
                 circuitTypeSelect.val(typeNameInput.val());
+
+                // Update the circuitTypes data structure if not undefined
+                if(circuitTypes !== undefined){
+                    circuitTypes.push(typeNameInput.val())
+                }
 
                 // Trigger change event
                 circuitTypeSelect.change();
