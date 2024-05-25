@@ -39,7 +39,9 @@ function handleCircuitClick() {
 
     // Fill admin edit link
     const adminEditCircuit = document.getElementById("admin-edit-circuit");
-    adminEditCircuit.href = "/wacar/admin/editCircuit/?name=" + this.id;
+    if(adminEditCircuit != null){
+        adminEditCircuit.href = "/wacar/admin/editCircuit/?name=" + this.id;
+    }
     
     const circuitUrl = "/wacar/rest/circuit/" + this.id; // TODO
     const xhrBody = new XMLHttpRequest();

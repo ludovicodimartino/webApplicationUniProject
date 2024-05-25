@@ -75,7 +75,7 @@ public class GetCarDAO extends AbstractDAO<Car> {
                         rs.getString("description"),
                         rs.getInt("maxSpeed"),
                         rs.getInt("horsepower"),
-                        rs.getInt("0-100"),
+                        rs.getFloat("0-100"),
                         rs.getBoolean("available"),
                         rs.getString("type"),
                         rs.getBytes("image"),
