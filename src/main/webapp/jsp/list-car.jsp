@@ -19,55 +19,57 @@
 <%@ include file="header.jsp" %>
 <%@ include file="toolbar.jsp" %>
 
-<c:if test="${not empty cars}">
-    <div class="container">
-        <!-- for each car in database -->
-        <div class="row">
-            <c:forEach var="car" items="${cars}" varStatus="loop">
-                <div class="card" data-toggle="modal" data-target="#carModal${loop.index}">
-                    <img class="card-img-top" src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="card-img-top" alt="car image">
-                    <div class="card-body">
-                        <p class="h5"><c:out value="${car.brand} ${car.model}"/></p>
-                        <p class="h6"><c:out value="${car.type}"/></p>
+<div class="container">
+    <c:if test="${not empty cars}">
+        <div class="container-form">
+            <!-- for each car in database -->
+            <div class="row">
+                <c:forEach var="car" items="${cars}" varStatus="loop">
+                    <div class="card" data-toggle="modal" data-target="#carModal${loop.index}">
+                        <img class="card-img-top" src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="card-img-top" alt="car image">
+                        <div class="card-body">
+                            <p class="h5"><c:out value="${car.brand} ${car.model}"/></p>
+                            <p class="h6"><c:out value="${car.type}"/></p>
+                        </div>
                     </div>
-                </div>
-                <!-- Opened/clicked car card -->
-                <div class="modal fade" id="carModal${loop.index}" tabindex="-1" role="dialog" aria-labelledby="carModalLabel${loop.index}" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h3 class="modal-title fs-5" id="carModalLabel${loop.index}">${car.brand} ${car.model}</h3>
-                                <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <div class="container-fluid">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <img src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="img-fluid rounded mb-3" alt="car image">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <p>${car.description}</p>
-                                            <ul class="list-group list-group-flush">
-                                                <li class="list-group-item"><strong>Max Speed:</strong> ${car.maxSpeed} km/h</li>
-                                                <li class="list-group-item"><strong>Horsepower:</strong> ${car.horsepower} HP</li>
-                                                <li class="list-group-item"><strong>Acceleration:</strong> ${car.acceleration} s</li>
-                                                <li class="list-group-item">
-                                                    <strong>Available:</strong>
-                                                    <span class="text-${car.available ? 'success' : 'danger'}"><strong>${car.available}</strong></span>
-                                                </li>
-                                            </ul>
+                    <!-- Opened/clicked car card -->
+                    <div class="modal fade" id="carModal${loop.index}" tabindex="-1" role="dialog" aria-labelledby="carModalLabel${loop.index}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h3 class="modal-title fs-5" id="carModalLabel${loop.index}">${car.brand} ${car.model}</h3>
+                                    <button type="button" class="close btn-close" data-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <img src="<c:url value='/loadCarImage'><c:param name='model' value='${car.model}'/><c:param name='brand' value='${car.brand}'/></c:url>" class="img-fluid rounded mb-3" alt="car image">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <p>${car.description}</p>
+                                                <ul class="list-group list-group-flush">
+                                                    <li class="list-group-item"><strong>Max Speed:</strong> ${car.maxSpeed} km/h</li>
+                                                    <li class="list-group-item"><strong>Horsepower:</strong> ${car.horsepower} HP</li>
+                                                    <li class="list-group-item"><strong>Acceleration:</strong> ${car.acceleration} s</li>
+                                                    <li class="list-group-item">
+                                                        <strong>Available:</strong>
+                                                        <span class="text-${car.available ? 'success' : 'danger'}"><strong>${car.available}</strong></span>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-            </c:forEach>
+                </c:forEach>
+            </div>
         </div>
-    </div>
-</c:if>
+    </c:if>
+</div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
