@@ -39,7 +39,7 @@ let lapPrice = -1
 
 
 // select all the buttons with the class name "btn"
-const buttons = document.querySelectorAll(".cardBtn");
+const buttons = document.querySelectorAll(".carBtn");
 
 // Add an event listener to the button,
 // to invoke the function making the AJAX call
@@ -49,6 +49,12 @@ buttons.forEach(function(button) {
 
 const btnOrder = document.getElementById("createOrder");
 btnOrder.addEventListener("click", handleCreateOrderClick);
+
+document.getElementById("nLaps").addEventListener("change", handleUpdateTotalPrice);
+document.getElementById("proceedOrder").addEventListener("click", populateOrderRecap);
+document.getElementById("addFavBtn").addEventListener("click", handleAddFavouriteClick);
+document.getElementById("delFavBtn").addEventListener("click", handleDeleteFavouriteClick);
+
 
 // document.getElementById("getCircuitByCarTypeButton").addEventListener("click", getCircuitByCarType);
 console.log("Event listener added to getCircuitByCarTypeButton.")
@@ -61,6 +67,21 @@ console.log("Event listener added to getCircuitByCarTypeButton.")
 function handleSelectCarClick() {
 	console.log("cookie: ", document.cookie);
 
+	// Hide all select labels
+	let alerts = document.querySelectorAll(".cardCarBtn-alert");
+	alerts.forEach((alert) => {
+		alert.parentNode.removeChild(alert);
+	})
+
+	// Show select label on selected card
+	let body = this.childNodes[3];
+	console.log("body ", body);
+	let newAlert = document.createElement("div");
+	newAlert.classList.add("cardCarBtn-alert", "alert", "alert-success");
+	newAlert.role = "alert";
+	newAlert.innerHTML = "Selected"
+	body.appendChild(newAlert);
+
 	// get the value of the salary from the form field
 	// const carTypeObject = document.getElementById("carType");
 	const carType = this.getAttribute("carType");
@@ -70,7 +91,7 @@ function handleSelectCarClick() {
 	order.carModel = this.getAttribute("carModel");
 	order.circuit = "";
 
-	document.getElementById("completeOrder").replaceChildren();
+	// document.getElementById("completeOrder").replaceChildren();
 
 	console.log("order:", order)
 
@@ -112,7 +133,6 @@ function handleSelectCarClick() {
  * @param xhr the XMLHttpRequest object performing the request.
  */
 function processCircuitsByCarType(xhr) {
-
 	// not finished yet
 	if (xhr.readyState !== XMLHttpRequest.DONE) {
 		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]",
@@ -157,7 +177,7 @@ function processCircuitsByCarType(xhr) {
 		console.log(circuit)
 
 		let card = document.createElement("div");
-    card.classList.add("card", "circuitBtn");
+    card.classList.add("circuitBtn", "card");
 		card.type = "submit";
 		card.setAttribute("circuitName", circuit.name);
 		card.setAttribute("lapPrice", circuit["lap price"]);
@@ -173,13 +193,13 @@ function processCircuitsByCarType(xhr) {
 		cardBody.className = "card-body";
 		card.appendChild(cardBody);
 
-		let circuitName = document.createElement("h5");
-		circuitName.className = "card-title";
+		let circuitName = document.createElement("p");
+		circuitName.className = "h5";
 		circuitName.textContent = circuit.name;
 		cardBody.appendChild(circuitName);
 
 		let circuitType = document.createElement("p");
-		circuitType.className = "card-text";
+		circuitType.className = "h6";
 		circuitType.textContent = circuit.type;
 		cardBody.appendChild(circuitType);
 	}
@@ -188,134 +208,30 @@ function processCircuitsByCarType(xhr) {
 }
 
 function handleSelectCircuitClick() {
+	// Hide all select labels
+	let alerts = document.querySelectorAll(".cardCircuitBtn-alert");
+	alerts.forEach((alert) => {
+		alert.parentNode.removeChild(alert);
+	})
+
+	console.log("this", this.childNodes);
+
+	// Show select label on selected card
+	let body = this.childNodes[1];
+	console.log("body ", body);
+	let newAlert = document.createElement("div");
+	newAlert.classList.add("cardCircuitBtn-alert", "alert", "alert-success");
+	newAlert.role = "alert";
+	newAlert.innerHTML = "Selected"
+	body.appendChild(newAlert);
+
 	let div = document.getElementById("completeOrder");
 	div.classList.remove("hidden");
 	div.classList.add("show");
-	div.replaceChildren();
+	// div.replaceChildren();
 
 	order.circuit = this.getAttribute("circuitName");
-	console.log("this button", this);
 	lapPrice = parseInt(this.getAttribute("lapPrice"));
-	console.log("lapPrice after click", lapPrice);
-
-	// Title --- Complete your order ---
-	const title = document.createElement("h2");
-	title.textContent = "Select the date and how many laps";
-	div.appendChild(title);
-
-	// Div of rows for date form
-	let rowDiv = document.createElement("div");
-	rowDiv.classList.add("row", "g-2", "align-items-center", "mb-1", "mt-1");
-	div.appendChild(rowDiv);
-
-	// Col label date form
-	let colDiv = document.createElement("div");
-	colDiv.classList.add("col-md-3");
-	rowDiv.appendChild(colDiv);
-
-	// Label --- Select a date ---
-	let label = document.createElement("label");
-	label.classList.add("form-label");
-	label.textContent = "Select a date: ";
-	colDiv.appendChild(label);
-
-	colDiv = document.createElement("div");
-	colDiv.classList.add("col-md-3");
-	rowDiv.appendChild(colDiv);
-
-	// Input date form
-	let inputDate = document.createElement("input");
-	inputDate.classList.add("form-control");
-	inputDate.id = "date";
-	inputDate.type = "date";
-	inputDate.setAttribute("min", "2018-01-01");
-	colDiv.appendChild(inputDate);
-
-	// Row for number of laps
-	rowDiv = document.createElement("div");
-	rowDiv.classList.add("row", "g-2", "align-items-center", "mb-1", "mt-1");
-	div.appendChild(rowDiv);
-
-	colDiv = document.createElement("div");
-	colDiv.classList.add("col-md-3");
-	rowDiv.appendChild(colDiv);
-
-	// Label --- Select number of laps ---
-	label = document.createElement("label");
-	label.classList.add("form-label");
-	label.textContent = "Select the number of laps: ";
-	colDiv.appendChild(label);
-
-	colDiv = document.createElement("div");
-	colDiv.classList.add("col-md-3");
-	rowDiv.appendChild(colDiv);
-
-	let inputLaps = document.createElement("input");
-	inputLaps.classList.add("form-control");
-	inputLaps.id = "nLaps";
-	inputLaps.type = "number";
-	inputLaps.setAttribute("min", "1");
-	inputLaps.addEventListener("change", handleUpdateTotalPrice);
-	colDiv.appendChild(inputLaps);
-
-	rowDiv = document.createElement("div");
-	rowDiv.classList.add("row", "g-2", "align-items-center", "mb-1", "mt-1");
-	div.appendChild(rowDiv);
-
-	// Col label price
-	colDiv = document.createElement("div");
-	colDiv.classList.add("col-md-3");
-	rowDiv.appendChild(colDiv);
-
-	let totalPrice = document.createElement("label");
-	totalPrice.classList.add("form-label");
-	totalPrice.textContent = "Total price:";
-	colDiv.appendChild(totalPrice);
-
-	let price = document.createElement("label");
-	price.id = "totalPrice";
-	price.textContent = "€0";
-	price.classList.add("form-label");
-	colDiv.appendChild(price);
-
-	colDiv = document.createElement("div");
-	colDiv.classList.add("col-md-3");
-	rowDiv.appendChild(colDiv);
-
-	const btnCol = document.createElement("div");
-	btnCol.classList.add("d-grid", "gap-2");
-	colDiv.appendChild(btnCol);
-
-	let button = document.createElement("button");
-	button.classList.add("createOrderBtn", "btn", "btn-primary");
-	button.type = "button";
-	button.textContent = "Proceed to order";
-	button.setAttribute("date", inputDate.value);
-	button.setAttribute("nLaps", inputLaps.value);
-	button.setAttribute("data-bs-toggle", "modal");
-	button.setAttribute("data-bs-target", "#orderModal");
-	button.addEventListener("click", populateOrderRecap);
-	btnCol.appendChild(button);
-
-	const addFavBtn = document.createElement("button");
-	addFavBtn.id = "addFavBtn";
-	addFavBtn.type = "button";
-	addFavBtn.classList.add("btn", "btn-primary");
-	addFavBtn.setAttribute("data-bs-target", "#favouriteModal");
-	addFavBtn.setAttribute("data-bs-toggle", "modal");
-	addFavBtn.addEventListener("click", handleAddFavouriteClick);
-	addFavBtn.textContent = "Add to favourites";
-	btnCol.appendChild(addFavBtn);
-
-	const delFavBtn = document.createElement("button");
-	delFavBtn.id = "delFavBtn";
-	delFavBtn.type = "button";
-	delFavBtn.classList.add("btn", "btn-primary", "d-none");
-	delFavBtn.setAttribute("data-bs-target", "#favouriteModal");
-	delFavBtn.setAttribute("data-bs-toggle", "modal");
-	delFavBtn.addEventListener("click", handleDeleteFavouriteClick);
-	delFavBtn.textContent = "Delete from favourites";
-	btnCol.appendChild(delFavBtn);
 
 	console.log(order);
 }
@@ -323,7 +239,7 @@ function handleSelectCircuitClick() {
 function handleUpdateTotalPrice() {
 	let label = document.getElementById("totalPrice");
 	if (lapPrice != null && this.value != null) {
-		label.textContent = "€" + lapPrice*this.value;
+		label.textContent = "Total price: €" + lapPrice*this.value;
 	}
 }
 
@@ -378,15 +294,18 @@ function processCreateOrder(xhr) {
 		return;
 	}
 
-	var response = JSON.parse(xhr.responseText);
 	// Show alert based on the success (or failure) of the request
 	if (xhr.status !== 201) {
 		console.log("i'm here, error");
+		const msg = JSON.parse(xhr.responseText);
 		document.getElementById("errorAlert").classList.remove("d-none");
+		document.getElementById("orderErrorMessage").innerHTML = msg.message.message;
 		document.getElementById("successAlert").classList.add("d-none");
 	} else {
 		console.log("i'm here, success");
+		const msg = JSON.parse(xhr.responseText);
 		document.getElementById("successAlert").classList.remove('d-none');
+		document.getElementById("orderSuccessMessage").innerHTML = msg.message.message;
 		document.getElementById("errorAlert").classList.add('d-none');
 	}
 	
@@ -444,7 +363,6 @@ function handleDeleteFavouriteClick() {
 		carBrand: order.carBrand,
 		carModel: order.carModel,
 		account: sessionStorage.getItem("email"),
-		createdAt: -1,
 	}
 	
 	const url = "http://localhost:8081/wacar/rest/user/favourite/delete";
@@ -521,7 +439,7 @@ function populateOrderRecap(){
 
 	//Add PRICE
 	const priceDiv = document.getElementById("orderRecapPrice");
-	priceDiv.innerHTML = document.getElementById("totalPrice").innerHTML.substring(1);
+	priceDiv.innerHTML = document.getElementById("totalPrice").innerHTML.substring(13);
 }
 
 function processFavouriteOperation(xhr, op) {
@@ -536,27 +454,36 @@ function processFavouriteOperation(xhr, op) {
 	if (op == "add") {
 		if (xhr.status !== 201) {
 			console.log("i'm here, error");
+			const msg = JSON.parse(xhr.responseText);
+			document.getElementById("addFavErrorMessage").innerHTML = msg.message.message;
+
+
 			document.getElementById("errorFavAlert").classList.remove('d-none');
 			document.getElementById("successFavAlert").classList.add('d-none');
-			const message = xhr.responseText;
-			console.log(message);
 		} else {
 			console.log("i'm here, success");
+			const msg = JSON.parse(xhr.responseText);
+
+			document.getElementById("addFavSuccesMessage").innerHTML = msg.message.message;
 			document.getElementById("successFavAlert").classList.remove('d-none');
 			document.getElementById("errorFavAlert").classList.add('d-none');
 	
 			document.getElementById("delFavBtn").classList.remove('d-none');
 			document.getElementById("addFavBtn").classList.add('d-none');
+
 		}
 	} else if (op == "delete") {
 		if (xhr.status !== 200) {
+			const msg = JSON.parse(xhr.responseText);
 			console.log("i'm here, error");
+			document.getElementById("addFavErrorMessage").innerHTML = msg.message.message;
+
 			document.getElementById("errorFavAlert").classList.remove('d-none');
 			document.getElementById("successFavAlert").classList.add('d-none');
-			const message = xhr.responseText;
-			console.log(message);
 		} else {
 			console.log("i'm here, success");
+			const msg = JSON.parse(xhr.responseText);
+			document.getElementById("addFavSuccesMessage").innerHTML = msg.message.message;
 			document.getElementById("successFavAlert").classList.remove('d-none');
 			document.getElementById("errorFavAlert").classList.add('d-none');
 	

@@ -67,8 +67,10 @@ public final class InsertOrderRR extends AbstractRR {
 			if (o != null) {
 				LOGGER.info("Order successfully created.");
 
+				m = new Message("Your order has been added.", "E200", null);
+
 				res.setStatus(HttpServletResponse.SC_CREATED);
-				o.toJSON(res.getOutputStream());
+				m.toJSON(res.getOutputStream());
 			} else { // it should not happen
 				LOGGER.error("Fatal error while inserting order.");
 

@@ -65,8 +65,9 @@ public final class InsertFavouriteRR extends AbstractRR {
 			if (f != null) {
 				LOGGER.info("Favourite successfully added.");
 
+				m = new Message("Your favourite has been added.", "E201", null);
 				res.setStatus(HttpServletResponse.SC_CREATED);
-				f.toJSON(res.getOutputStream());
+				m.toJSON(res.getOutputStream());
 			} else { // it should not happen
 				LOGGER.error("Fatal error while inserting favourite.");
 
