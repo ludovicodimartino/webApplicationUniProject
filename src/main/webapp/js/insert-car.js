@@ -10,20 +10,8 @@ $(document).ready(function(){
     // Placeholder image
     const placeholderImageURL = "/wacar/images/carImagePlaceholder.png"
 
-    // Display the selected image
-    imageInput.change( event => {
-        const fileInput = event.target;
-        const validImageTypes = ['image/jpeg', 'image/png'];
-        if (fileInput.files && fileInput.files[0] && validImageTypes.includes(fileInput.files[0]['type'])) {
-            const reader = new FileReader();
-            reader.onload = e =>  selectedImage.attr('src', e.target.result);
-            reader.readAsDataURL(fileInput.files[0]);
-            imageInput[0].setCustomValidity("");
-        }else{ //invalid image
-            selectedImage.attr('src', placeholderImageURL);
-            imageInput[0].setCustomValidity("Invalid image.");
-        }
-    });
+    // Display the selected image on file input change
+    imageInput.change((e) => updateImage(e, placeholderImageURL, imageInput, selectedImage));
 
     // Insert car
     insertCarForm.submit((e) => {

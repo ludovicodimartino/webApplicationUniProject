@@ -81,3 +81,25 @@ const appendAlert = (message, type) => {
 
     liveAlert.append(wrapper);
 }
+
+/**
+ * Function to update the displayed image in the admin pages that have an image input.
+ * 
+ * @param event the event that triggered the update image.
+ * @param imgPlaceholder the url of the image placeholder.
+ * @param imageInput the image input jQuery object.
+ * @param selectedImage the selecte image <img> element jQuery object.
+ */ 
+const updateImage = (event, imgPlaceholder, imageInput, selectedImage) => {
+    const fileInput = event.target;
+    const validImageTypes = ['image/jpeg', 'image/png'];
+    if (fileInput.files && fileInput.files[0] && validImageTypes.includes(fileInput.files[0]['type'])) {
+        const reader = new FileReader();
+        reader.onload = e => selectedImage.attr('src', e.target.result);
+        reader.readAsDataURL(fileInput.files[0]);
+        imageInput[0].setCustomValidity("");
+    } else { //invalid image
+        selectedImage.attr('src', imgPlaceholder);
+        imageInput[0].setCustomValidity("Invalid image.");
+    }
+}

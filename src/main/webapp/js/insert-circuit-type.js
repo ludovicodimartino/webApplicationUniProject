@@ -39,7 +39,7 @@ $(document).ready(function() {
                 circuitTypeSelect.val(typeNameInput.val());
 
                 // Update the circuitTypes data structure if not undefined
-                if(circuitTypes !== undefined){
+                if(typeof circuitTypes !== 'undefined'){
                     circuitTypes.push(typeNameInput.val())
                 }
 
