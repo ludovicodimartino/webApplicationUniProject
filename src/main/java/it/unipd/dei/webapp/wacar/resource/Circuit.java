@@ -260,13 +260,13 @@ public class Circuit extends AbstractResource {
 
         jg.writeNumberField("length", length);
 
-        jg.writeNumberField("corners number", cornersNumber);
+        jg.writeNumberField("cornersNumber", cornersNumber);
 
         jg.writeStringField("address", address);
 
         jg.writeStringField("description", description);
 
-        jg.writeNumberField("lap price", lapPrice);
+        jg.writeNumberField("lapPrice", lapPrice);
 
         jg.writeBooleanField("available", available);
 

@@ -180,7 +180,7 @@ function processCircuitsByCarType(xhr) {
     card.classList.add("circuitBtn", "card");
 		card.type = "submit";
 		card.setAttribute("circuitName", circuit.name);
-		card.setAttribute("lapPrice", circuit["lap price"]);
+		card.setAttribute("lapPrice", circuit["lapPrice"]);
 		card.addEventListener("click", handleSelectCircuitClick);
 		circuitSection.appendChild(card);
 

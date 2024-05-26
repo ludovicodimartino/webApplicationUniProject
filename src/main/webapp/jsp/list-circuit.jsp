@@ -35,7 +35,7 @@
         </div>
         <!-- Opened circuit modal -->
         <div class="modal fade" id="circuitModal" tabindex="-1" role="dialog" aria-labelledby="circuitModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="circuitModalTitle"></h1>
@@ -43,22 +43,32 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-md-6">
                                 <img id="modal-img" class="card-img-top" alt="circuit image">
                             </div>
-                            <div class="col-6">
-
+                            <div class="col-md-6">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item"><strong>Type: </strong><span id="type"></span></li>
+                                    <li class="list-group-item"><strong>Length: </strong><span id="length"></span> m</li>
+                                    <li class="list-group-item"><strong>Corners number: </strong><span id="cornersNumber"></span></li>
+                                    <li class="list-group-item"><strong>Address: </strong><span id="address"></span></li>
+                                    <li class="list-group-item"><strong>Price per lap: </strong>€<span id="lapPrice"></span></li>
+                                    <li class="list-group-item">
+                                        <strong>Available: </strong>
+                                        <span id="isAvailable"><strong id="available"></strong></span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                         <div class="col">
                             <p class="h3">Description</p>
-                            <p class="description"></p>
+                            <p id="description"></p>
                         </div>
                     </div>
                     <c:choose>
                         <c:when test="${accountType eq 'ADMIN'}">
                             <div class="modal-footer">
-                                <a id="admin-edit-circuit" href="/wacar/admin/editCircuit/?name=Autodromo+Vallelunga" class="btn btn-primary" type="button">
+                                <a id="admin-edit-circuit" class="btn btn-primary" type="button">
                                     Edit
                                 </a>
                             </div>

@@ -31,15 +31,13 @@ cards.forEach(function(card) {
  * @returns {boolean} true if the HTTP request was successful; false otherwise.
  */
 function handleCircuitClick() {
-    console.log(this)
-
     // Fill modal image
     const modalImg = document.getElementById("modal-img");
     modalImg.src = "/wacar/loadCircuitImage?circuitName=" + this.id;
 
     // Fill admin edit link
-    const adminEditCircuit = document.getElementById("admin-edit-circuit");
-    if(adminEditCircuit != null){
+    if (sessionStorage.getItem("Authorization")) {
+        const adminEditCircuit = document.getElementById("admin-edit-circuit");
         adminEditCircuit.href = "/wacar/admin/editCircuit/?name=" + this.id;
     }
     
@@ -73,8 +71,22 @@ function processCircuitBody(xhr) {
 		return;
 	}
 
-    const circuit = JSON.parse(xhr.responseText)["resource"];
+    const circuit = JSON.parse(xhr.responseText).circuit;
     console.log("circuit", circuit);
 
-    // const editBtn = document.getElementById("admin-edit-circuit").src = "/wacar/admin/editCircuit/?name=" + circuit.name;
-}
+    document.getElementById("circuitModalTitle").innerHTML = circuit.name;
+    document.getElementById("type").innerHTML = circuit.type;
+    document.getElementById("length").innerHTML = circuit.length;
+    document.getElementById("cornersNumber").innerHTML = circuit.cornersNumber;
+    document.getElementById("address").innerHTML = circuit.address;
+    document.getElementById("lapPrice").innerHTML = circuit.lapPrice;
+    let isAvailable = document.getElementById("isAvailable");
+    if (circuit.available) {
+        isAvailable.classList.add("text-success");
+        isAvailable.classList.remove("text-danger");
+    } else {
+        isAvailable.classList.add("text-danger");
+        isAvailable.classList.remove("text-success");
+    }
+    document.getElementById("available").innerHTML = circuit.available
+    document.getElementById("description").innerHTML = circuit.description;}
