@@ -239,10 +239,14 @@ function handleSelectCircuitClick() {
 	let div = document.getElementById("completeOrder");
 	div.classList.remove("hidden");
 	div.classList.add("show");
-	// div.replaceChildren();
+	div.scrollIntoView();
 
 	order.circuit = this.getAttribute("circuitName");
 	lapPrice = parseInt(this.getAttribute("lapPrice"));
+	order.price = lapPrice
+
+	let label = document.getElementById("totalPrice");
+	label.textContent = "Total price: €" + lapPrice;
 
 	console.log(order);
 }

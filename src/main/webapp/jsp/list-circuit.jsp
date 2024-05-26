@@ -17,8 +17,9 @@
 <body>
 <%@ include file="header.jsp" %>
 <%@ include file="toolbar.jsp" %>
-
 <div class="container">
+    <h1>Cars list</h1>
+    <hr>
     <c:if test="${not empty circuits}">
         <div class="container-form">
             <div class="row row-cols-3">

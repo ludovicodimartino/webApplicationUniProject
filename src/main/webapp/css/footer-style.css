@@ -3,7 +3,8 @@ html, body {
     margin: 0;
     display: flex;
     flex-direction: column;
-}
+    scroll-behavior: smooth;
+  }
 
 #footer {
     background-color: #1c1c1e; /* Dark background color */

@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+
 @keyframes show {
   100% {
     opacity: 1;
@@ -5,10 +7,15 @@
   }
 }
 
+.container h1 {
+  font-family: "Audiowide", cursive;
+  font-size: 3rem;
+  margin-top: 1.5rem;
+}
+
 .container-form {
   background-color: #f0f0f0;
   border-radius: 1rem;
-  /* box-shadow: 0px 0px 10px #f0f0f0; */
   margin-top: 2rem;
   margin-bottom: 2rem;
   padding: 1rem;
@@ -46,7 +53,7 @@
   background-color: white;
   display: flex;
   flex-direction: column;
-  margin: auto auto auto auto;
+  margin: 0.6rem auto 0.6rem auto;
   padding-right: 0%;
   padding-left: 0%;
   transition: transform 0.4s;

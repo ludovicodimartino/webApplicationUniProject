@@ -20,6 +20,8 @@
 <%@ include file="toolbar.jsp" %>
 
 <div class="container">
+    <h1>Circuits list</h1>
+    <hr>
     <c:if test="${not empty cars}">
         <div class="container-form">
             <!-- for each car in database -->
