@@ -26,6 +26,8 @@ import it.unipd.dei.webapp.wacar.rest.InsertFavouriteRR;
 import it.unipd.dei.webapp.wacar.rest.DeleteFavouriteRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitByCarTypeRR;
 import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
+import it.unipd.dei.webapp.wacar.rest.GetCarRR;
+import it.unipd.dei.webapp.wacar.rest.GetCircuitRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,7 +60,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		try {
 
 			// if the requested resource was a Circuit a Car or an Order, delegate its processing and return
-			if (processListCar(req, res) || processOrder(req, res) || processFavourite(req, res) || processListCircuits(req, res)) {
+			if (processGetCar(req, res) || processOrder(req, res) || processFavourite(req, res) || processGetCircuit(req, res)) {
 				return;
 			}
 
@@ -237,6 +239,94 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 
 		return true;
 
+	}
+
+	/**
+	 * Checks whether the request if for visualizing a {@link Car} and, in case, processes it.
+	 *
+	 * @param req the HTTP request.
+	 * @param res the HTTP response.
+	 * @return {@code true} if the request was for a {@code Product}; {@code false} otherwise.
+	 * @throws Exception if any error occurs.
+	 */
+	private boolean processGetCar(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+		final String method = req.getMethod();
+
+		String path = req.getRequestURI();
+		Message m = null;
+
+		LOGGER.info("I am here");
+
+		// the requested resource was not an order
+		if (path.lastIndexOf("wacar/rest/car/") <= 0) {
+			LOGGER.info("Return false");
+			return false;
+		}
+
+		// strip everything until after the car/
+		path = path.substring(path.lastIndexOf("wacar/rest/car/") + 8);
+
+		if (!path.isEmpty()) {
+			switch (method) {
+				case "GET":
+					new GetCarRR(req, res, getConnection()).serve();
+					break;
+				default:
+					LOGGER.warn("Unsupported operation %s.", method);
+
+					m = new Message(ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage(),
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+							String.format("Requested operation %s.", method));
+					res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+					m.toJSON(res.getOutputStream());
+					break;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Checks whether the request if for visualizing a {@link Circuit} and, in case, processes it.
+	 *
+	 * @param req the HTTP request.
+	 * @param res the HTTP response.
+	 * @return {@code true} if the request was for a {@code Product}; {@code false} otherwise.
+	 * @throws Exception if any error occurs.
+	 */
+	private boolean processGetCircuit(final HttpServletRequest req, final HttpServletResponse res) throws Exception {
+		final String method = req.getMethod();
+
+		String path = req.getRequestURI();
+		Message m = null;
+
+		LOGGER.info("I am here");
+
+		// the requested resource was not an order
+		if (path.lastIndexOf("wacar/rest/circuit/") <= 0) {
+			LOGGER.info("Return false");
+			return false;
+		}
+
+		// strip everything until after the circuit/
+		path = path.substring(path.lastIndexOf("wacar/rest/circuit/") + 8);
+
+		if (!path.isEmpty()) {
+			switch (method) {
+				case "GET":
+					new GetCircuitRR(req, res, getConnection()).serve();
+					break;
+				default:
+					LOGGER.warn("Unsupported operation %s.", method);
+
+					m = new Message(ErrorCode.UNSUPPORTED_OPERATION.getErrorMessage(),
+							ErrorCode.UNSUPPORTED_OPERATION.getErrorCode(),
+							String.format("Requested operation %s.", method));
+					res.setStatus(ErrorCode.UNSUPPORTED_OPERATION.getHTTPCode());
+					m.toJSON(res.getOutputStream());
+					break;
+			}
+		}
+		return true;
 	}
 
 	/**

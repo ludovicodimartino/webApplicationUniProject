@@ -209,11 +209,11 @@ public class Car extends AbstractResource{
 
         jg.writeStringField("description", description);
 
-        jg.writeNumberField("max speed", maxSpeed);
+        jg.writeNumberField("maxSpeed", maxSpeed);
 
         jg.writeNumberField("horsepower", horsepower);
 
-        jg.writeNumberField("0-100", acceleration);
+        jg.writeNumberField("acceleration", acceleration);
 
         jg.writeBooleanField("available", available);
 
