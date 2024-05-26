@@ -95,7 +95,7 @@ $(document).ready(function(){
         performPOSTAjaxRequest(url, body, contentType, afterResponseFunction);
     });
 
-    // When a change is detected in the dropdowns activate the next dropdown
+    // When a change is detected in the car type dropdown activate the circuit type dropdown
     carTypeSelect.change(() => {
        if(carTypeSelect.val() === ""){ // Invalid car type -> disable circuit type
            circuitTypeSelect.prop("disabled", true);

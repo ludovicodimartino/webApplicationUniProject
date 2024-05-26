@@ -154,9 +154,7 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
             crossorigin="anonymous"></script>
         <script type="text/javascript" src="<c:url value="/js/admin-utils.js"/>"></script>
-        <script type="text/javascript"
-            src="<c:url value="/js/insert-circuit-type.js"/>"></script>
-        <script type="text/javascript"
-            src="<c:url value="/js/edit-circuit.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/insert-circuit-type.js"/>"></script>
+        <script type="text/javascript" src="<c:url value="/js/edit-circuit.js"/>"></script>
     </body>
 </html>

@@ -73,7 +73,7 @@
                             <div class="input-check">
                                 <input class="form-check-input" type="checkbox" value="true"
                                     id="availability" name="availability"
-                                    <c:if test="${circuit.available}">
+                                    <c:if test="${car.available}">
                                         checked
                                     </c:if>/>
                                 <label class="form-check-label" for="availability">
@@ -149,8 +149,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
     <script type="text/javascript" src="<c:url value="/js/admin-utils.js"/>"></script>
-    <script type="text/javascript"
-        src="<c:url value="/js/insert-car-type.js"/>"></script>
+    <script type="text/javascript" src="<c:url value="/js/insert-car-type.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/edit-car.js"/>"></script>
 </body>
 </html>
