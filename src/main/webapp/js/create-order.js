@@ -171,37 +171,48 @@ function processCircuitsByCarType(xhr) {
 	// parse the response as JSON and extract the resource-list array
 	const resourceList = JSON.parse(xhr.responseText)["resource-list"];
 
-	for (let i = 0; i < resourceList.length; i++) { // Loop inside circuits
-		let circuit = resourceList[i].circuit;
+	if (resourceList.length > 0) {
+		circuitSection.classList.remove("noItems-alert");
 
-		console.log(circuit)
-
-		let card = document.createElement("div");
-    card.classList.add("circuitBtn", "card");
-		card.type = "submit";
-		card.setAttribute("circuitName", circuit.name);
-		card.setAttribute("lapPrice", circuit["lapPrice"]);
-		card.addEventListener("click", handleSelectCircuitClick);
-		circuitSection.appendChild(card);
-
-		let image = document.createElement("img");
-		image.className = "card-img-top";
-		image.src = "/wacar/loadCircuitImage?circuitName=" + circuit.name;
-		card.appendChild(image);
-
-		let cardBody = document.createElement("div");
-		cardBody.className = "card-body";
-		card.appendChild(cardBody);
-
-		let circuitName = document.createElement("p");
-		circuitName.className = "h5";
-		circuitName.textContent = circuit.name;
-		cardBody.appendChild(circuitName);
-
-		let circuitType = document.createElement("p");
-		circuitType.className = "h6";
-		circuitType.textContent = circuit.type;
-		cardBody.appendChild(circuitType);
+		for (let i = 0; i < resourceList.length; i++) { // Loop inside circuits
+			let circuit = resourceList[i].circuit;
+	
+			console.log(circuit)
+	
+			let card = document.createElement("div");
+			card.classList.add("circuitBtn", "card");
+			card.type = "submit";
+			card.setAttribute("circuitName", circuit.name);
+			card.setAttribute("lapPrice", circuit["lapPrice"]);
+			card.addEventListener("click", handleSelectCircuitClick);
+			circuitSection.appendChild(card);
+	
+			let image = document.createElement("img");
+			image.className = "card-img-top";
+			image.src = "/wacar/loadCircuitImage?circuitName=" + circuit.name;
+			card.appendChild(image);
+	
+			let cardBody = document.createElement("div");
+			cardBody.className = "card-body";
+			card.appendChild(cardBody);
+	
+			let circuitName = document.createElement("p");
+			circuitName.className = "h5";
+			circuitName.textContent = circuit.name;
+			cardBody.appendChild(circuitName);
+	
+			let circuitType = document.createElement("p");
+			circuitType.className = "h6";
+			circuitType.textContent = circuit.type;
+			cardBody.appendChild(circuitType);
+		}
+	} else {
+		let div = document.createElement("div");
+		div.classList.add("alert", "alert-info");
+		div.role = "alert";
+		div.innerHTML = "There are not any available circuits for the selected car. Sorry for the inconvenience.";
+		circuitSection.classList.add("noItems-alert");
+		circuitSection.appendChild(div);
 	}
 
 	console.log("HTTP GET request successfully performed and processed.");

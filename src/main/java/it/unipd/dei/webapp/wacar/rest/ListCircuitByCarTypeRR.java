@@ -62,27 +62,15 @@ public class ListCircuitByCarTypeRR extends AbstractRR {
             // creates a new DAO for accessing the database and lists the circuits
             circuits = new ListCircuitByCarTypeDAO(con, carType).access().getOutputParam();
 
-            LOGGER.info(circuits.getFirst().getName());
-
             if (circuits != null) {
                 LOGGER.info("Circuit(s) successfully listed.");
 
                 res.setStatus(HttpServletResponse.SC_OK);
                 new ResourceList<>(circuits).toJSON(res.getOutputStream());
-            } else {
-                LOGGER.error("Fatal error while listing car(s).");
-
-                m = new Message(
-                        ErrorCode.UNEXPECTED_ERROR.getErrorMessage(),
-                        ErrorCode.UNEXPECTED_ERROR.getErrorCode(),
-                        null);
-
-                res.setStatus(ErrorCode.UNEXPECTED_ERROR.getHTTPCode());
-                m.toJSON(res.getOutputStream());
             }
         } catch (SQLException ex) {
             LOGGER.error(
-                    "Cannot list car(s): unexpected database error.", ex);
+                    "Cannot list circuit(s): unexpected database error.", ex);
 
             m = new Message(
                     ErrorCode.UNEXPECTED_ERROR.getErrorMessage(),

@@ -11,6 +11,14 @@
   margin-bottom: 0.5rem;
 }
 
+.noItems-alert {
+  padding: 0 2rem 0 2rem !important;
+}
+
+.alert-info {
+  width: 100% !important;
+}
+
 .formComplete {
   margin-left: 2rem;
 }

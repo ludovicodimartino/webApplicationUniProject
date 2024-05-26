@@ -418,10 +418,6 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 						break;
 				}
 			}
-
-
-
-
 		} else {
 			// the request URI is: /order/{orderId}
 			path = path.substring(path.lastIndexOf("/") + 1);
