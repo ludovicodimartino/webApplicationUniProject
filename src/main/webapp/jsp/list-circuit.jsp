@@ -66,18 +66,11 @@
                             <p id="description"></p>
                         </div>
                     </div>
-                    <c:choose>
-                        <c:when test="${accountType eq 'ADMIN'}">
-                            <div class="modal-footer">
-                                <a id="admin-edit-circuit" class="btn btn-primary" type="button">
-                                    Edit
-                                </a>
-                            </div>
-                        </c:when>
-                        <c:otherwise>
-                            <!-- Handle other cases if needed -->
-                        </c:otherwise>
-                    </c:choose>
+                    <div id="admin-edit" class="modal-footer">
+                        <a id="admin-edit-circuit" class="btn btn-primary" type="button">
+                            Edit
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>    

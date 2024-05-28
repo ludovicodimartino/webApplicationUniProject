@@ -25,6 +25,10 @@ cards.forEach(function(card) {
 	card.addEventListener("click", handleCircuitClick);
 })
 
+if (sessionStorage.getItem("accountYupe") !== "ADMIN") {
+    document.getElementById("admin-edit").classList.add("d-none");
+}
+
 /**
  * Searches for circuits that are suitable for the selected car type.
  *
@@ -38,7 +42,7 @@ function handleCircuitClick() {
     // Fill admin edit link
     if (sessionStorage.getItem("Authorization")) {
         const adminEditCircuit = document.getElementById("admin-edit-circuit");
-        adminEditCircuit.href = "/wacar/admin/editCircuit/?name=" + this.id;
+        adminEditCircuit.src = "/wacar/admin/editCircuit/?name=" + this.id;
     }
     
     const circuitUrl = "/wacar/rest/circuit/" + this.id; // TODO

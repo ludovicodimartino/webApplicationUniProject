@@ -99,22 +99,22 @@ function processLogin(xhr) {
     return;
   } else if (xhr.status == 200) {
     const headers = xhr.getAllResponseHeaders();
-    console.log("headers: ", headers);
 
     const array = headers.trim().split(/[\r\n]+/);
-    console.log("array: ", array);
 
     array.forEach((line) => {
       const parts = line.split(": ");
       const header = parts.shift();
       if (header === "authorization") {
         const token = parts.join(": ");
-        console.log("token: ", token);
 
         sessionStorage.setItem("Authorization", token);
         sessionStorage.setItem("email", email.value);
       }
     });
+    // Save userType
+    const user = JSON.parse(xhr.responseText).user;
+    sessionStorage.setItem("accountType", user.accountType);
 
     window.location.replace("http://localhost:8081/wacar/");
   }

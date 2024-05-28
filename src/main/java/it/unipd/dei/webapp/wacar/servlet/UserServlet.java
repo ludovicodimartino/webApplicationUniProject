@@ -259,6 +259,9 @@ public class UserServlet extends AbstractDatabaseServlet {
                     String token = ENCODER.encodeToString(tokenBytes);
                     res.addHeader("Authorization", "BASIC " + token);
                     res.setStatus(HttpServletResponse.SC_OK);
+
+                    User outUser = new User(user.getId(), user.getEmail(), user.getType());
+                    outUser.toJSON(res.getOutputStream());
                 }
             }
             else
@@ -341,6 +344,10 @@ public class UserServlet extends AbstractDatabaseServlet {
                         String token = ENCODER.encodeToString(tokenBytes);
                         res.addHeader("Authorization", "BASIC " + token);
                         res.setStatus(HttpServletResponse.SC_OK);
+
+                        
+                    User outUser = new User(user.getId(), user.getEmail(), user.getType());
+                    outUser.toJSON(res.getOutputStream());
                     }
                 }
             }

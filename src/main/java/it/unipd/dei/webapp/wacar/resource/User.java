@@ -92,6 +92,20 @@ public class User extends AbstractResource {
     /**
      * Constructs a User object with the specified attributes.
      *
+     * @param id      The unique identifier of the user.
+     * @param email   The email address of the user.
+     * @param name    The first name of the user.
+     * @param surname The last name of the user.
+     */
+    public User(int id, String email, String accountType) {
+        this.id = id;
+        this.email = email;
+        this.accountType = accountType;
+    }
+
+    /**
+     * Constructs a User object with the specified attributes.
+     *
      * @param email   The email address of the user.
      * @param name    The first name of the user.
      * @param surname The last name of the user.

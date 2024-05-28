@@ -25,6 +25,10 @@ cards.forEach(function(card) {
 	card.addEventListener("click", handleCarClick);
 })
 
+if (sessionStorage.getItem("accountYupe") !== "ADMIN") {
+    document.getElementById("admin-edit").classList.add("d-none");
+}
+
 /**
  * Searches for cars that are suitable for the selected car type.
  *
