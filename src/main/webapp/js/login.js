@@ -37,6 +37,26 @@ function handleLogin() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
   const url = "http://localhost:8081/wacar/login/" + "?email=" + email + "&password=" + password;
+  const regexEmail = /^[a-z0-9+_.-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  const regexPsw = /^(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
+
+    if (!email) {
+        showError("Please insert your email.");
+        return;
+    }
+    if (!regexEmail.test(email)) {
+        showError("Please enter a valid email.");
+        return;
+    }
+
+    if (!password) {
+        showError("Please insert your password.");
+        return;
+    }
+    if (!regexPsw.test(password)) {
+        showError("Password must contain at least one number, one uppercase letter, and be at least 8 characters long.");
+        return;
+    }
 
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
@@ -72,13 +92,10 @@ function processLogin(xhr) {
   }
     
   if (xhr.status == 401) {
-    const alert = document.getElementById("errorAlert");
-    const alertText = document.getElementById("errorAlertText");
     console.log("error message ", xhr.responseText);
     var message = JSON.parse(xhr.responseText);
     console.log("error message ", message.message.message);
-    alertText.textContent = message.message.message;
-    alert.classList.remove("d-none");
+    showError(message.message.message)
     return;
   } else if (xhr.status == 200) {
     const headers = xhr.getAllResponseHeaders();
@@ -102,4 +119,11 @@ function processLogin(xhr) {
     window.location.replace("http://localhost:8081/wacar/");
   }
   return;
+}
+
+function showError(message) {
+    const alert = document.getElementById("errorAlert");
+    const alertText = document.getElementById("errorAlertText");
+    alertText.textContent = message;
+    alert.classList.remove("d-none");
 }

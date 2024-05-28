@@ -437,13 +437,12 @@ public class UserServlet extends AbstractDatabaseServlet {
                 // the user has already signed up with this email
                 LOGGER.error("Email {} already used",email);
 
-                ErrorCode ec = ErrorCode.MAIL_ALREADY_USED;
-                res.setStatus(ec.getHTTPCode());
-                m = new Message("This user already exists", ec.getErrorCode(),ec.getErrorMessage());
-                req.setAttribute("message", m);
-                req.getRequestDispatcher("/jsp/signup.jsp").forward(req, res);
+                ErrorCode ec = ErrorCode.USER_NOT_EXISTS;
+                m = new Message("User already signed up with this email",ec.getErrorCode(),ec.getErrorMessage());
+                LOGGER.error("problems with user: {}", m.getMessage());
 
-
+                res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                m.toJSON(res.getOutputStream());
             }
             else if (!fieldEmpty){
                 email = email.toLowerCase();

@@ -132,5 +132,6 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
         req.setAttribute("message", m);
 
         req.getRequestDispatcher("/jsp/list-orders.jsp").forward(req, res);
+        session.removeAttribute("errorMessage");
     }
 }

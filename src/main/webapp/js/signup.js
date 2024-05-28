@@ -30,6 +30,22 @@ function handleSignup() {
 
   const params = "?email=" + email + "&name=" + name + "&surname=" + surname + "&address=" + address + "&password=" + password;
   const url = "http://localhost:8081/wacar/signup/" + params;
+  const regexEmail = /^[a-z0-9+_.-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+  const regexPsw = /^(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
+
+    if (!email || !name || !surname || !address || !password) {
+        showError("Please fill all the fields.");
+        return;
+    }
+
+    if (!regexEmail.test(email)) {
+        showError("Please enter a valid email.");
+        return;
+    }
+    if (!regexPsw.test(password)) {
+        showError("Password must contain at least one number, one uppercase letter, and be at least 8 characters long.");
+        return;
+    }
 
   	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
@@ -59,8 +75,16 @@ function handleSignup() {
  */
 function processSignup(xhr) {
   // not finished yet
-  if (xhr.readyState !== XMLHttpRequest.DONE) {
+
+    if (xhr.readyState !== XMLHttpRequest.DONE) {
     console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]", xhr.readyState);
+    if (xhr.status == 401) {
+        console.log("error message ", xhr.responseText);
+        var message = JSON.parse(xhr.responseText);
+        console.log("error message ", message.message.message);
+        showError(message.message.message)
+        return;
+    }
     
     if (xhr.readyState == XMLHttpRequest.HEADERS_RECEIVED) {
       const headers = xhr.getAllResponseHeaders();
@@ -81,8 +105,15 @@ function processSignup(xhr) {
         }
       });
 
-      // window.location.replace("http://localhost:8081/wacar/");
+      window.location.replace("http://localhost:8081/wacar/");
     }
     return;
   }
+}
+
+function showError(message) {
+    const alert = document.getElementById("errorAlert");
+    const alertText = document.getElementById("errorAlertText");
+    alertText.textContent = message;
+    alert.classList.remove("d-none");
 }

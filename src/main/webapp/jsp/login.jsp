@@ -35,7 +35,7 @@
                     'and lowercase letter, and at least 8 or more characters')" required
                     placeholder="Enter your password">
         </div>
-        <button id="login" type="submit" class="btn btn-success">Submit</button>
+        <button id="login" type="button" class="btn btn-success">Submit</button>
         <button id="reset" type="reset" class="btn btn-secondary">Reset</button>
     </div>
 </div>

@@ -14,13 +14,9 @@
 <div class="container">
     <div class="form-container">
         <h1>REGISTRATION</h1>
-        <c:choose>
-            <c:when test="${not empty message.error}">
-                <div class="alert alert-danger" role="alert">
-                    <span>${message.message}</span>
-                </div>
-            </c:when>
-        </c:choose>
+        <div id="errorAlert" class="alert alert-danger d-none" role="alert">
+            <span id="errorAlertText"></span>
+        </div>
         <!-- <form method="POST" action="/wacar/signup/"> -->
             <div class="input-group mb-3">
                 <span class="input-group-text"><i class="fa-solid fa-envelope"></i></span>
@@ -47,7 +43,7 @@
                         'and lowercase letter, and at least 8 or more characters')" required
                        placeholder="Enter your password">
             </div>
-            <button id="signup" type="submit" class="btn btn-success">Submit</button>
+            <button id="signup" type="button" class="btn btn-success">Submit</button>
             <button id="reset" type="reset" class="btn btn-secondary">Reset</button>
         <!-- </form> -->
     </div>
