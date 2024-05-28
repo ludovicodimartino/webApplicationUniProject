@@ -91,7 +91,7 @@ public class DeleteFavouriteServlet extends AbstractDatabaseServlet{
             LogContext.removeAction();
             LogContext.removeResource();
             // Redirect to home
-            res.sendRedirect("/wacar/");
+            res.sendRedirect("/wacar/user/list-favourite");
         }
     }
 }
