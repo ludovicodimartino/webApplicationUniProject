@@ -23,7 +23,6 @@
 
 <body>
     <%@ include file="header.jsp" %>
-    <%@ include file="toolbar.jsp" %>
 
     <div class="container">
         <h1 class="mb-4 mt-4">Edit Car ${car.brand} ${car.model}</h1>
@@ -152,4 +151,5 @@
     <script type="text/javascript" src="<c:url value="/js/insert-car-type.js"/>"></script>
     <script type="text/javascript" src="<c:url value="/js/edit-car.js"/>"></script>
 </body>
+<%@ include file="footer.jsp" %>
 </html>

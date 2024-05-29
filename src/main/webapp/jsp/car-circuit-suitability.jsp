@@ -24,7 +24,7 @@ Since: 1.00
 <body>
 
     <%@ include file="header.jsp" %>
-    <%@ include file="toolbar.jsp" %>
+    
         <div class="container">
             <h1 class="mt-4 mb-4">Car-Circuit Suitability</h1>
             <div id="liveAlertPlaceholder"></div>
@@ -165,5 +165,5 @@ Since: 1.00
             <script type="text/javascript" src="<c:url value="/js/insert-circuit-type.js" />"></script>
             <script type="text/javascript" src="<c:url value="/js/car-circuit-suitability.js" />"></script>
 </body>
-
+<%@ include file="footer.jsp" %>
 </html>

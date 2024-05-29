@@ -19,7 +19,6 @@ Since: 1.00
 <body>
 
 <%@ include file="header.jsp" %>
-<%@ include file="toolbar.jsp" %>
 
 <div class="container">
     <h1 class="mb-4 mt-4">Add new Car</h1>
@@ -149,4 +148,5 @@ Since: 1.00
         <script type="text/javascript" src="<c:url value="/js/insert-car-type.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/insert-car.js"/>"></script>
 </body>
+<%@ include file="footer.jsp" %>
 </html>

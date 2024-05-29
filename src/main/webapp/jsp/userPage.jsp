@@ -19,10 +19,10 @@
         <c:when test="${not empty sessionScope.account}">
             <c:choose>
                 <c:when test="${sessionScope.account.type == 'USER'}">
-                    <h1>USER PAGE - SUCCESS</h1>
+                    <h1>USER DETAILS</h1>
                 </c:when>
                 <c:otherwise>
-                    <h1>ADMIN PAGE - SUCCESS</h1>
+                    <h1>ADMIN DETAILS</h1>
                 </c:otherwise>
             </c:choose>
             <hr/>
@@ -36,14 +36,16 @@
                     <li><strong>Address:</strong> ${sessionScope.account.address}</li>
                 </ul>
             </div>
-            <div class="user-actions">
-                <form action="/wacar/user/listOrdersByAccount" method="get">
-                    <button type="submit" class="btn btn-success">Order list</button>
-                </form>
-                <form action="/wacar/user/list-favourite" method="get">
-                    <button type="submit" class="btn btn-success">Favourite list</button>
-                </form>
-            </div>
+            <c:if test="${sessionScope.account.type == 'USER'}">
+                <div class="user-actions">
+                    <form action="/wacar/user/listOrdersByAccount" method="get">
+                        <button type="submit" class="btn btn-success">Order list</button>
+                    </form>
+                    <form action="/wacar/user/list-favourite" method="get">
+                        <button type="submit" class="btn btn-success">Favourite list</button>
+                    </form>
+                </div>
+            </c:if>
         </c:when>
         <c:otherwise>
             <div class="login-error">

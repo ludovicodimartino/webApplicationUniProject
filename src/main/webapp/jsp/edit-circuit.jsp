@@ -22,7 +22,6 @@
 <body>
 
     <%@ include file="header.jsp" %>
-    <%@ include file="toolbar.jsp" %>
 
         <div class="container">
             <jsp:useBean id="circuit" scope="request" type="it.unipd.dei.webapp.wacar.resource.Circuit" />
@@ -157,4 +156,5 @@
         <script type="text/javascript" src="<c:url value="/js/insert-circuit-type.js"/>"></script>
         <script type="text/javascript" src="<c:url value="/js/edit-circuit.js"/>"></script>
     </body>
+    <%@ include file="footer.jsp" %>
 </html>

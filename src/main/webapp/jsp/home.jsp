@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome!</title>
+    <title>Welcome to WaCar</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer-style.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/home-style.css">
@@ -18,7 +18,10 @@
 <%@ include file="header.jsp" %>
 
 <div class="container">
-    <h1>Welcome!</h1>
+    <h1>Welcome to 
+        <img src="<c:url value="/images/logo_dark.png"/>" id="logo" alt="Wacar logo"
+                         width="160">
+    </h1>
 
     <div class="container-home">
         <!-- Circuit list -->

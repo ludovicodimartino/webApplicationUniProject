@@ -4,6 +4,11 @@ h1 {
   color: #333;
 }
 
+#logo {
+  margin-top: -8px;
+  margin-left: 5px;
+}
+
 .container-home {
   background-color: #f0f0f0;
   border-radius: 1rem;
