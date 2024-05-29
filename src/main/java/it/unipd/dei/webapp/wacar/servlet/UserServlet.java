@@ -191,9 +191,13 @@ public class UserServlet extends AbstractDatabaseServlet {
         if (user != null) {
             LOGGER.info("Session found {} ", session);
             LOGGER.info("the USER {} logged out", user.getEmail());
-            request.getSession().invalidate();
+            session.invalidate();
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.sendRedirect(request.getContextPath() + "/");
         } else {
             LOGGER.info("User NULL");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.sendRedirect(request.getContextPath() + "/login");
         }
     }
 

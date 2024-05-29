@@ -53,10 +53,18 @@ function handleLogout() {
 function processLogout(xhr) {
 	if (xhr.readyState !== XMLHttpRequest.DONE) {
 		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]", xhr.readyState);
-  }
-
-  // Remove all saved items
-  sessionStorage.clear();
-
-  window.location.replace("http://localhost:8081/wacar/");
+	}
+	else if (xhr.status == 200) {
+		console.log("Logout successful");
+		sessionStorage.clear();
+		window.location.replace("http://localhost:8081/wacar/");
+	}
+ 	else if (xhr.status == 401) {
+		console.error("User not logged in");
+		alert("User not logged in");
+		window.location.replace("http://localhost:8081/wacar/login/");}
+	else {
+		console.error("Logout failed. Status: ", xhr.status);
+		alert("Logout failed");
+	}
 }
