@@ -19,7 +19,9 @@
 */
 
 const button = document.getElementById("logout");
-button.addEventListener("click", handleLogout);
+if (button != null)  {
+  button.addEventListener("click", handleLogout);
+}
 
 function handleLogout() {
   const url = "http://localhost:8081/wacar/logout/";
