@@ -1,7 +1,9 @@
 const footerbtn = document.getElementById("footer-logout");
-footerbtn.addEventListener("click", handleLogout);
 
-function handleLogout() {
+if (footerbtn != null) {
+	footerbtn.addEventListener("click", handleLogout);
+}
+function handleLogout(){
   const url = "http://localhost:8081/wacar/logout/";
 
   	// the XMLHttpRequest object

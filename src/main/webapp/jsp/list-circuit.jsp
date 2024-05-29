@@ -16,7 +16,7 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<%@ include file="toolbar.jsp" %>
+
 <div class="container">
     <h1>Circuits list</h1>
     <hr>

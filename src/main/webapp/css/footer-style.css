@@ -12,6 +12,7 @@ html, body {
     flex-shrink: 0; /* Ensures the footer doesn't shrink */
     position: relative;
     margin-top: auto;
+    transition: transform 0.5s ease-out, opacity 0.5s ease-out; /* Animation for transform and opacity */
 }
 
 .footerContainer {
@@ -52,4 +53,12 @@ html, body {
 
 .text-center.p-3 {
     background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* Media query to hide the footer on small screens */
+@media (max-width: 768px) {
+    #footer {
+        transform: translateY(100%); /* Move the footer down */
+        opacity: 0;
+    }
 }
