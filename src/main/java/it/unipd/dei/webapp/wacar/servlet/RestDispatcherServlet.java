@@ -28,6 +28,7 @@ import it.unipd.dei.webapp.wacar.rest.ListCircuitByCarTypeRR;
 import it.unipd.dei.webapp.wacar.rest.ListCarsRR;
 import it.unipd.dei.webapp.wacar.rest.GetCarRR;
 import it.unipd.dei.webapp.wacar.rest.GetCircuitRR;
+import it.unipd.dei.webapp.wacar.rest.GetFavouriteRR;
 import it.unipd.dei.webapp.wacar.rest.ListCircuitsRR;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import jakarta.servlet.http.HttpServletRequest;
@@ -484,6 +485,10 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		if (path.isEmpty() || path.equals("/")) {
 			LOGGER.info("path /");
 			switch (method) {
+				case "POST":
+					new GetFavouriteRR(req, res, getConnection()).serve();
+
+					break;
 				default:
 					LOGGER.warn("Unsupported operation for URI /: %s.", method);
 

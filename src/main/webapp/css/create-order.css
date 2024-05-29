@@ -6,6 +6,14 @@
   display: block;
 }
 
+.card-car-selected {
+  background-color: #9EE493 !important;
+}
+
+.card-circuit-selected {
+  background-color: #9EE493 !important;
+}
+
 .row .card .card-body .card-text {
   margin-top: 0;
   margin-bottom: 0.5rem;
