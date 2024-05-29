@@ -24,7 +24,6 @@
 
 
 <%@ include file="header.jsp" %>
-<%@ include file="toolbar.jsp" %>
 
 <div class="container">
 

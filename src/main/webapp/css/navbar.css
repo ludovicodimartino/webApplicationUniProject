@@ -18,3 +18,7 @@
     color: lightgrey;
 }
 
+.hidden {
+    display: none;
+}
+
