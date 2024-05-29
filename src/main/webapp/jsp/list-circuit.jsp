@@ -36,10 +36,10 @@
         </div>
         <!-- Opened circuit modal -->
         <div class="modal fade" id="circuitModal" tabindex="-1" role="dialog" aria-labelledby="circuitModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="circuitModalTitle"></h1>
+                        <h3 class="modal-title fs-5" id="circuitModalTitle"></h3>
                         <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
@@ -62,7 +62,6 @@
                             </div>
                         </div>
                         <div class="col">
-                            <p class="h3">Description</p>
                             <p id="description"></p>
                         </div>
                     </div>

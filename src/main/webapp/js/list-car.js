@@ -25,7 +25,7 @@ cards.forEach(function(card) {
 	card.addEventListener("click", handleCarClick);
 })
 
-if (sessionStorage.getItem("accountYupe") !== "ADMIN") {
+if (sessionStorage.getItem("accountType") !== "ADMIN") {
     document.getElementById("admin-edit").classList.add("d-none");
 }
 
@@ -45,7 +45,7 @@ function handleCarClick() {
 
     console.log("auth ", sessionStorage.getItem("Authorization"));
     // Fill admin edit link
-    if (sessionStorage.getItem("Authorization")) {
+    if (sessionStorage.getItem("Authorization") && sessionStorage.getItem("accountType") === "ADMIN") {
         const adminEditCar = document.getElementById("admin-edit-car");
         adminEditCar.href = "/wacar/admin/editCar/" + params;
     }

@@ -66,7 +66,6 @@
                             </div>
                         </div>
                         <div class="col">
-                            <p class="h3">Description</p>
                             <p id="description"></p>
                         </div>
                         <div id="admin-edit" class="modal-footer">

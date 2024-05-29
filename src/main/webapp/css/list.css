@@ -85,3 +85,7 @@
   margin-left: 2rem;
   font-size: 1.5rem;
 }
+
+.modal-header h3 {
+  font-family: "Audiowide", cursive;
+}

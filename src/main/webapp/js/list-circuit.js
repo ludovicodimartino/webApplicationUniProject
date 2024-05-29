@@ -25,7 +25,7 @@ cards.forEach(function(card) {
 	card.addEventListener("click", handleCircuitClick);
 })
 
-if (sessionStorage.getItem("accountYupe") !== "ADMIN") {
+if (sessionStorage.getItem("accountType") !== "ADMIN") {
     document.getElementById("admin-edit").classList.add("d-none");
 }
 
@@ -40,7 +40,7 @@ function handleCircuitClick() {
     modalImg.src = "/wacar/loadCircuitImage?circuitName=" + this.id;
 
     // Fill admin edit link
-    if (sessionStorage.getItem("Authorization")) {
+    if (sessionStorage.getItem("Authorization") && sessionStorage.getItem("accountType") === "ADMIN") {
         const adminEditCircuit = document.getElementById("admin-edit-circuit");
         adminEditCircuit.src = "/wacar/admin/editCircuit/?name=" + this.id;
     }
