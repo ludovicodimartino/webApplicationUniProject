@@ -42,7 +42,7 @@ function handleCircuitClick() {
     // Fill admin edit link
     if (sessionStorage.getItem("Authorization") && sessionStorage.getItem("accountType") === "ADMIN") {
         const adminEditCircuit = document.getElementById("admin-edit-circuit");
-        adminEditCircuit.src = "/wacar/admin/editCircuit/?name=" + this.id;
+        adminEditCircuit.href = "/wacar/admin/editCircuit/?name=" + this.id;
     }
     
     const circuitUrl = "/wacar/rest/circuit/" + this.id; // TODO
