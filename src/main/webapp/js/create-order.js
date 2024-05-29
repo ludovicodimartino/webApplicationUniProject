@@ -65,22 +65,13 @@ console.log("Event listener added to getCircuitByCarTypeButton.")
  * @returns {boolean} true if the HTTP request was successful; false otherwise.
  */
 function handleSelectCarClick() {
-	console.log("cookie: ", document.cookie);
-
-	// Hide all select labels
-	let alerts = document.querySelectorAll(".cardCarBtn-alert");
+	// Remove green backgroung on previous selected car card
+	let alerts = document.querySelectorAll(".carBtn");
 	alerts.forEach((alert) => {
-		alert.parentNode.removeChild(alert);
+		alert.classList.remove("card-car-selected");
 	})
-
-	// Show select label on selected card
-	let body = this.childNodes[3];
-	console.log("body ", body);
-	let newAlert = document.createElement("div");
-	newAlert.classList.add("cardCarBtn-alert", "alert", "alert-success");
-	newAlert.role = "alert";
-	newAlert.innerHTML = "Selected"
-	body.appendChild(newAlert);
+	// Show green background on selected car card
+	this.classList.add("card-car-selected");
 
 	// get the value of the salary from the form field
 	// const carTypeObject = document.getElementById("carType");
@@ -91,17 +82,10 @@ function handleSelectCarClick() {
 	order.carModel = this.getAttribute("carModel");
 	order.circuit = "";
 
-	// document.getElementById("completeOrder").replaceChildren();
-
-	console.log("order:", order)
-
 	const url = "http://localhost:8081/wacar/rest/user/order/create/" + carType;
-
 	console.log("Request URL: %s.", url)
-
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
-
 	if (!xhr) {
 		console.log("Cannot create an XMLHttpRequest instance.")
 
@@ -140,33 +124,30 @@ function processCircuitsByCarType(xhr) {
 		return;
 	}
 
-	const div = document.getElementById("circuits");
-	div.classList.remove("hidden");
-	div.classList.add("show");
-
 	const divOrder = document.getElementById("completeOrder");
 	divOrder.classList.remove("show");
 	divOrder.classList.add("hidden");
 
-	// remove all the children of the result div, appended by a previous call, if any
-	div.replaceChildren();
+	// remove all the children of the circuits div, appended by a previous call, if any
+	const divCircuits = document.getElementById("circuits");
+	divCircuits.replaceChildren();
 
 	if (xhr.status !== 200) {
 		console.log("Request unsuccessful: HTTP status = %d.", xhr.status);
 		console.log(xhr.response);
 
-		div.appendChild(document.createTextNode("Unable to perform the AJAX request."));
+		divCircuits.appendChild(document.createTextNode("Unable to perform the AJAX request."));
 
 		return;
 	}
 
 	const title = document.createElement("h2");
 	title.textContent = "Select a circuit";
-	div.appendChild(title);
+	divCircuits.appendChild(title);
 
 	const circuitSection = document.createElement("div");
 	circuitSection.classList.add("row", "row-cols-3");
-	div.appendChild(circuitSection);
+	divCircuits.appendChild(circuitSection);
 
 	// parse the response as JSON and extract the resource-list array
 	const resourceList = JSON.parse(xhr.responseText)["resource-list"];
@@ -215,28 +196,65 @@ function processCircuitsByCarType(xhr) {
 		circuitSection.appendChild(div);
 	}
 
+	// Show container with circuits
+	divCircuits.classList.remove("hidden");
+	divCircuits.classList.add("show");
+
 	console.log("HTTP GET request successfully performed and processed.");
 }
 
 function handleSelectCircuitClick() {
-	// Hide all select labels
-	let alerts = document.querySelectorAll(".cardCircuitBtn-alert");
+	// Hide div for completing the order
+	let div = document.getElementById("completeOrder");
+	div.classList.add("hidden");
+	div.classList.remove("show");
+	div.scrollIntoView();
+
+	// Remove previous selected circuit
+	let alerts = document.querySelectorAll(".circuitBtn");
 	alerts.forEach((alert) => {
-		alert.parentNode.removeChild(alert);
+		alert.classList.remove("card-circuit-selected");
 	})
 
-	console.log("this", this.childNodes);
+	this.classList.add("card-circuit-selected");
 
-	// Show select label on selected card
-	let body = this.childNodes[1];
-	console.log("body ", body);
-	let newAlert = document.createElement("div");
-	newAlert.classList.add("cardCircuitBtn-alert", "alert", "alert-success");
-	newAlert.role = "alert";
-	newAlert.innerHTML = "Selected"
-	body.appendChild(newAlert);
+	// Check if favourite already exists
+	const url = "http://localhost:8081/wacar/rest/user/favourite/";
+	console.log("Request URL: %s.", url)
+	// the XMLHttpRequest object
+	const xhr = new XMLHttpRequest();
 
-	let div = document.getElementById("completeOrder");
+	if (!xhr) {
+		console.log("Cannot create an XMLHttpRequest instance.")
+
+		alert("Giving up :( Cannot create an XMLHttpRequest instance");
+		return false;
+	}
+
+	// set up the call back for handling the request
+	xhr.onreadystatechange = function () {
+		processExistsFavourite(this);
+	};
+	// perform the request
+	console.log("Performing the HTTP GET request.");
+
+	xhr.open('POST', url, true);
+	xhr.setRequestHeader("Content-Type", "application/json");
+	const auth = sessionStorage.getItem("Authorization");
+	xhr.setRequestHeader('Authorization', sessionStorage.getItem("Authorization"));
+	xhr.withCredentials = true;
+	const favourite = {
+		circuit: this.getAttribute("circuitName"),
+		carBrand: order.carBrand,
+		carModel: order.carModel,
+		account: sessionStorage.getItem("email"),
+	}
+	const favString = JSON.stringify({ "favourite": favourite });
+	xhr.send(favString);
+
+	console.log("HTTP POST request sent. ", xhr);
+
+	// Show div for completing the order
 	div.classList.remove("hidden");
 	div.classList.add("show");
 	div.scrollIntoView();
@@ -249,6 +267,27 @@ function handleSelectCircuitClick() {
 	label.textContent = "Total price: €" + lapPrice;
 
 	console.log(order);
+}
+
+function processExistsFavourite(xhr) {
+	// not finished yet
+	if (xhr.readyState !== XMLHttpRequest.DONE) {
+		console.log("Request state: %d. [0 = UNSENT; 1 = OPENED; 2 = HEADERS_RECEIVED; 3 = LOADING]", xhr.readyState);
+		return;
+	}
+
+	// Show add/delete favourite based on the result of the request
+	if (xhr.status !== 302) {
+		if (xhr.status === 404) {
+			console.log("i'm here, favourite not found");
+			document.getElementById("addFavBtn").classList.remove('d-none');
+			document.getElementById("delFavBtn").classList.add('d-none');
+		}
+	} else {
+		console.log("i'm here, favourite found");
+		document.getElementById("delFavBtn").classList.remove('d-none');
+		document.getElementById("addFavBtn").classList.add('d-none');
+	}
 }
 
 function handleUpdateTotalPrice() {

@@ -65,6 +65,12 @@ public class Actions {
 	 */
 	public static final String GET_INSERT_CAR_TYPE_PAGE = "GET_INSERT_CAR_TYPE_PAGE";
 
+
+	/**
+	 * Get of a favourite.
+	 */
+	public static final String GET_FAVOURITE = "GET_FAVOURITE";
+
 	/**
 	 * The search of circuit where a type of car can race.
 	 */
