@@ -109,7 +109,7 @@
 
 
             <!-- Modal -->
-            <div class="modal fade" id="orderModal${afterorders.id}" tabindex="-1" aria-labelledby="orderModalLabel${afterorders.id}" aria-hidden="true">
+            <div class="modal fade" id="orderModal${afterorders.id}" tabindex="-1" aria-labelledby="orderModalLabel${afterorders.id}" aria-hidden="true" data-lap-price="${circuits[afterorders.id].lapPrice}">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -203,6 +203,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
+<script type="text/javascript" src="<c:url value="/js/modify-order.js"/>"></script>
 </body>
 
 <%@ include file="footer.jsp" %>
