@@ -34,9 +34,15 @@ let order = {
 	price: -1,
 }
 
-
 let lapPrice = -1
 
+let today = new Date();
+let day = String(today.getDate()).padStart(2, '0');
+let month = String(today.getMonth() + 1).padStart(2, '0'); // I mesi in JavaScript vanno da 0 a 11, quindi aggiungiamo 1
+let year = today.getFullYear();
+let todayString = `${year}-${month}-${day}`;
+document.getElementById("date").setAttribute("min", todayString);
+today.setHours(0, 0, 0, 0);
 
 // select all the buttons with the class name "btn"
 const buttons = document.querySelectorAll(".carBtn");
@@ -196,6 +202,8 @@ function processCircuitsByCarType(xhr) {
 		circuitSection.appendChild(div);
 	}
 
+	// Initialize number of laps
+	document.getElementById("nLaps").value = 1;
 	// Show container with circuits
 	divCircuits.classList.remove("hidden");
 	divCircuits.classList.add("show");
@@ -449,8 +457,29 @@ function handleDeleteFavouriteClick() {
 	console.log("HTTP GET request sent. ", xhr);
 }
 
-function populateOrderRecap(){
+function populateOrderRecap(e){
 	console.log("Order recap population");
+	var recapOrderModal = new bootstrap.Modal(document.getElementById('orderModal'));
+
+	// Check for date validity
+	const inputDate = document.getElementById('date');
+	if (inputDate.value === "") {
+		inputDate.setCustomValidity("Please select a valid date.");
+		inputDate.reportValidity();
+		return;
+	} else {
+		const orderDate = new Date(inputDate.value).setHours(0, 0, 0, 0);	
+		console.log(today);
+		console.log(orderDate);
+		if (today >= orderDate) {
+			inputDate.setCustomValidity("The order date cannot be earlier than today's date.");
+			inputDate.reportValidity();
+			return;
+		}
+	}
+
+	// Show recap order modal
+	recapOrderModal.show();
 
 	// ADD THE CAR IMAGE
 	const carImageDiv = document.getElementById("recapOrderCarImage");
@@ -476,11 +505,10 @@ function populateOrderRecap(){
 	circuitLabel.innerHTML = `${order.circuit}`;
 
 	//Add DATE
-	const date = document.getElementById("date");
 	const dateDiv = document.getElementById("orderRecapDate");
 	dateDiv.innerHTML = '';
 	let textElement = document.createElement('p');
-	textElement.textContent = date.value;
+	textElement.textContent = inputDate.value;
 	dateDiv.appendChild(textElement);
 
 	//Add laps

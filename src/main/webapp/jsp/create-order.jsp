@@ -46,12 +46,11 @@
           <div class="container-form hidden" id="completeOrder">
             <h2>Select the date and how many laps</h2>
             <div class="row">
-              <div class="col-5">
+              <div class="col-md-5">
                 <div class="row g-2 align-items-center mb-1 mt-1">
                   <div class="input-group">
                     <label class="input-group-text">Select a date:</label>
                     <input id="date" type="date" class="form-control" />
-                    <div class="invalid-feedback">Please select a valid date</div>
                   </div>
                 </div>
                 <div class="row g-2 align-items-center mb-1 mt-1">
@@ -61,18 +60,22 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-3">
-                <label id="totalPrice" class="form-label">Total price: €0</label>
-                <div class="btn-grid">
-                  <button id="proceedOrder" type="button" class="createOrderBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#orderModal">
-                    Proceed to order
-                  </button>
-                  <button id="addFavBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#favouriteModal">
-                    Add to favourites
-                  </button>
-                  <button id="delFavBtn" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#favouriteModal">
-                    Delete from favourites
-                  </button>
+              <div class="col-md-7">
+                <div class="row g-2 align-items-center mb-1 mt-1">
+                  <label id="totalPrice" class="form-label">Total price: €0</label>
+                </div>
+                <div class="row g-2 align-items-center mb-1 mt-1">
+                  <div class="btn-grid mb-1">
+                    <button id="proceedOrder" type="button" class="createOrderBtn btn btn-primary">
+                      Proceed to order
+                    </button>
+                    <button id="addFavBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#favouriteModal">
+                      Add to favourites
+                    </button>
+                    <button id="delFavBtn" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#favouriteModal">
+                      Delete from favourites
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
