@@ -1,0 +1,44 @@
+.modal-dialog {
+    max-width: 600px;
+}
+.order-item {
+    background-color: #f8f9fa; /* Light gray background */
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap; /* Allow wrapping of content */
+}
+.order-item nav {
+    width: 100%;
+}
+.order-item ol {
+    display: flex;
+    flex-wrap: wrap; /* Allow wrapping of breadcrumb items */
+    justify-content: center; /* Center items horizontally */
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+.order-item ol > li {
+    text-align: center;
+    padding: 0.5rem;
+    flex: 1 1 auto;
+}
+.order-item ol > .delete-button {
+    flex: 1 1 auto;
+}
+@media (max-width: 575.98px) {
+    .order-item ol > li {
+        flex: 0 0 100%; /* Full width on small screens */
+        margin-bottom: 0.5rem;
+    }
+    .order-item ol > .delete-button {
+        text-align: center;
+        flex: 0 0 100%; /* Full width on small screens */
+    }
+}
