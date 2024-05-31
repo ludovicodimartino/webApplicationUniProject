@@ -92,21 +92,21 @@ IF (NEW."date" < CURRENT_DATE) THEN
 	RAISE EXCEPTION 'User cannot turn back time.';
 END IF;
 IF (NEW."nLaps") < 0 THEN
-	RAISE EXCEPTION 'Number of laps cannot be negative';
+	RAISE EXCEPTION 'Number of laps cannot be negative.';
 END IF;
 IF (
 	SELECT c."lapPrice" * NEW."nLaps"
 	FROM assessment."circuit" AS c
 	WHERE c."name" = NEW."circuit"
 	) <> NEW."price" THEN
-	RAISE EXCEPTION 'Price is not correct';
+	RAISE EXCEPTION 'Price is not correct.';
 END IF;
 IF (
 	SELECT a."type"
 	FROM assessment."account" as a
 	WHERE a."email" = NEW.account
 	) = 'ADMIN' THEN
-	RAISE EXCEPTION 'Admin cannot create an order';
+	RAISE EXCEPTION 'Admin cannot create an order.';
 END IF;
 IF ((SELECT COUNT(*)
 	FROM (
@@ -120,7 +120,7 @@ IF ((SELECT COUNT(*)
 		WHERE o."account" = NEW."account" AND o."date" = NEW."date"
 		GROUP BY o."circuit"
 	)) THEN
-	RAISE EXCEPTION 'You cannot have two orders on the same date but in different circuits';
+	RAISE EXCEPTION 'You cannot have two orders on the same date but in different circuits.';
 END IF;
 IF (
    SELECT COUNT(*) as result
@@ -135,7 +135,7 @@ IF (
 	   WHERE g."name" = NEW."circuit"
    )
   ) < 1 THEN
-  RAISE EXCEPTION 'Car and Circuit are not suitable';
+  RAISE EXCEPTION 'Car and Circuit are not suitable.';
 END IF;
 RETURN NEW;
 END;$$;

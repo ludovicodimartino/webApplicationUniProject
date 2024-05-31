@@ -22,6 +22,7 @@ import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import it.unipd.dei.webapp.wacar.resource.ResourceList;
+import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -87,8 +88,18 @@ public final class InsertOrderRR extends AbstractRR {
 		} catch (SQLException ex) {
 			LOGGER.error("Cannot insert the order: unexpected database error.", ex);
 
-			m = new Message("Cannot insert the order: unexpected database error.", "E5A1", ex.getMessage());
-			res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			// Exception raised by the trigger
+			if (ex.getSQLState().equals("P0001")) {
+				//Prepare message to be show
+				String errorMsg = ex.getMessage().split("ERROR: ")[1].split("Where:")[0];
+				m = new Message(errorMsg, ErrorCode.CANNOT_CREATE_RESOURCE.getErrorCode(), errorMsg);
+
+				res.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+			} else {
+				m = new Message("Cannot insert the order: unexpected database error.", "E5A1", ex.getMessage());
+				
+				res.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			}
 			m.toJSON(res.getOutputStream());
 		}
 	}
