@@ -27,6 +27,7 @@ Since: 1.00
     
         <div class="container">
             <h1 class="mt-4 mb-4">Car-Circuit Suitability</h1>
+            <hr>
             <div id="liveAlertPlaceholder"></div>
 
             <div class="container customContainer p-4 mb-4">
@@ -114,9 +115,7 @@ Since: 1.00
                                                 <c:out value="${cCSuit.value[0]}" />
                                             </td>
                                             <td class="deleteBtnCol">
-                                                <button carType="${cCSuit.key}"
-                                                    circuitType="<c:out value=" ${cCSuit.value[0]}" />"
-                                                class="deleteBtn btn btn-danger">
+                                                <button carType="${cCSuit.key}" circuitType="${cCSuit.value[0]}" class="deleteBtn btn btn-danger">
                                                 <span class="material-symbols-outlined">delete</span>
                                                 </button>
                                             </td>
@@ -130,9 +129,7 @@ Since: 1.00
                                                     </td>
                                                     <td class="deleteBtnCol">
                                                         <button carType="${cCSuit.key}"
-                                                            circuitType="<c:out value="
-                                                            ${circuitType}" />" class="deleteBtn btn
-                                                        btn-danger">
+                                                            circuitType="${circuitType}" class="deleteBtn btn btn-danger">
                                                         <span
                                                             class="material-symbols-outlined">delete</span>
                                                         </button>

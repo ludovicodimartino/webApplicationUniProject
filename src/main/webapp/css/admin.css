@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+
 .customTextarea {
     resize: none;
 }
@@ -10,6 +12,6 @@
     padding: 1rem;
 }
 
-h1 {
+h1, h3 {
     font-family: "Audiowide", cursive;
 }
