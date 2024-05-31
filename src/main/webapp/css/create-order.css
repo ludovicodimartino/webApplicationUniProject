@@ -7,11 +7,13 @@
 }
 
 .card-car-selected {
-  background-color: #9EE493 !important;
+  background-color: #D76464 !important;
+  color: white !important;
 }
 
 .card-circuit-selected {
-  background-color: #9EE493 !important;
+  background-color: #D76464 !important;
+  color: white !important;
 }
 
 .row .card .card-body .card-text {
@@ -36,7 +38,7 @@
 }
 
 .input-group .input-group-text {
-  width: 65%;
+  width: 55%;
   font-size: 1.2rem;
 }
 

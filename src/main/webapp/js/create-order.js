@@ -88,7 +88,7 @@ function handleSelectCarClick() {
 	order.carModel = this.getAttribute("carModel");
 	order.circuit = "";
 
-	const url = "http://localhost:8081/wacar/rest/user/order/create/" + carType;
+	const url = "/wacar/rest/user/order/create/" + carType;
 	console.log("Request URL: %s.", url)
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
@@ -227,7 +227,8 @@ function handleSelectCircuitClick() {
 	this.classList.add("card-circuit-selected");
 
 	// Check if favourite already exists
-	const url = "http://localhost:8081/wacar/rest/user/favourite/";
+	const params = "?circuitName=" + this.getAttribute("circuitName") + "&carBrand=" + order.carBrand + "&carModel=" + order.carModel
+	const url = "/wacar/rest/user/favourite/" + params;
 	console.log("Request URL: %s.", url)
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
@@ -251,14 +252,7 @@ function handleSelectCircuitClick() {
 	const auth = sessionStorage.getItem("Authorization");
 	xhr.setRequestHeader('Authorization', sessionStorage.getItem("Authorization"));
 	xhr.withCredentials = true;
-	const favourite = {
-		circuit: this.getAttribute("circuitName"),
-		carBrand: order.carBrand,
-		carModel: order.carModel,
-		account: sessionStorage.getItem("email"),
-	}
-	const favString = JSON.stringify({ "favourite": favourite });
-	xhr.send(favString);
+	xhr.send();
 
 	console.log("HTTP POST request sent. ", xhr);
 
@@ -313,7 +307,7 @@ function handleCreateOrderClick() {
 	order.price = parseInt(order.nLaps * lapPrice);
 
 
-	const url = "http://localhost:8081/wacar/rest/user/order/create/complete";
+	const url = "/wacar/rest/user/order/create/complete";
 
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
@@ -375,7 +369,7 @@ function processCreateOrder(xhr) {
 }
 
 function returnHome() {
-	window.location.replace("http://localhost:8081/wacar/");
+	window.location.replace("/wacar/");
 }
 
 function handleAddFavouriteClick() {
@@ -387,7 +381,7 @@ function handleAddFavouriteClick() {
 		createdAt: -1,
 	}
 
-	const url = "http://localhost:8081/wacar/rest/user/favourite/add";
+	const url = "/wacar/rest/user/favourite/add";
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -427,7 +421,7 @@ function handleDeleteFavouriteClick() {
 		account: sessionStorage.getItem("email"),
 	}
 	
-	const url = "http://localhost:8081/wacar/rest/user/favourite/delete";
+	const url = "/wacar/rest/user/favourite/delete";
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
 	xhr.open("DELETE", url, true);

@@ -20,6 +20,7 @@ import it.unipd.dei.webapp.wacar.dao.GetFavouriteDAO;
 import it.unipd.dei.webapp.wacar.resource.Actions;
 import it.unipd.dei.webapp.wacar.resource.Favourite;
 import it.unipd.dei.webapp.wacar.resource.Order;
+import it.unipd.dei.webapp.wacar.resource.User;
 import it.unipd.dei.webapp.wacar.utils.ErrorCode;
 import it.unipd.dei.webapp.wacar.resource.Message;
 import jakarta.servlet.http.HttpServletRequest;
@@ -58,8 +59,14 @@ public final class GetFavouriteRR extends AbstractRR {
 		Message m = null;
 
 		try {
-			final Favourite favouriteToSearch = Favourite.fromJSON(req.getInputStream());
+			final User loggedUser = (User) req.getSession().getAttribute("account");
 
+			// final Favourite favouriteToSearch = Favourite.fromJSON(req.getInputStream());
+			final Favourite favouriteToSearch = new Favourite(
+				req.getParameter("circuitName"),
+				req.getParameter("carBrand"),
+				req.getParameter("carModel"),
+				loggedUser.getEmail());
 			f = new GetFavouriteDAO(con, favouriteToSearch).access().getOutputParam();
 
 			if (f != null) {
