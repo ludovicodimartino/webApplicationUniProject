@@ -107,7 +107,7 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
                 long differenceMillis = orderDate.getTime() - currentDate.getTime();
 
                 // Check if the order date is before or after the current date
-                if (differenceMillis <= 0) {
+                if (differenceMillis > 0) {
                     after_current_date.add(orders.get(i));
                 } else {
                     before_current_date.add(orders.get(i));
@@ -124,8 +124,8 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
             }
             // Set the array as an attribute to be passed to the JSP file
             req.setAttribute("modifyAvailable", isDifferenceGreaterThan3DaysArray);
-            req.setAttribute("afterorders", after_current_date);
-            req.setAttribute("beforeorders", before_current_date);
+            req.setAttribute("after", after_current_date);
+            req.setAttribute("before", before_current_date);
         }
         req.setAttribute("cars", cars);
         req.setAttribute("circuits", circuits);
