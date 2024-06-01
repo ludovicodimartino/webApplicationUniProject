@@ -1,7 +1,4 @@
-body {
-    background-color: #f0f0f0;
-}
-
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
 
 .container {
     display: flex;
@@ -9,11 +6,43 @@ body {
     align-items: center;
     height: 100vh;
 }
+
 .form-container {
-    background-color: white;
+    font-size: 1rem;
+
+    background-color: #f0f0f0;
     max-width: 400px;
     width: 100%;
     padding: 40px;
     border: 1px solid #ccc;
     border-radius: 10px;
+}
+
+.logo-container {
+    align-items: center;
+    font-family: "Audiowide", cursive;
+    text-align: center;
+    margin: 40px;
+}
+
+.logo-container img {
+    align-items: center;
+    width: 250px;
+}
+
+.input-group-text {
+    background-color: white;
+    border-color: white;
+}
+
+.btn-success {
+    font-family: "Audiowide", cursive;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.btn-secondary {
+    font-family: "Audiowide", cursive;
+    width: 100%;
+    margin-top: 10px;
 }

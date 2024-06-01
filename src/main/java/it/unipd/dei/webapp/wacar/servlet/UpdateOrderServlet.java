@@ -64,12 +64,12 @@ public class UpdateOrderServlet extends AbstractDatabaseServlet {
             long differenceInDays = TimeUnit.DAYS.convert(differenceInMillis, TimeUnit.MILLISECONDS);
 
             if (differenceInDays < 3) {
-                handleFieldErrors(session, response, oldOrder, "INVALID DATE");
+                handleFieldErrors(session, response, oldOrder, "Select a valid date\n");
                 return;
             }
 
             if (nLaps < 1) {
-                handleFieldErrors(session, response, oldOrder, "INVALID NUMBER OF LAPS");
+                handleFieldErrors(session, response, oldOrder, "Insert a valid number of laps");
                 return;
             }
 
