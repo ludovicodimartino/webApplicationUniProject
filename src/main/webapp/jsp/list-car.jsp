@@ -67,11 +67,15 @@
                         <div class="col">
                             <p id="description"></p>
                         </div>
-                        <div id="admin-edit" class="modal-footer">
-                            <a id="admin-edit-car" class="btn btn-primary" type="button">
-                                Edit
-                            </a>
-                        </div>
+                        <c:choose>
+                            <c:when test="${role eq 'ADMIN'}">
+                                <div class="modal-footer">
+                                    <a id="admin-edit-car" class="btn btn-primary" type="button">
+                                        Edit
+                                    </a>
+                                </div>
+                            </c:when>
+                        </c:choose>
                     </div>
                 </div>
             </div>

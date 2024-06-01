@@ -65,11 +65,15 @@
                             <p id="description"></p>
                         </div>
                     </div>
-                    <div id="admin-edit" class="modal-footer">
-                        <a id="admin-edit-circuit" class="btn btn-primary" type="button">
-                            Edit
-                        </a>
-                    </div>
+                    <c:choose>
+                        <c:when test="${role eq 'ADMIN'}">
+                            <div id="admin-edit" class="modal-footer">
+                                <a id="admin-edit-circuit" class="btn btn-primary" type="button">
+                                    Edit
+                                </a>
+                            </div>
+                        </c:when>
+                    </c:choose>
                 </div>
             </div>
         </div>    

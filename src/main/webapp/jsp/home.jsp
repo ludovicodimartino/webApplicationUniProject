@@ -18,11 +18,11 @@
 <%@ include file="header.jsp" %>
 
 <div class="container">
-    <h1>Welcome to 
-        <img src="<c:url value="/images/logo_dark.png"/>" id="logo" alt="Wacar logo"
-                         width="160">
-    </h1>
-
+    <div class="title">
+        <h1>Welcome to&nbsp;</h1>
+        <img src="<c:url value="/images/logo_dark.png"/>" id="logo" alt="Wacar logo"width="160">
+    </div>
+    <hr>
     <div class="container-home">
         <!-- Circuit list -->
         <div class="card">

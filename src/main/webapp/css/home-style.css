@@ -1,12 +1,12 @@
-h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #333;
+.title {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-#logo {
-  margin-top: -8px;
-  margin-left: 5px;
+.title img {
+  margin-right: 10px;
 }
 
 .container-home {

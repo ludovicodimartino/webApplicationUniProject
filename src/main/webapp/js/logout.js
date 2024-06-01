@@ -24,7 +24,7 @@ if (button != null)  {
 }
 
 function handleLogout() {
-  const url = "http://localhost:8081/wacar/logout/";
+  const url = "/wacar/logout/";
 
   	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
@@ -57,12 +57,12 @@ function processLogout(xhr) {
 	else if (xhr.status == 200) {
 		console.log("Logout successful");
 		sessionStorage.clear();
-		window.location.replace("http://localhost:8081/wacar/");
+		window.location.replace("/wacar/");
 	}
  	else if (xhr.status == 401) {
 		console.error("User not logged in");
 		alert("User not logged in");
-		window.location.replace("http://localhost:8081/wacar/login/");}
+		window.location.replace("/wacar/login/");}
 	else {
 		console.error("Logout failed. Status: ", xhr.status);
 		alert("Logout failed");

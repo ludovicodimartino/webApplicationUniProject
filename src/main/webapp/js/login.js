@@ -36,7 +36,7 @@ function handleLogin() {
 
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
-  const url = "http://localhost:8081/wacar/login/" + "?email=" + email + "&password=" + password;
+  const url = "/wacar/login/" + "?email=" + email + "&password=" + password;
   const regexEmail = /^[a-z0-9+_.-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
   const regexPsw = /^(?=.*[A-Z])(?=.*[0-9]).{8,}$/;
 
@@ -116,7 +116,7 @@ function processLogin(xhr) {
     const user = JSON.parse(xhr.responseText).user;
     sessionStorage.setItem("accountType", user.accountType);
 
-    window.location.replace("http://localhost:8081/wacar/");
+    window.location.replace("/wacar/");
   }
   return;
 }

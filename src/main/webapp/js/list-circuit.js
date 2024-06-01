@@ -25,10 +25,6 @@ cards.forEach(function(card) {
 	card.addEventListener("click", handleCircuitClick);
 })
 
-if (sessionStorage.getItem("accountType") !== "ADMIN") {
-    document.getElementById("admin-edit").classList.add("d-none");
-}
-
 /**
  * Searches for circuits that are suitable for the selected car type.
  *
