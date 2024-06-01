@@ -108,9 +108,9 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
 
                 // Check if the order date is before or after the current date
                 if (differenceMillis <= 0) {
-                    before_current_date.add(orders.get(i));
-                } else {
                     after_current_date.add(orders.get(i));
+                } else {
+                    before_current_date.add(orders.get(i));
                 }
 
                 long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
