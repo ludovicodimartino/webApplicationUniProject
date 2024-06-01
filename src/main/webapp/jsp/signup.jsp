@@ -12,8 +12,11 @@
 </head>
 <body>
 <div class="container">
+    <div class="logo-container">
+        <img src="<c:url value="/images/logo_dark.png"/>" alt="Logo">
+        <h2>Register Your Account</h2>
+    </div>
     <div class="form-container">
-        <h1>REGISTRATION</h1>
         <div id="errorAlert" class="alert alert-danger d-none" role="alert">
             <span id="errorAlertText"></span>
         </div>
@@ -52,4 +55,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value="/js/signup.js"/>"></script>
 </body>
+<%@ include file="footer.jsp" %>
 </html>

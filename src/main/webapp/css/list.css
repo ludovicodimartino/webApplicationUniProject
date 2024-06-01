@@ -89,3 +89,7 @@
 .modal-header h3 {
   font-family: "Audiowide", cursive;
 }
+
+.alert-top-margin {
+  margin-top: 20px;
+}

@@ -34,7 +34,7 @@ Since: 1.01
 <div class="container">
 
     <c:if test="${not empty sessionScope.errorMessage}">
-        <div class="alert alert-danger">
+        <div class="alert alert-danger alert-top-margin">
                 ${sessionScope.errorMessage.message}
         </div>
         <c:remove var="sessionScope.errorMessage" />
@@ -164,7 +164,7 @@ Since: 1.01
                                             <label for="orderPrice${afterorders.id}" class="form-label">Price</label>
                                             <input type="text" class="form-control" id="orderPrice${afterorders.id}" value="${afterorders.price}" disabled>
                                         </div>
-                                        <button type="submit" class="btn btn-primary w-100">Confirm changes</button>
+                                        <button id="confirmButton${afterorders.id}" type="submit" class="btn btn-primary w-100">Confirm changes</button>
                                     </form>
                                 </div>
                             </div>
@@ -223,7 +223,7 @@ Since: 1.01
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 <script type="text/javascript" src="<c:url value="/js/modify-order.js"/>"></script>
-            </body>
+
 
 <%@ include file="footer.jsp" %>
 
