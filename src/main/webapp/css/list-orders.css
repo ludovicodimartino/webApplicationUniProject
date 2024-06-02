@@ -3,26 +3,22 @@
     height: 3rem;
 }
 
-.row {
-    background-color: #f8f9fa; /* Light gray background */
-}
-
 .row h5 {
     padding-top: 0.5rem;
     align-content: center;
 }
 
-.col-md-3 {
+.col-xl-3 {
     gap: 1rem;
     display: flex;
 }
 
-.col-md-2 {
+.col-xl-2 {
     gap: 1rem;
     display: flex;
 }
 
-.col-md-1 {
+.col-xl-1 {
     display: flex;
     gap: 1rem;
 }
@@ -30,71 +26,44 @@
 .material-symbols-outlined {
     align-content: center;
     font-size: xxx-large;
-    color: #ebecee;
-}
-
-.edit:hover {
-    color: red;
-}
-
-.table {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
+    color: #1c1c1e;
 }
 
 .modal-dialog {
     max-width: 600px;
 }
 
-.order-item {
-    background-color: #f8f9fa; /* Light gray background */
+.container-table {
+    background-color: #f0f0f0;
+    border-radius: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 0.5rem;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap; /* Allow wrapping of content */
 }
 
-.order-item nav {
+.btn-grid {
+    gap: 1rem;
+    grid-template-columns: auto auto;
+    display: grid;
     width: 100%;
 }
 
-.order-item ol {
-    display: flex;
-    flex-wrap: wrap; /* Allow wrapping of breadcrumb items */
-    justify-content: center; /* Center items horizontally */
-    align-items: center;
-    width: 100%;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-}
-
-.order-item ol > li {
-    text-align: center;
-    padding: 0.5rem;
-    flex: 1 1 auto;
-    justify-content: center;
-    align-items: center;
-}
-
-.order-item ol > .delete-button {
-    flex: 1 1 auto;
-    justify-content: center;
-    align-items: center;
-}
-
-@media (max-width: 575.98px) {
-    .order-item ol > li {
-        flex: 0 0 100%; /* Full width on small screens */
-        margin-bottom: 0.5rem;
+@media screen and (max-width: 1200px) {
+    .btn-grid {
+        display: grid;
     }
 
-    .order-item ol > .delete-button {
-        text-align: center;
-        flex: 0 0 100%; /* Full width on small screens */
+    .btn-dropdown {
+        display: none;
     }
 }
+
+@media screen and (min-width: 1200px) {
+    .btn-grid {
+        display: none;
+    }
+    .btn-dropdown {
+        display: block;
+    }
+}
+
