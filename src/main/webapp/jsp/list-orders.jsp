@@ -17,6 +17,12 @@ Since: 1.01
 <head>
     <c:import url="/jsp/include/head-links.jsp"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>List Orders</title>
 </head>
 <body>
@@ -58,9 +64,53 @@ Since: 1.01
         <tbody>
         -->
     <%-- Display the list of pending Orders --%>
-    <div>
+    <div class="container-table">
         <c:if test="${not empty after}">
             <c:forEach var="after" items="${after}" varStatus="loop">
+                <div class="row">
+                    <div class="col-md-2">
+                        <span class="material-symbols-outlined"> calendar_month </span>
+                        <h5 class="order-data"><c:out value="${after.date}"/></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="material-symbols-outlined"> directions_car </span>
+                        <h5><c:out value="${after.carBrand} ${after.carModel}"/></h5>
+                    </div>
+                    <div class="col-md-3">
+                        <span class="material-symbols-outlined"> road </span>
+                        <h5 class="order-data"><c:out value="${after.circuit}"/>
+                    </div>
+                    <div class="col-md-1">
+                        <span class="material-symbols-outlined"> rotate_right</span>
+                        <h5 class="order-data"><c:out value="${after.NLaps}"/></h5>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="material-symbols-outlined"> euro </span>
+                        <h5 class="order-data"> <c:out value="${after.price}"/></h5>
+                    </div>
+                    <div class="col-md-1">
+                        <span class="material-symbols-outlined"> edit </span>
+                        <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                <path d="M9.5 13a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0m0-5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0"/>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <c:choose>
+                                <c:when test="${modifyAvailable[loop.index]}">
+                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#orderModal${after.id}">Edit</a></li>
+                                    <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${after.id}">Delete</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><a class="dropdown-item disabled">Edit</a></li>
+                                    <li><a class="dropdown-item text-danger disabled">Delete</a></li>
+                                </c:otherwise>
+                            </c:choose>
+                        </ul>
+                    </div>
+
+                </div>
                 <div class="order-item">
                     <nav style="--bs-breadcrumb-divider: url('data:image/svg+xml,%3Csvg width=\'32\' height=\'29\' viewBox=\'0 0 32 29\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M4.14551 3.84894L12.3841 12.345C13.5125 13.5086 13.5125 15.3582 12.3841 16.5219L4.14551 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M18.8994 3.84894L27.138 12.345C28.2664 13.5086 28.2664 15.3582 27.138 16.5219L18.8994 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3C/svg%3E');" aria-label="breadcrumb">
                         <ol class="breadcrumb">

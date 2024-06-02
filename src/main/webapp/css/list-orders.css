@@ -1,6 +1,52 @@
+.icon {
+    width: 3rem;
+    height: 3rem;
+}
+
+.row {
+    background-color: #f8f9fa; /* Light gray background */
+}
+
+.row h5 {
+    padding-top: 0.5rem;
+    align-content: center;
+}
+
+.col-md-3 {
+    gap: 1rem;
+    display: flex;
+}
+
+.col-md-2 {
+    gap: 1rem;
+    display: flex;
+}
+
+.col-md-1 {
+    display: flex;
+    gap: 1rem;
+}
+
+.material-symbols-outlined {
+    align-content: center;
+    font-size: xxx-large;
+    color: #ebecee;
+}
+
+.edit:hover {
+    color: red;
+}
+
+.table {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .modal-dialog {
     max-width: 600px;
 }
+
 .order-item {
     background-color: #f8f9fa; /* Light gray background */
     padding: 1rem;
@@ -11,9 +57,11 @@
     align-items: center;
     flex-wrap: wrap; /* Allow wrapping of content */
 }
+
 .order-item nav {
     width: 100%;
 }
+
 .order-item ol {
     display: flex;
     flex-wrap: wrap; /* Allow wrapping of breadcrumb items */
@@ -24,6 +72,7 @@
     margin: 0;
     list-style: none;
 }
+
 .order-item ol > li {
     text-align: center;
     padding: 0.5rem;
@@ -31,16 +80,19 @@
     justify-content: center;
     align-items: center;
 }
+
 .order-item ol > .delete-button {
     flex: 1 1 auto;
     justify-content: center;
     align-items: center;
 }
+
 @media (max-width: 575.98px) {
     .order-item ol > li {
         flex: 0 0 100%; /* Full width on small screens */
         margin-bottom: 0.5rem;
     }
+
     .order-item ol > .delete-button {
         text-align: center;
         flex: 0 0 100%; /* Full width on small screens */
