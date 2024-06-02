@@ -1,30 +1,41 @@
-.container {
+@import url("https://fonts.googleapis.com/css2?family=Audiowide&display=swap");
+.customContainer {
     display: flex;
     flex-direction: column;
     align-items: center;
-    border: 1px solid #ccc;
-    border-radius: 10px;
+    background-color: #f0f0f0;
+    border-radius: 1rem;
     max-width: 600px;
     padding: 30px;
     margin: 50px auto;
     overflow: auto;
-
 }
-.user-info, .user-actions {
+
+.container h1 {
+    font-family: "Audiowide", cursive;
+    margin-top: 1rem;
+}
+
+.user-info {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
+    column-gap: 4rem;
 }
-.user-info ul, .user-actions form {
+
+.user-info ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
-.user-info ul li {
-    margin-bottom: 10px;
+
+.user-info li{
+    margin-bottom: 1rem;
 }
-.user-actions form button {
-    margin-bottom: 10px;
+
+.user-actions {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+    margin-top: 2rem;
 }

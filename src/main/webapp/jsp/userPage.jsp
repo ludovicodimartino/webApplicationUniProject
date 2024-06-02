@@ -19,33 +19,36 @@
         <c:when test="${not empty sessionScope.account}">
             <c:choose>
                 <c:when test="${sessionScope.account.type == 'USER'}">
-                    <h1>USER DETAILS</h1>
+                    <h1>User details</h1>
                 </c:when>
                 <c:otherwise>
-                    <h1>ADMIN DETAILS</h1>
+                    <h1>Admin details</h1>
                 </c:otherwise>
             </c:choose>
             <hr/>
-            <div class="user-info">
-                <ul>
-                    <li><strong>Surname:</strong> ${sessionScope.account.surname}</li>
-                    <li><strong>Name:</strong> ${sessionScope.account.name}</li>
-                </ul>
-                <ul>
-                    <li><strong>Email:</strong> ${sessionScope.account.email}</li>
-                    <li><strong>Address:</strong> ${sessionScope.account.address}</li>
-                </ul>
-            </div>
-            <c:if test="${sessionScope.account.type == 'USER'}">
-                <div class="user-actions">
-                    <form action="/wacar/user/listOrdersByAccount" method="get">
-                        <button type="submit" class="btn btn-success">Order list</button>
-                    </form>
-                    <form action="/wacar/user/list-favourite" method="get">
-                        <button type="submit" class="btn btn-success">Favourite list</button>
-                    </form>
+            <div class="customContainer">
+                <div class="user-info">
+                    <ul>
+                        <li><strong>Surname</strong><br>${sessionScope.account.surname}</li>
+                        <li><strong>Name</strong><br>${sessionScope.account.name}</li>
+                    </ul>
+                    <ul>
+                        <li><strong>Email</strong><br>${sessionScope.account.email}</li>
+                        <li><strong>Address</strong><br>${sessionScope.account.address}</li>
+                    </ul>
                 </div>
-            </c:if>
+                <c:if test="${sessionScope.account.type == 'USER'}">
+                    <div class="user-actions">
+                        <form action="/wacar/user/listOrdersByAccount" method="get">
+                            <button type="submit" class="btn btn-primary">Order list</button>
+                        </form>
+                        <form action="/wacar/user/list-favourite" method="get">
+                            <button type="submit" class="btn btn-outline-primary">Favourite list</button>
+                        </form>
+                    </div>
+                </c:if>
+            </div>
+            
         </c:when>
         <c:otherwise>
             <div class="login-error">
