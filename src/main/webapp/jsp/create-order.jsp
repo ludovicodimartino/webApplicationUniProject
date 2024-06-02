@@ -45,8 +45,8 @@
           <div class="container-form hidden" id="circuits"></div>
           <div class="container-form hidden" id="completeOrder">
             <h2>Select the date and how many laps</h2>
-            <div class="row">
-              <div class="col-md-5">
+            <div class="row complete-form">
+              <div class="col-xl-6">
                 <div class="row g-2 align-items-center mb-1 mt-1">
                   <div class="input-group">
                     <label class="input-group-text">Select a date:</label>
@@ -60,7 +60,7 @@
                   </div>
                 </div>
               </div>
-              <div class="col-md-7">
+              <div class="col-xl-6">
                 <div class="row g-2 align-items-center mb-1 mt-1">
                   <label id="totalPrice" class="form-label">Total price: €0</label>
                 </div>

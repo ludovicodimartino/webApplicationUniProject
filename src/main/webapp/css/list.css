@@ -9,8 +9,6 @@
 
 .container h1 {
   font-family: "Audiowide", cursive;
-  font-size: 3rem;
-  margin-top: 1.5rem;
 }
 
 .container-form {
@@ -29,8 +27,6 @@
 
 .container-form h2 {
   font-family: "Audiowide", cursive;
-  margin-left: 2rem;
-  margin-bottom: 1rem;
 }
 
 .row {
@@ -81,15 +77,35 @@
   font-family: "Audiowide", cursive;
 }
 
-.container .form-label {
-  margin-left: 2rem;
-  font-size: 1.5rem;
-}
-
 .modal-header h3 {
   font-family: "Audiowide", cursive;
 }
 
 .alert-top-margin {
   margin-top: 20px;
+}
+
+@media screen and (max-width: 768px) {
+  .container h1 {
+    font-size: 2rem;
+    margin-top: 1rem;
+  }
+
+  .container-form h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .container h1 {
+    font-family: "Audiowide", cursive;
+    font-size: 3rem;
+    margin-top: 1.5rem;
+  }
+
+  .container-form h2 {
+    margin-left: 2rem;
+    margin-bottom: 1rem;
+  }
 }

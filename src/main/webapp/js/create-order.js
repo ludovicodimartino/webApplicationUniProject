@@ -207,6 +207,7 @@ function processCircuitsByCarType(xhr) {
 	// Show container with circuits
 	divCircuits.classList.remove("hidden");
 	divCircuits.classList.add("show");
+	divCircuits.scrollIntoView();
 
 	console.log("HTTP GET request successfully performed and processed.");
 }

@@ -16,7 +16,7 @@
   color: white !important;
 }
 
-.row .card .card-body .card-text {
+.card .card-body .card-text {
   margin-top: 0;
   margin-bottom: 0.5rem;
 }
@@ -29,28 +29,15 @@
   width: 100% !important;
 }
 
-.formComplete {
-  margin-left: 2rem;
-}
-
-.row .input-group {
+.container .form-label {
   padding-left: 2rem;
-}
-
-.input-group .input-group-text {
-  width: 55%;
-  font-size: 1.2rem;
-}
-
-.input-group .form-control {
-  width: 45%;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .btn-grid{
   display: grid;
   grid-template-areas: "button1 button2";
-  grid-gap: calc(20%);
+  grid-gap: calc(15%);
 }
 
 .carBtn .cardCarBtn-alert {
@@ -65,4 +52,38 @@
   margin: 0;
   padding: 0;
   width: 30%;
+}
+
+@media screen and (max-width: 768px) {
+  .input-group .input-group-text {
+    width: 55%;
+    font-size: 1rem;
+  }
+  
+  .input-group .form-control {
+    width: 45%;
+    font-size: 1rem;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .input-group .input-group-text {
+    width: 55%;
+    font-size: 1.2rem;
+  }
+  
+  .input-group .form-control {
+    width: 45%;
+    font-size: 1.2rem;
+  }
+
+  .container-form .complete-form {
+    margin: 0 2rem 0 2rem !important;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .container .form-label {
+    text-align: center;
+  }
 }
