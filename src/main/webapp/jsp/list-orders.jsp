@@ -59,19 +59,19 @@ Since: 1.01
         -->
     <%-- Display the list of pending Orders --%>
     <div>
-        <c:if test="${not empty afterorders}">
-            <c:forEach var="afterorders" items="${afterorders}" varStatus="loop">
+        <c:if test="${not empty after}">
+            <c:forEach var="after" items="${after}" varStatus="loop">
                 <div class="order-item">
                     <nav style="--bs-breadcrumb-divider: url('data:image/svg+xml,%3Csvg width=\'32\' height=\'29\' viewBox=\'0 0 32 29\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M4.14551 3.84894L12.3841 12.345C13.5125 13.5086 13.5125 15.3582 12.3841 16.5219L4.14551 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M18.8994 3.84894L27.138 12.345C28.2664 13.5086 28.2664 15.3582 27.138 16.5219L18.8994 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3C/svg%3E');" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><c:out value="${afterorders.id}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.date}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.carBrand}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.carModel}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.circuit}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.createdAt}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.NLaps}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${afterorders.price}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.id}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.date}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.carBrand}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.carModel}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.circuit}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.createdAt}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.NLaps}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${after.price}"/></li>
                             <li class="dropdown">
                                 <button class="btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -82,8 +82,8 @@ Since: 1.01
                                 <ul class="dropdown-menu">
                                     <c:choose>
                                         <c:when test="${modifyAvailable[loop.index]}">
-                                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#orderModal${afterorders.id}">Edit</a></li>
-                                            <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${afterorders.id}">Delete</a></li>
+                                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#orderModal${after.id}">Edit</a></li>
+                                            <li><a class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#deleteModal${after.id}">Delete</a></li>
                                         </c:when>
                                         <c:otherwise>
                                             <li><a class="dropdown-item disabled">Edit</a></li>
@@ -95,16 +95,16 @@ Since: 1.01
                         </ol>
                     </nav>
                     <!-- Modal for DELETE -->
-                    <div class="modal fade" id="deleteModal${afterorders.id}" tabindex="-1" aria-labelledby="deleteModalLabel${afterorders.id}" aria-hidden="true">
+                    <div class="modal fade" id="deleteModal${after.id}" tabindex="-1" aria-labelledby="deleteModalLabel${after.id}" aria-hidden="true">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="deleteModalLabel${afterorders.id}">Deleting order ${afterorders.id}</h5>
+                                    <h5 class="modal-title" id="deleteModalLabel${after.id}">Deleting order ${after.id}</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
-                                    <form id="deleteForm${afterorders.id}" action="/wacar/order/delete/${afterorders.id}" method="post">
-                                        <input type="hidden" name="orderId" value="${afterorders.id}">
+                                    <form id="deleteForm${after.id}" action="/wacar/order/delete/${after.id}" method="post">
+                                        <input type="hidden" name="orderId" value="${after.id}">
                                         <p>Are you sure you want to delete this order?</p>
                                         <button type="submit" class="btn btn-danger">Confirm</button>
                                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
@@ -117,53 +117,53 @@ Since: 1.01
 
 
                     <!-- Modal -->
-                    <div class="modal fade" id="orderModal${afterorders.id}" tabindex="-1" aria-labelledby="orderModalLabel${afterorders.id}" aria-hidden="true" data-lap-price="${circuits[afterorders.id].lapPrice}">
+                    <div class="modal fade" id="orderModal${after.id}" tabindex="-1" aria-labelledby="orderModalLabel${after.id}" aria-hidden="true" data-lap-price="${circuits[after.id].lapPrice}">
                         <div class="modal-dialog">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="orderModalLabel${afterorders.id}">Order ${afterorders.id} Details</h5>
+                                    <h5 class="modal-title" id="orderModalLabel${after.id}">Order ${after.id} Details</h5>
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="row">
                                         <div class="col-md-6 image-container p-3">
-                                            <img class="img-fluid rounded" src="<c:url value='/loadCarImage'><c:param name='model' value='${cars[afterorders.id].model}'/><c:param name='brand' value='${cars[afterorders.id].brand}'/></c:url>" alt="car image">
+                                            <img class="img-fluid rounded" src="<c:url value='/loadCarImage'><c:param name='model' value='${cars[after.id].model}'/><c:param name='brand' value='${cars[after.id].brand}'/></c:url>" alt="car image">
                                         </div>
                                         <div class="col-md-6 image-container p-3">
-                                            <img class="img-fluid rounded" src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuits[afterorders.id].name}'/></c:url>" alt="circuit image">
+                                            <img class="img-fluid rounded" src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuits[after.id].name}'/></c:url>" alt="circuit image">
                                         </div>
                                     </div>
-                                    <form id="orderForm${afterorders.id}" action="/wacar/order/update/${afterorders.id}" method="post">
-                                        <input type="hidden" name="orderId" value="${afterorders.id}">
+                                    <form id="orderForm${after.id}" action="/wacar/order/update/${after.id}" method="post">
+                                        <input type="hidden" name="orderId" value="${after.id}">
                                         <div class="mb-3">
-                                            <label for="orderDate${afterorders.id}" class="form-label">Date</label>
-                                            <input type="date" name="date" min="2024-01-01" class="form-control" id="orderDate${afterorders.id}" value="${afterorders.date}">
+                                            <label for="orderDate${after.id}" class="form-label">Date</label>
+                                            <input type="date" name="date" min="2024-01-01" class="form-control" id="orderDate${after.id}" value="${after.date}">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label for="orderCarBrand${afterorders.id}" class="form-label">Car Brand</label>
-                                                <input type="text" class="form-control" id="orderCarBrand${afterorders.id}" value="${afterorders.carBrand}" disabled>
+                                                <label for="orderCarBrand${after.id}" class="form-label">Car Brand</label>
+                                                <input type="text" class="form-control" id="orderCarBrand${after.id}" value="${after.carBrand}" disabled>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="orderCarModel${afterorders.id}" class="form-label">Car Model</label>
-                                                <input type="text" class="form-control" id="orderCarModel${afterorders.id}" value="${afterorders.carModel}" disabled>
+                                                <label for="orderCarModel${after.id}" class="form-label">Car Model</label>
+                                                <input type="text" class="form-control" id="orderCarModel${after.id}" value="${after.carModel}" disabled>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6 mb-3">
-                                                <label for="orderCircuit${afterorders.id}" class="form-label">Circuit</label>
-                                                <input type="text" class="form-control" id="orderCircuit${afterorders.id}" value="${afterorders.circuit}" disabled>
+                                                <label for="orderCircuit${after.id}" class="form-label">Circuit</label>
+                                                <input type="text" class="form-control" id="orderCircuit${after.id}" value="${after.circuit}" disabled>
                                             </div>
                                             <div class="col-md-6 mb-3">
-                                                <label for="orderNLaps${afterorders.id}" class="form-label">Number of Laps</label>
-                                                <input type="number" class="form-control" id="nLaps" name="nLaps" value="${afterorders.NLaps}">
+                                                <label for="orderNLaps${after.id}" class="form-label">Number of Laps</label>
+                                                <input type="number" class="form-control" id="nLaps" name="nLaps" value="${after.NLaps}">
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="orderPrice${afterorders.id}" class="form-label">Price</label>
-                                            <input type="text" class="form-control" id="orderPrice${afterorders.id}" value="${afterorders.price}" disabled>
+                                            <label for="orderPrice${after.id}" class="form-label">Price</label>
+                                            <input type="text" class="form-control" id="orderPrice${after.id}" value="${after.price}" disabled>
                                         </div>
-                                        <button id="confirmButton${afterorders.id}" type="submit" class="btn btn-primary w-100">Confirm changes</button>
+                                        <button id="confirmButton${after.id}" type="submit" class="btn btn-primary w-100">Confirm changes</button>
                                     </form>
                                 </div>
                             </div>
@@ -196,19 +196,19 @@ Since: 1.01
         -->
     <div classname="expired-orders">
 
-        <c:if test="${not empty beforeorders}">
-            <c:forEach var="beforeorders" items="${beforeorders}" varStatus="loop">
+        <c:if test="${not empty before}">
+            <c:forEach var="before" items="${before}" varStatus="loop">
                 <div class="order-item">
                     <nav style="--bs-breadcrumb-divider: url('data:image/svg+xml,%3Csvg width=\'32\' height=\'29\' viewBox=\'0 0 32 29\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M4.14551 3.84894L12.3841 12.345C13.5125 13.5086 13.5125 15.3582 12.3841 16.5219L4.14551 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M18.8994 3.84894L27.138 12.345C28.2664 13.5086 28.2664 15.3582 27.138 16.5219L18.8994 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3C/svg%3E');" aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.id}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.date}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.carBrand}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.carModel}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.circuit}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.createdAt}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.NLaps}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${beforeorders.price}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.id}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.date}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.carBrand}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.carModel}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.circuit}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.createdAt}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.NLaps}"/></li>
+                            <li class="breadcrumb-item"><c:out value="${before.price}"/></li>
                             </li>
                         </ol>
                     </nav>
