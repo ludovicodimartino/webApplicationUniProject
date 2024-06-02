@@ -18,8 +18,8 @@
     Since: 1.0
 */
 
-const button = document.getElementById("signup");
-button.addEventListener("click", handleSignup);
+const signupButton = document.getElementById("signup");
+signupButton.addEventListener("click", handleSignup);
 
 function handleSignup() {
   const email = document.getElementById("email").value;
@@ -67,6 +67,15 @@ function handleSignup() {
 
   console.log("HTTP POST request sent. ", xhr);
 }
+
+const resetButton = document.getElementById("reset");
+resetButton.addEventListener("click", function() {
+    document.getElementById("password").value = "";
+    document.getElementById("email").value = "";
+    document.getElementById("name").value = "";
+    document.getElementById("surname").value = "";
+    document.getElementById("address").value = "";
+});
 
 /**
  * Processes the HTTP response and writes the results back to the HTML page.

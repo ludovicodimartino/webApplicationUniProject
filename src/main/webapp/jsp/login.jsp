@@ -12,12 +12,12 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<div class="container">
-    <div class="logo-container">
-        <img src="<c:url value="/images/logo_dark.png"/>" alt="Logo">
+<div class="container d-flex flex-column align-items-center justify-content-center vh-100">
+    <div class="logo-container text-center mb-4">
+        <img src="<c:url value="/images/logo_dark.png"/>" alt="Logo" class="img-fluid mb-3">
         <h2>Login to Your Account</h2>
     </div>
-    <div class="form-container">
+    <div class="form-container p-4 bg-light border rounded">
         <div id="errorAlert" class="alert alert-danger d-none" role="alert">
             <span id="errorAlertText"></span>
         </div>
@@ -34,8 +34,8 @@
                     'and lowercase letter, and at least 8 or more characters')" required
                    placeholder="Enter your password">
         </div>
-        <button id="login" type="button" class="btn btn-success">Submit</button>
-        <button id="reset" type="reset" class="btn btn-secondary">Reset</button>
+        <button id="login" type="button" class="btn btn-success w-100 mb-2">Submit</button>
+        <button id="reset" type="reset" class="btn btn-secondary w-100">Reset</button>
     </div>
 </div>
 
@@ -44,4 +44,3 @@
 </body>
 <%@ include file="footer.jsp" %>
 </html>
-
