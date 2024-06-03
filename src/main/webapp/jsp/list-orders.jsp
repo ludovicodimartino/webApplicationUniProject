@@ -130,11 +130,66 @@ Since: 1.01
                         </div>
                         <div class="modal-body">
                             <form id="deleteForm${after.id}" action="/wacar/order/delete/${after.id}" method="post">
-                                <input type="hidden" name="orderId" value="${after.id}">
-                                <p>Are you sure you want to delete this order?</p>
-                                <button type="submit" class="btn btn-danger">Confirm</button>
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel
-                                </button>
+                                <div class="row">
+                                    <div class="col-md-6 image-container p-3">
+                                        <img class="img-fluid rounded"
+                                             src="<c:url value='/loadCarImage'><c:param name='model' value='${cars[after.id].model}'/><c:param name='brand' value='${cars[after.id].brand}'/></c:url>"
+                                             alt="car image">
+                                    </div>
+                                    <div class="col-md-6 image-container p-3">
+                                        <img class="img-fluid rounded"
+                                             src="<c:url value='/loadCircuitImage'><c:param name='circuitName' value='${circuits[after.id].name}'/></c:url>"
+                                             alt="circuit image">
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="orderDate${after.id}" class="form-label"><b>Date</b></label>
+                                    <input type="date" name="date" min="2024-01-01" class="form-control"
+                                           id="orderDate${after.id}" value="${after.date}" disabled>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="orderCarBrand${after.id}" class="form-label"><b>Car Brand</b></label>
+                                        <input type="text" readonly class="form-control"
+                                               id="orderCarBrand${after.id}"
+                                               value="${after.carBrand}" disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="orderCarModel${after.id}" class="form-label"><b>Car Model</b></label>
+                                        <input type="text" readonly class="form-control"
+                                               id="orderCarModel${after.id}"
+                                               value="${after.carModel}" disabled>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="orderCircuit${after.id}" class="form-label"><b>Circuit</b></label>
+                                        <input type="text" class="form-control"
+                                               id="orderCircuit${after.id}"
+                                               value="${after.circuit}" disabled>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="orderNLaps${after.id}" class="form-label"><b>Number of Laps</b></label>
+                                        <input type="number" class="form-control" id="nLaps"
+                                               name="nLaps"
+                                               value="${after.NLaps}" disabled>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="orderPrice${after.id}" class="form-label"><b>Price</b></label>
+                                    <input type="text" class="form-control" id="orderPrice${after.id}"
+                                           value="${after.price}" disabled>
+                                </div>
+                                <!----Deletion--->
+                                <div class="row">
+                                    <input type="hidden" name="orderId" value="${after.id}">
+                                    <div class="col-md-6 mb-3">
+                                        <button type="submit" class="btn btn-danger w-100">Confirm</button>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <button type="button" class="btn btn-secondary w-100" data-bs-dismiss="modal">Cancel</button>
+                                    </div>
+                                </div>
                             </form>
                         </div>
                     </div>
