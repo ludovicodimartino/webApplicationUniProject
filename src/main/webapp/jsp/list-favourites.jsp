@@ -4,20 +4,25 @@ Version: 1.01
 Since: 1.00
 -->
 
-<%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/sql" prefix="sql" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html lang="en">
 <head>
     <title>List Favorites</title>
     <c:import url="/jsp/include/head-links.jsp"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <style>
-        .modal-dialog {
-            max-width: 600px;
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" rel="stylesheet">
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
+    <link rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <script>
         function confirmDelete(circuit, carBrand, carModel) {
             if (confirm("Are you sure you want to delete this favorite?")) {
@@ -30,8 +35,8 @@ Since: 1.00
     </script>
 </head>
 <body>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list-orders.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer-style.css">
@@ -52,28 +57,35 @@ Since: 1.00
     <hr>
 
     <%-- Display the list of favorites --%>
-    <div>
-        <c:if test="${not empty favouritesList}">
-            <c:forEach var="favorite" items="${favouritesList}">
-                <div class="order-item">
-                    <nav style="--bs-breadcrumb-divider: url('data:image/svg+xml,%3Csvg width=\'32\' height=\'29\' viewBox=\'0 0 32 29\' fill=\'none\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cpath d=\'M4.14551 3.84894L12.3841 12.345C13.5125 13.5086 13.5125 15.3582 12.3841 16.5219L4.14551 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3Cpath d=\'M18.8994 3.84894L27.138 12.345C28.2664 13.5086 28.2664 15.3582 27.138 16.5219L18.8994 25.0179\' stroke=\'%23C4C4C4\' stroke-width=\'7\' stroke-linecap=\'round\'/%3E%3C/svg%3E');" aria-label="breadcrumb">
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><c:out value="${favorite.circuit}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${favorite.carBrand}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${favorite.carModel}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${favorite.account}"/></li>
-                            <li class="breadcrumb-item"><c:out value="${favorite.createdAt}"/></li>
-                            <li class="delete-button">
-                                <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
-                                        data-circuit="${favorite.circuit}" data-carbrand="${favorite.carBrand}" data-carmodel="${favorite.carModel}">Delete</button>
-                            </li>
-                        </ol>
-                    </nav>
+
+    <c:if test="${not empty favouritesList}">
+        <c:forEach var="favorite" items="${favouritesList}">
+            <div class="container-table">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-xl-3 col-md-6 text-center">
+                        <span class="material-symbols-outlined">directions_car</span>
+                        <h5><c:out value="${favorite.carBrand} ${favorite.carModel}"/></h5>
+                    </div>
+                    <div class="col-xl-2 col-md-5 text-center">
+                        <span class="material-symbols-outlined">road</span>
+                        <h5 class="orderdata"><c:out value="${favorite.circuit}"/></h5>
+                    </div>
+                    <div class="col-xl-2 col-md-5 text-center">
+                        <span class="material-symbols-outlined">calendar_month</span>
+                        <h5 class="orderdata">
+                            <fmt:formatDate value="${favorite.createdAt}" pattern="yyyy-MM-dd HH:mm" />
+                        </h5>
+                    </div>
+                    <div class="col-xl-2 col-md-5 text-center">
+                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                data-circuit="${favorite.circuit}" data-carbrand="${favorite.carBrand}" data-carmodel="${favorite.carModel}">Delete</button>
+                    </div>
                 </div>
-            </c:forEach>
-        </c:if>
-    </div>
+            </div>
+        </c:forEach>
+    </c:if>
 </div>
+
 <!-- Modal for DELETE -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -130,7 +142,6 @@ Since: 1.00
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-<script type="text/javascript" src="<c:url value="/js/modify-order.js"/>"></script>
 </body>
 
 <%@ include file="footer.jsp" %>
