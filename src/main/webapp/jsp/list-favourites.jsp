@@ -3,7 +3,6 @@ Author: Alessandro Leonardi (alessandro.leonardi.5@studenti.unipd.it)
 Version: 1.01
 Since: 1.00
 -->
-
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
@@ -23,20 +22,12 @@ Since: 1.00
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"/>
-    <script>
-        function confirmDelete(circuit, carBrand, carModel) {
-            if (confirm("Are you sure you want to delete this favorite?")) {
-                document.getElementById('circuitName').value = circuit;
-                document.getElementById('carBrand').value = carBrand;
-                document.getElementById('carModel').value = carModel;
-                document.getElementById('deleteForm').submit();
-            }
-        }
-    </script>
 </head>
 <body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.6/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="${pageContext.request.contextPath}/js/list-orders.js"></script>
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/list-orders.css">
 <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/footer-style.css">
@@ -77,7 +68,7 @@ Since: 1.00
                         </h5>
                     </div>
                     <div class="col-xl-2 col-md-5 text-center">
-                        <button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
+                        <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteModal"
                                 data-circuit="${favorite.circuit}" data-carbrand="${favorite.carBrand}" data-carmodel="${favorite.carModel}">Delete</button>
                     </div>
                 </div>
@@ -110,39 +101,7 @@ Since: 1.00
         </div>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-<script>
-    var deleteModal = document.getElementById('deleteModal');
-    deleteModal.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget; // Button that triggered the modal
-        var circuit = button.getAttribute('data-circuit');
-        var carBrand = button.getAttribute('data-carbrand');
-        var carModel = button.getAttribute('data-carmodel');
-
-        var modalTitle = deleteModal.querySelector('.modal-title');
-        var modalCircuit = deleteModal.querySelector('#modal-circuit');
-        var modalCarBrand = deleteModal.querySelector('#modal-carBrand');
-        var modalCarModel = deleteModal.querySelector('#modal-carModel');
-
-        modalTitle.textContent = 'Deleting Favourite';
-        modalCircuit.textContent = circuit;
-        modalCarBrand.textContent = carBrand;
-        modalCarModel.textContent = carModel;
-
-        var circuitNameInput = deleteModal.querySelector('#circuitName');
-        var carBrandInput = deleteModal.querySelector('#carBrand');
-        var carModelInput = deleteModal.querySelector('#carModel');
-
-        circuitNameInput.value = circuit;
-        carBrandInput.value = carBrand;
-        carModelInput.value = carModel;
-    });
-</script>
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-        crossorigin="anonymous"></script>
-</body>
-
+<script type="text/javascript" src="<c:url value="/js/list-favourites.js"/>"></script>
 <%@ include file="footer.jsp" %>
 </html>
