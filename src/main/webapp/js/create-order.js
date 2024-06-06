@@ -228,9 +228,9 @@ function handleSelectCircuitClick() {
 	this.classList.add("card-circuit-selected");
 
 	// Check if favourite already exists
-	const params = "?circuitName=" + this.getAttribute("circuitName") + "&carBrand=" + order.carBrand + "&carModel=" + order.carModel
-	const url = "/wacar/rest/user/favourite/" + params;
-	console.log("Request URL: %s.", url)
+	const circuitName = this.getAttribute("circuitName")
+	const url = "/wacar/rest/user/favourite/search/" + circuitName + "/" + order.carBrand + "/" + order.carModel;
+	console.log("Request URL: %s.", url);
 	// the XMLHttpRequest object
 	const xhr = new XMLHttpRequest();
 
@@ -248,7 +248,7 @@ function handleSelectCircuitClick() {
 	// perform the request
 	console.log("Performing the HTTP GET request.");
 
-	xhr.open('POST', url, true);
+	xhr.open('GET', url, true);
 	xhr.setRequestHeader("Content-Type", "application/json");
 	const auth = sessionStorage.getItem("Authorization");
 	xhr.setRequestHeader('Authorization', sessionStorage.getItem("Authorization"));

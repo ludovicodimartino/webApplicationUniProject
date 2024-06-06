@@ -17,6 +17,8 @@
 package it.unipd.dei.webapp.wacar.servlet;
 
 import it.unipd.dei.webapp.wacar.resource.Car;
+import it.unipd.dei.webapp.wacar.resource.Circuit;
+import it.unipd.dei.webapp.wacar.resource.Favourite;
 import it.unipd.dei.webapp.wacar.resource.Order;
 import it.unipd.dei.webapp.wacar.resource.LogContext;
 import it.unipd.dei.webapp.wacar.resource.Message;
@@ -256,7 +258,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		String path = req.getRequestURI();
 		Message m = null;
 
-		LOGGER.info("I am here");
+		LOGGER.info("Processing get car");
 
 		// the requested resource was not an order
 		if (path.lastIndexOf("wacar/rest/car/") <= 0) {
@@ -300,7 +302,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		String path = req.getRequestURI();
 		Message m = null;
 
-		LOGGER.info("I am here");
+		LOGGER.info("Processing get circuit");
 
 		// the requested resource was not an order
 		if (path.lastIndexOf("wacar/rest/circuit/") <= 0) {
@@ -344,7 +346,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		String path = req.getRequestURI();
 		Message m = null;
 
-		LOGGER.info("I am here");
+		LOGGER.info("Processing order");
 
 		// the requested resource was not an order
 		if (path.lastIndexOf("user/order") <= 0) {
@@ -470,7 +472,7 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 		String path = req.getRequestURI();
 		Message m = null;
 
-		LOGGER.info("I am here");
+		LOGGER.info("Processing favourite");
 
 		// the requested resource was not a favourite
 		if (path.lastIndexOf("user/favourite") <= 0) {
@@ -499,8 +501,9 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 					m.toJSON(res.getOutputStream());
 					break;
 			}
-		} else if (path.contains("/")) {
-			path = path.substring(path.lastIndexOf("/") + 1);
+		} else {
+			path = path.substring(path.indexOf("/") + 1);
+
 			if (path.equals("add")) {
 				LOGGER.info("Inside favourite/add handler");
 
@@ -537,10 +540,14 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 						m.toJSON(res.getOutputStream());
 						break;
 				}
-			} else if (path.equals("search")) {
+			} else if (path.contains("search/")) {
+				LOGGER.info("Inside favourite/search/{circuitName}/{carBrand}/{carModel} handler");
+
+				path = path.substring(path.lastIndexOf("search/") + 7);
+				LOGGER.info(path);
 				switch (method) {
 					case "GET":
-						// new GetFavouriteRR(req, res, favourite, getConnection()).serve();
+						new GetFavouriteRR(req, res, getConnection()).serve();
 	
 						break;
 					default:
@@ -553,6 +560,9 @@ public final class RestDispatcherServlet extends AbstractDatabaseServlet {
 						m.toJSON(res.getOutputStream());
 						break;
 				}
+			} else {
+				LOGGER.info("qua");
+
 			}
 		}
 		return true;

@@ -32,7 +32,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 /**
- * A REST resource for inserting a new {@link Order}.
+ * A REST resource for getting a {@code Favourite}.
  *
  * @author Manuel Rigobello (manuel.rigobello@studenti.unipd.it)
  * @version 1.00
@@ -61,11 +61,26 @@ public final class GetFavouriteRR extends AbstractRR {
 		try {
 			final User loggedUser = (User) req.getSession().getAttribute("account");
 
-			// final Favourite favouriteToSearch = Favourite.fromJSON(req.getInputStream());
+			// parse the URI path about the favourite search operation
+			String path = req.getRequestURI();
+			final String[] pathArgs = path.split("/");
+
+			for (int i = 0; i < pathArgs.length; i++){
+				LOGGER.info(pathArgs[i]);
+			}
+
+			final String carModel = pathArgs[pathArgs.length - 1].replace("%20", " ");
+			final String carBrand = pathArgs[pathArgs.length - 2].replace("%20", " ");
+			final String circuitName = pathArgs[pathArgs.length - 3].replace("%20", " ");
+
+			LOGGER.info(carBrand);
+			LOGGER.info(carModel);
+			LOGGER.info(circuitName);
+
 			final Favourite favouriteToSearch = new Favourite(
-				req.getParameter("circuitName"),
-				req.getParameter("carBrand"),
-				req.getParameter("carModel"),
+				circuitName,
+				carBrand,
+				carModel,
 				loggedUser.getEmail());
 			f = new GetFavouriteDAO(con, favouriteToSearch).access().getOutputParam();
 
