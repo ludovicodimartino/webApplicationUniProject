@@ -42,6 +42,13 @@ Since: 1.01
 <%@ include file="header.jsp" %>
 
 <div class="container">
+    <c:if test="${not empty sessionScope.confirmMessage}">
+        <div class="alert alert-success alert-top-margin">
+                ${sessionScope.confirmMessage.message}
+        </div>
+        <c:remove var="sessionScope.confirmMessage"/>
+    </c:if>
+
     <c:if test="${not empty sessionScope.errorMessage}">
         <div class="alert alert-danger alert-top-margin">
                 ${sessionScope.errorMessage.message}

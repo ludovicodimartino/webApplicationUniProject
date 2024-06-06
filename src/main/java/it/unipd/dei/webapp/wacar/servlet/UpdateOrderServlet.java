@@ -83,6 +83,9 @@ public class UpdateOrderServlet extends AbstractDatabaseServlet {
 
             session.setAttribute("order", null);
             session.removeAttribute("errorMessage");
+            Message m = new Message("Order successfully modified");
+            session.setAttribute("order", oldOrder);
+            session.setAttribute("confirmMessage", m);
 
             new UpdateOrderDAO(getConnection(), newOrder).access().getOutputParam();
 
