@@ -42,6 +42,13 @@ Since: 1.01
 <%@ include file="header.jsp" %>
 
 <div class="container">
+    <c:if test="${not empty sessionScope.confirmMessage}">
+        <div class="alert alert-success alert-top-margin">
+                ${sessionScope.confirmMessage.message}
+        </div>
+        <c:remove var="sessionScope.confirmMessage"/>
+    </c:if>
+
     <c:if test="${not empty sessionScope.errorMessage}">
         <div class="alert alert-danger alert-top-margin">
                 ${sessionScope.errorMessage.message}
@@ -73,7 +80,7 @@ Since: 1.01
                         <h5 class="order-data"><c:out value="${after.NLaps}"/></h5>
                     </div>
                     <div class="col-xl-2">
-                        <span class="material-symbols-outlined"> euro </span>
+                        <span class="material-symbols-outlined eurobutton"> euro </span>
                         <h5 class="order-data"><c:out value="${after.price}"/></h5>
                     </div>
                     <div class="col-xl-1">
@@ -170,8 +177,7 @@ Since: 1.01
                                     </div>
                                     <div class="col-md-6 mb-3">
                                         <label for="orderNLaps${after.id}" class="form-label"><b>Number of Laps</b></label>
-                                        <input type="number" class="form-control" id="nLaps"
-                                               name="nLaps"
+                                        <input type="number" class="form-control" id="nLapss" name="nLaps"
                                                value="${after.NLaps}" disabled>
                                     </div>
                                 </div>

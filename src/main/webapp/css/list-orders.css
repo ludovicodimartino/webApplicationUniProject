@@ -29,6 +29,10 @@
     color: #1c1c1e;
 }
 
+.eurobutton {
+    padding-left: 1em;
+}
+
 .modal-dialog {
     max-width: 600px;
 }
@@ -56,6 +60,10 @@
     .btn-dropdown {
         display: none;
     }
+
+    .eurobutton {
+        padding-left: 0em;
+    }
 }
 
 @media screen and (min-width: 1200px) {
@@ -64,6 +72,9 @@
     }
     .btn-dropdown {
         display: block;
+    }
+    .eurobutton {
+        padding-left: 1em;
     }
 }
 
