@@ -109,18 +109,15 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
                 // Check if the order date is before or after the current date
                 if (differenceMillis > 0) {
                     after_current_date.add(orders.get(i));
+                    long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
+                    // Check if the difference is greater than 3 days
+                    isDifferenceGreaterThan3DaysArray[i] = differenceDays > 3;
+                    // Debugging: Print out differenceDays and other relevant information
+                    LOGGER.info("Difference in days for order " + i + ": " + differenceDays);
+                    LOGGER.info("Is difference greater than 3 days? " + isDifferenceGreaterThan3DaysArray[i]);
                 } else {
                     before_current_date.add(orders.get(i));
                 }
-
-                long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
-
-                // Check if the difference is greater than 3 days
-                isDifferenceGreaterThan3DaysArray[i] = differenceDays > 3;
-
-                // Debugging: Print out differenceDays and other relevant information
-                LOGGER.info("Difference in days for order " + i + ": " + differenceDays);
-                LOGGER.info("Is difference greater than 3 days? " + isDifferenceGreaterThan3DaysArray[i]);
             }
             // Set the array as an attribute to be passed to the JSP file
             req.setAttribute("modifyAvailable", isDifferenceGreaterThan3DaysArray);

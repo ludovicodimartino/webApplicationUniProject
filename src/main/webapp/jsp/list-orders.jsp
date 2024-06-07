@@ -299,7 +299,7 @@ Since: 1.01
                         <h5 class="order-data"><c:out value="${before.NLaps}"/></h5>
                     </div>
                     <div class="col-xl-2">
-                        <span class="material-symbols-outlined"> euro </span>
+                        <span class="material-symbols-outlined eurobutton"> euro </span>
                         <h5 class="order-data"><c:out value="${before.price}"/></h5>
                     </div>
                 </div>

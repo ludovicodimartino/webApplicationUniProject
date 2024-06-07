@@ -69,10 +69,10 @@
                     <button id="proceedOrder" type="button" class="createOrderBtn btn btn-primary">
                       Proceed to order
                     </button>
-                    <button id="addFavBtn" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#favouriteModal">
+                    <button id="addFavBtn" type="button" class="btn btn-primary btn-delete" data-bs-toggle="modal" data-bs-target="#favouriteModal">
                       Add to favourites
                     </button>
-                    <button id="delFavBtn" type="button" class="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#favouriteModal">
+                    <button id="delFavBtn" type="button" class="btn btn-primary d-none btn-delete" data-bs-toggle="modal" data-bs-target="#favouriteModal">
                       Delete from favourites
                     </button>
                   </div>
