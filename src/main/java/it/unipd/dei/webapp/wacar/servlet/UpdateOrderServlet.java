@@ -82,7 +82,6 @@ public class UpdateOrderServlet extends AbstractDatabaseServlet {
             LOGGER.info("New order info {} date {} retrieved", newOrder.getId(), newOrder.getDate());
 
             session.setAttribute("order", null);
-            session.removeAttribute("errorMessage");
             Message m = new Message("Order successfully modified");
             session.setAttribute("order", oldOrder);
             session.setAttribute("confirmMessage", m);
