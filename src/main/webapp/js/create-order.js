@@ -44,7 +44,7 @@ let todayString = `${year}-${month}-${day}`;
 document.getElementById("date").setAttribute("min", todayString);
 today.setHours(0, 0, 0, 0);
 
-// select all the buttons with the class name "btn"
+// select all the buttons with the class name "carBtn"
 const buttons = document.querySelectorAll(".carBtn");
 
 // Add an event listener to the button,
@@ -53,17 +53,18 @@ buttons.forEach(function(button) {
 	button.addEventListener("click", handleSelectCarClick);
 })
 
+// Add event for creating the order
 const btnOrder = document.getElementById("createOrder");
 btnOrder.addEventListener("click", handleCreateOrderClick);
 
+// Add events
 document.getElementById("nLaps").addEventListener("change", handleUpdateTotalPrice);
 document.getElementById("proceedOrder").addEventListener("click", populateOrderRecap);
 document.getElementById("addFavBtn").addEventListener("click", handleAddFavouriteClick);
 document.getElementById("delFavBtn").addEventListener("click", handleDeleteFavouriteClick);
 
 
-// document.getElementById("getCircuitByCarTypeButton").addEventListener("click", getCircuitByCarType);
-console.log("Event listener added to getCircuitByCarTypeButton.")
+console.log("Event listener added.")
 
 /**
  * Searches for circuits that are suitable for the selected car type.
@@ -212,6 +213,11 @@ function processCircuitsByCarType(xhr) {
 	console.log("HTTP GET request successfully performed and processed.");
 }
 
+/**
+ * Searches for the existence of a favourite with the selected car and circuit.
+ *
+ * @returns {boolean} true if the HTTP request was successful; false otherwise.
+ */
 function handleSelectCircuitClick() {
 	// Hide div for completing the order
 	let div = document.getElementById("completeOrder");
@@ -272,6 +278,11 @@ function handleSelectCircuitClick() {
 	console.log(order);
 }
 
+/**
+ * Processes the HTTP response and writes the results back to the HTML page.
+ *
+ * @param xhr the XMLHttpRequest object performing the request.
+ */
 function processExistsFavourite(xhr) {
 	// not finished yet
 	if (xhr.readyState !== XMLHttpRequest.DONE) {
@@ -293,6 +304,7 @@ function processExistsFavourite(xhr) {
 	}
 }
 
+// Updates the Total price label
 function handleUpdateTotalPrice() {
 	let label = document.getElementById("totalPrice");
 	if (lapPrice != null && this.value != null) {
@@ -300,6 +312,11 @@ function handleUpdateTotalPrice() {
 	}
 }
 
+/**
+ * Create the order.
+ *
+ * @returns {boolean} true if the HTTP request was successful; false otherwise.
+ */
 function handleCreateOrderClick() {
 	let date = document.getElementById("date");
 	order.date = date.value;
@@ -344,6 +361,11 @@ function handleCreateOrderClick() {
 	console.log("HTTP GET request sent. ", xhr);
 }
 
+/**
+ * Processes the HTTP response and writes the results back to the HTML page.
+ *
+ * @param xhr the XMLHttpRequest object performing the request.
+ */
 function processCreateOrder(xhr) {
 	// not finished yet
 	if (xhr.readyState !== XMLHttpRequest.DONE) {
@@ -373,6 +395,11 @@ function returnHome() {
 	window.location.replace("/wacar/");
 }
 
+/**
+ * Add the favourite.
+ *
+ * @returns {boolean} true if the HTTP request was successful; false otherwise.
+ */
 function handleAddFavouriteClick() {
 	const favourite = {
 		circuit: order.circuit,
@@ -414,6 +441,11 @@ function handleAddFavouriteClick() {
 	console.log("HTTP GET request sent. ", xhr);
 }
 
+/**
+ * Delete the favourite.
+ *
+ * @returns {boolean} true if the HTTP request was successful; false otherwise.
+ */
 function handleDeleteFavouriteClick() {
 	const favourite = {
 		circuit: order.circuit,
@@ -519,6 +551,12 @@ function populateOrderRecap(e){
 	priceDiv.innerHTML = document.getElementById("totalPrice").innerHTML.substring(13);
 }
 
+/**
+ * Processes the HTTP response and writes the results back to the HTML page.
+ *
+ * @param xhr the XMLHttpRequest object performing the request.
+ * @param op can be 'add' if it has to process an add favourite operation; 'delete' in case of delete favourite operation
+ */
 function processFavouriteOperation(xhr, op) {
 	// not finished yet
 	if (xhr.readyState !== XMLHttpRequest.DONE) {
@@ -568,7 +606,4 @@ function processFavouriteOperation(xhr, op) {
 			document.getElementById("delFavBtn").classList.add('d-none');
 		}
 	}
-
-
-	console.log("Add favourite completed");
 }

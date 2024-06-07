@@ -22,7 +22,7 @@ public class GetFavouriteDAO extends AbstractDAO<Favourite> {
      * Creates a new object for retrieving the favourite from the database.
      *
      * @param con the connection to the database.
-     * @param name the favourite to be retrieved from the database.
+     * @param favourite the favourite to be retrieved from the database.
      */
     public GetFavouriteDAO(final Connection con, final Favourite favourite) {
         super(con);
