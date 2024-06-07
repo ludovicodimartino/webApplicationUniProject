@@ -26,7 +26,7 @@ cards.forEach(function(card) {
 })
 
 /**
- * Searches for cars that are suitable for the selected car type.
+ * Open the modal for a specific car.
  *
  * @returns {boolean} true if the HTTP request was successful; false otherwise.
  */
