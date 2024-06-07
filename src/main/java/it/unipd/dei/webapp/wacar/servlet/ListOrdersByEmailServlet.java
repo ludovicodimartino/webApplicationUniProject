@@ -96,7 +96,7 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
         if (!orders.isEmpty()) {
             Date currentDate = new Date();
 
-            boolean[] isDifferenceGreaterThan3DaysArray = new boolean[orders.size()];
+            ArrayList<Boolean> difference3days = new ArrayList<Boolean>();
 
             // Iterate over each object in the ArrayList
             for (int i = 0; i < orders.size(); i++) {
@@ -109,18 +109,33 @@ public class ListOrdersByEmailServlet extends AbstractDatabaseServlet {
                 // Check if the order date is before or after the current date
                 if (differenceMillis > 0) {
                     after_current_date.add(orders.get(i));
-                    long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
-                    // Check if the difference is greater than 3 days
-                    isDifferenceGreaterThan3DaysArray[i] = differenceDays > 3;
-                    // Debugging: Print out differenceDays and other relevant information
-                    LOGGER.info("Difference in days for order " + i + ": " + differenceDays);
-                    LOGGER.info("Is difference greater than 3 days? " + isDifferenceGreaterThan3DaysArray[i]);
                 } else {
                     before_current_date.add(orders.get(i));
                 }
             }
+
+            after_current_date.sort(Comparator.comparing(Order::getDate));
+            before_current_date.sort(Comparator.comparing(Order::getDate));
+
+            for (Order o : after_current_date) {
+                // Get the order date from the object
+                Date orderDate = o.getDate();
+
+                // Calculate the difference in days between the order date and the current date
+                long differenceMillis = orderDate.getTime() - currentDate.getTime();
+
+                long differenceDays = TimeUnit.DAYS.convert(differenceMillis, TimeUnit.MILLISECONDS);
+                // Check if the difference is greater than 3 days
+
+                difference3days.add(differenceDays > 3);
+                // Debugging: Print out differenceDays and other relevant information
+                LOGGER.info("Difference in days for order " + o.getId() + ": " + differenceDays);
+                LOGGER.info("Is difference greater than 3 days? " + difference3days.getLast());
+
+            }
+
             // Set the array as an attribute to be passed to the JSP file
-            req.setAttribute("modifyAvailable", isDifferenceGreaterThan3DaysArray);
+            req.setAttribute("modifyAvailable", difference3days);
             req.setAttribute("after", after_current_date);
             req.setAttribute("before", before_current_date);
         }
